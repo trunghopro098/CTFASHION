@@ -1,6 +1,5 @@
 import {API_URL} from "@env"
 export const getAPI = async(url)=>{
-    console.log(API_URL)
     const res = await fetch(API_URL+url)
     .then((response)=>response.json())
     .then((responseJson)=>{
