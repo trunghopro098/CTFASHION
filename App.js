@@ -1,38 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
+import {Text,View,} from 'react-native';
+import { useSelector } from 'react-redux';
 const App = ()=>{
+  const quanityCart = useSelector(state=>state.productReducer.quanityCart)
 
-return(
-  <View>
-    <Text>hello world</Text>
-  </View>
-)
+  return(
+    <View>
+      <Text>hello world {quanityCart}</Text>
+    </View>
+  )
 
 }
 
