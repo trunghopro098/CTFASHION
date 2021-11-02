@@ -8,6 +8,7 @@ import {name as appName} from './app.json';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
+
 export default function Register(){
     return(
         <Provider store={store}>
