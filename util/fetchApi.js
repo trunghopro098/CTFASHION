@@ -10,7 +10,6 @@ export const getAPI = async(url)=>{
     })
     return res;
 }
-
 export const postDataAPI = async(url,data)=>{
     const res = await fetch(API_URL+url,{
         method:'POST',
