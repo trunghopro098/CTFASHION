@@ -18,23 +18,22 @@ export default class TabNavigation extends Component {
         return(
             <View style={{ flex:1 }}>
             <Stack.Navigator
+          
             screenOptions={{
-                    headerShown:false
+                    headerShown:false,
+                    style:{
+                        position : "absolute",
+                        borderTopLeftRadius  :11, 
+                        borderTopRightRadius : 11,
+                        height : 60,
+                        elevation : 0,
+                        backgroundColor : '#ffffff',
+                        ...styles.shadow,
+                    },
+                    
+                        showLabel : false
                 }}
-            tabBarOptions={{ 
-                // hide lable , custom lablebottomnavigation
-                showLabel : false,
-                style:{
-                    position : "absolute",
-                    borderTopLeftRadius  :11, 
-                    borderTopRightRadius : 11,
-                    height : 60,
-                    elevation : 0,
-                    backgroundColor : '#ffffff',
-                    ...styles.shadow,
-                }
-                
-                }}>
+>
         <Stack.Screen name="Home" component={HomeScreen}
                 options={{
                 tabBarIcon: ({focused})=>(
@@ -66,7 +65,8 @@ export default class TabNavigation extends Component {
                             }}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>FAVORITE</Text>
                         </View>
-                    )
+                    ),
+                    tabBarBadge : 3
                 }}        
         />
          <Stack.Screen name="Gift" component={GiftScreen}
@@ -100,7 +100,8 @@ export default class TabNavigation extends Component {
                             }}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>CART</Text>
                         </View>
-                    )
+                    ),
+                    tabBarBadge : 3
                 }}    
         />
 
