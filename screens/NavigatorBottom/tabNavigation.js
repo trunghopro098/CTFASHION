@@ -21,19 +21,21 @@ export default class TabNavigation extends Component {
           
             screenOptions={{
                     headerShown:false,
-                    style:{
-                        position : "absolute",
-                        borderTopLeftRadius  :11, 
-                        borderTopRightRadius : 11,
-                        height : 60,
-                        elevation : 0,
-                        backgroundColor : '#ffffff',
-                        ...styles.shadow,
-                    },
-                    
-                        showLabel : false
-                }}
->
+                    tabBarStyle:[{  
+                        style:{
+                            position : "absolute",
+                            borderTopLeftRadius  :11, 
+                            borderTopRightRadius : 11,
+                            height : 60,
+                            elevation : 0,
+                            backgroundColor : '#ffffff',
+                            ...styles.shadow,
+                      }
+                    }
+                    ],
+                    tabBarShowLabel: false
+                }}>
+
         <Stack.Screen name="Home" component={HomeScreen}
                 options={{
                 tabBarIcon: ({focused})=>(
