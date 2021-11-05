@@ -1,21 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, Text} from "react-native"; 
 
 
-export default class HomeScreen extends Component{
-    constructor(props){
-        super(props)
-    }
-
-    render(){
-        return(
-            <View>
-                <Text>
-                    HomeScreen
-                </Text>
-            </View>
-        )
-    }
-
+export default function HomeScreen(){
+    return(
+        <View>
+            <Text>
+                HomeScreen
+            </Text>
+        </View>
+    )
+    
 }
 

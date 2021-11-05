@@ -4,7 +4,7 @@ const productSlice = createSlice({
     name: 'product',
     initialState:{
         cart:{},
-        quanityCart:6
+        quanityCart:0
     },
     reducers:{
         updateQuanityProduct: (state,action) =>{

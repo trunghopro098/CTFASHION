@@ -1,6 +1,6 @@
 import {API_URL} from "@env"
 export const getAPI = async(url)=>{
-    const res = await fetch("http://192.168.1.7:5000"+url)
+    const res = await fetch(API_URL+url)
     .then((response)=>response.json())
     .then((responseJson)=>{
         return responseJson;

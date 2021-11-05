@@ -1,20 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, Text} from "react-native"; 
 
 
-export default class CartScreen extends Component{
-    constructor(props){
-        super(props)
-    }
+export default function CartScreen (){
 
-    render(){
-        return(
-            <View>
-                <Text>
-                cartScreen
-                </Text>
-            </View>
-        )
-    }
+    return(
+        <View>
+            <Text>
+            cartScreen
+            </Text>
+        </View>
+    )
 
 }

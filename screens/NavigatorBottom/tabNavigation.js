@@ -1,4 +1,4 @@
-import  React, { Component} from 'react';
+import  React  from 'react';
 import {View, Text, Image, } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
@@ -7,14 +7,10 @@ import CartScreen from './cartScreen';
 import FavoriteScreen from './favoriteScreen';
 import GiftScreen from './giftScreen';
 import ProfileScreen from './profileScreen';
-
+import { useSelector } from 'react-redux';
 const Stack = createBottomTabNavigator();
-export default class TabNavigation extends Component {
-    constructor(props){
-        super(props)
-    }
-
-    render(){
+export default function TabNavigation(){
+    const quanityCart = useSelector(state=>state.productReducer.quanityCart);
         return(
             <View style={{ flex:1 }}>
             <Stack.Navigator
@@ -48,7 +44,7 @@ export default class TabNavigation extends Component {
                         height : 25,
                         tintColor : focused ? '#e32f45' : '#748c94'         
                         }}/>
-                        <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>HOME</Text>
+                        <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Trang chủ</Text>
                     </View>
                 )
             }}
@@ -65,7 +61,7 @@ export default class TabNavigation extends Component {
                             height : 25,
                             tintColor : focused ? '#e32f45' : '#748c94'         
                             }}/>
-                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>FAVORITE</Text>
+                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Yêu thích</Text>
                         </View>
                     ),
                     tabBarBadge : 3
@@ -83,7 +79,7 @@ export default class TabNavigation extends Component {
                             height : 25,
                             tintColor : focused ? '#e32f45' : '#748c94'         
                             }}/>
-                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>GIFT</Text>
+                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Khuyến mãi</Text>
                         </View>
                     )
                 }}       
@@ -100,10 +96,10 @@ export default class TabNavigation extends Component {
                             height : 25,
                             tintColor : focused ? '#e32f45' : '#748c94'         
                             }}/>
-                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>CART</Text>
+                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Giỏ hàng</Text>
                         </View>
                     ),
-                    tabBarBadge : 3
+                    tabBarBadge : quanityCart > 0 ? quanityCart :null
                 }}    
         />
 
@@ -119,7 +115,7 @@ export default class TabNavigation extends Component {
                             height : 25,
                             tintColor : focused ? '#e32f45' : '#748c94'         
                             }}/>
-                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>PROFILE</Text>
+                            <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Tài khoản</Text>
                         </View>
                     )
                 }}     
@@ -127,8 +123,8 @@ export default class TabNavigation extends Component {
     </Stack.Navigator>
 
     </View> 
-        )
-    }
+    )
+    
 }
 
 const styles = StyleSheet.create({
