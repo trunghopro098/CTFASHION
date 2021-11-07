@@ -12,6 +12,8 @@ target 'CTFASHION' do
     :hermes_enabled => false
   )
 
+  pod 'Interactable', :path => '../node_modules/react-native-interactable'
+
   target 'CTFASHIONTests' do
     inherit! :complete
     # Pods for testing
