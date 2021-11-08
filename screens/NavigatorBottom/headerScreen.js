@@ -3,7 +3,7 @@ import {View, Text, TextInput, StyleSheet, Dimensions,Image,TouchableOpacity,Ani
 import LinearGradient from "react-native-linear-gradient";
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-export default function HeaderScreen(props,{navigation}){
+export default function HeaderScreen(props){
     const {bgWhite} = props;
     return(
         <Animated.View>
@@ -23,11 +23,11 @@ export default function HeaderScreen(props,{navigation}){
                 <View style={style.input}>
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
                     <TouchableOpacity onPress={()=>{
-                        navigation.navigate('search')
+                        props.navigation.navigate('search')
                     }}>
                         <TextInput style={style.textinput}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('search')}}>
+                    <TouchableOpacity onPress={()=>{props.navigation.navigate('search')}}>
                         <LinearGradient 
                             colors={["#C790E5",'#9C30FF','#BEE6F0']}
                             style={style.search}

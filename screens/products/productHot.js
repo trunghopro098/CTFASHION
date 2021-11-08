@@ -1,8 +1,7 @@
-import React, { useEffect, useState} from "react";
+import React from "react";
 import {View, Text, StyleSheet,Dimensions,FlatList, Image} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Label, {Orientation} from "react-native-label";
-import * as GETAPI from '../../util/fetchApi'
 import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 
@@ -78,8 +77,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         borderRadius: 20,
-
-
     },
     LogoSale:{
 
