@@ -7,18 +7,23 @@ import VirtualizedView from "../../util/VirtualizedView";
 import ProductHot from "../products/productHot";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
+import GetfullProduct from "../products/getfullProduct";
+import LoadingCircle from "../StartScreens/loadingCircle";
+// import LoadingSkeleton from "../StartScreens/loadingSkeleton";
+
 
 export default function HomeScreen({navigation}){
-
-
     return(
 
             <SafeAreaView style= {{ flex: 1 }}>
                 <HeaderScreen navigation={navigation}/>
+                {/* <LoadingSkeleton/> */}
+                {/* <LoadingCircle/> */}
                 <VirtualizedView>           
                     <CategoryScreen/>
                     <ProductHot/>
                     <Flashsales/>
+                    <GetfullProduct/>
                     <Test2/>
                     <Test2/>
                     <Test2/>

@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         alignContent: "space-around",
         alignItems: "center",
         marginTop: 2,
-        marginHorizontal: 10
+        marginHorizontal: 6
 
     },
     productsaleLable:{
