@@ -1,6 +1,5 @@
-import React from "react";
-import { View, Text, SafeAreaView,StyleSheet, Dimensions,Image, ScrollView} from "react-native"; 
-import CollapsingHeader from "../products/test";
+import React,{useState} from "react";
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
@@ -8,18 +7,54 @@ import ProductHot from "../products/productHot";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import GetfullProduct from "../products/getfullProduct";
-import LoadingCircle from "../StartScreens/loadingCircle";
-// import LoadingSkeleton from "../StartScreens/loadingSkeleton";
-
-
 export default function HomeScreen({navigation}){
+    const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
+    const [colorSearch, setcolorSearch] = useState(null);
+    
+    //Animation header
+    const scrollY = new Animated.Value(0);
+    const diffClamp = Animated.diffClamp(scrollY,0,50);
+    const translateY = diffClamp.interpolate({
+        inputRange:[0,50],
+        outputRange:[0,-50]
+    })
+    //Animation header
+    const handleSetValueScrollY = (e)=>{
+        const value = e.nativeEvent.contentOffset.y;
+        if(value>80){
+            setbgcolorStatusBar("white")
+            setcolorSearch("white")
+        }else{
+            setbgcolorStatusBar("#764FE2")
+            setcolorSearch(null)
+        }
+        if(value<0){
+          scrollY.setValue(0)
+        }else{
+          scrollY.setValue(value)
+        } 
+    }
+  
     return(
-
             <SafeAreaView style= {{ flex: 1 }}>
-                <HeaderScreen navigation={navigation}/>
-                {/* <LoadingSkeleton/> */}
-                {/* <LoadingCircle/> */}
-                <VirtualizedView>           
+                 {/* barStyle="dark-content" */}
+                <StatusBar 
+                    backgroundColor={bgcolorStatusBar} 
+                    animated 
+                    barStyle={bgcolorStatusBar=="white"?"dark-content":null}/>
+                <Animated.View  
+                    style={{
+                        transform:[{translateY:translateY}], 
+                        position:'absolute',
+                        top:0,
+                        left:0,
+                        right:0,
+                        zIndex:1
+                    }} 
+                >
+                    <HeaderScreen navigation={navigation} colorSearch={colorSearch}/>
+                </Animated.View>
+                <VirtualizedView setValue={handleSetValueScrollY}>           
                     <CategoryScreen/>
                     <ProductHot/>
                     <Flashsales/>
@@ -33,7 +68,7 @@ export default function HomeScreen({navigation}){
     )
     
 }
-
+const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     fakebox:{
         height : 250,

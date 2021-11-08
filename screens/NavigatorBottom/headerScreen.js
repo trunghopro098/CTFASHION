@@ -1,20 +1,25 @@
 import React from "react";
-import {View, Text, TextInput, StyleSheet, Dimensions,Image, Button,TouchableOpacity } from 'react-native';
+import {View, Text, TextInput, StyleSheet, Dimensions,Image,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 
-export default function HeaderScreen({navigation}){
+export default function HeaderScreen(props,{navigation}){
     return(
+        <Animated.View>
         <LinearGradient
-        colors={["#764FE2",'#9C30FF']}
-         style= {style.container}>
+            colors={["#764FE2",'#9C30FF']}
+            style= {style.container}
+        >
             <View style= {style.header}>
-                <Image source={require('../../assets/icons/cartwhite.png')} resizeMode="contain"
-                style={{ width : 30, height: 30, marginRight :12 }}></Image>
+                <Text style={style.label}>CT FASHION</Text>
+                <View style={{ flexDirection:'row' }}>
+                    <Image source={require('../../assets/icons/cartwhite.png')} resizeMode="contain"
+                    style={{ width : 30, height: 30, marginRight :12 }}></Image>
 
-                <Image source={require('../../assets/icons/wallet.png')} resizeMode="contain"
-                style={{ width : 30, height: 30 }}></Image>
+                    <Image source={require('../../assets/icons/wallet.png')} resizeMode="contain"
+                    style={{ width : 30, height: 30 }}></Image>
+                </View>
             </View>
-            <View style={style.search1}>
+            <View style={{...style.search1,backgroundColor:props.colorSearch}}>
                 <View style={style.input}>
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
                     <TouchableOpacity onPress={()=>{
@@ -23,17 +28,17 @@ export default function HeaderScreen({navigation}){
                         <TextInput style={style.textinput}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>{navigation.navigate('search')}}>
-                                <LinearGradient
-                                     colors={["#C790E5",'#9C30FF','#BEE6F0']}style={style.search}>
-                                    <Text style= {{ color: 'white' }}>Tìm kiếm</Text>
-                                </LinearGradient>
+                        <LinearGradient 
+                            colors={["#C790E5",'#9C30FF','#BEE6F0']}
+                            style={style.search}
+                        >
+                            <Text style= {{ color: 'white' }}>Tìm kiếm</Text>
+                        </LinearGradient>
                     </TouchableOpacity>
                 </View>
             </View>
-
-            
-
         </LinearGradient>
+        </Animated.View>
     )
 }
 
@@ -43,7 +48,7 @@ const windowH = Dimensions.get('window').height;
 const style = StyleSheet.create({
     container:{
         
-        height : windowH*0.121,
+        height : windowH*0.145,
         backgroundColor : "#764FE2",
 
     },
@@ -80,13 +85,22 @@ const style = StyleSheet.create({
     },
     header:{
         flexDirection: "row",
-        justifyContent: 'flex-end',
-        marginRight : 15
-        
+        justifyContent: 'space-between',
+        marginRight : 15,
+        paddingTop:10,
+        marginBottom:10
     },
     search1:{
         justifyContent : "center",
         alignContent : "center",
-        alignItems:"center"
+        alignItems:"center",
+        paddingBottom:10
+    },
+    label:{
+        color:'white',
+        fontWeight:'bold',
+        fontSize:18,
+        marginLeft:10,
+        marginTop:5 
     }
 })

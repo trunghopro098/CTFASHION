@@ -13,23 +13,22 @@ export default function CategoryScreen(){
         getCategory();
     }, [])
 
- const getCategory = async()=>{
-     const res = await FetchAPI.getAPI('/product/getCategory');
-    setData(res)
+    const getCategory = async()=>{
+        const res = await FetchAPI.getAPI('/product/getCategory');
+        setData(res)
+    }
 
- }
-
-// console.log(Data)
 
  const renderitem = ({item,index})=>{
         return(
         <View style={styles.item}>
             <TouchableOpacity onPress={()=>{console.log("xin chaof")}}>
             <View style={styles.itemImage}>
-
-                     <Image source={{uri :SetHTTP(item.logo) }} resizeMode='contain'
-                    style={{ width : 30, height : 30}}/>
-                 
+                <Image
+                    source={{uri :SetHTTP(item.logo) }} 
+                    resizeMode='contain'
+                    style={{ width : 30, height : 30}}
+                />
             </View>
             <Text style={styles.text}>{item.name}</Text>
             </TouchableOpacity>
@@ -37,22 +36,20 @@ export default function CategoryScreen(){
         )
     }
 
-        return(
-            <LinearGradient
-            colors={['#9C30FF',"#C790E5"]}
-             style= {styles.container}>
-                 {/* <Text style={{color : 'white',fontWeight : 'bold', marginLeft: 10 }}>DANH MỤC SẢN PHẨM</Text> */}
-                <FlatList
+    return(
+        <LinearGradient
+        colors={['#9C30FF',"#C790E5"]}
+            style= {styles.container}>
+                {/* <Text style={{color : 'white',fontWeight : 'bold', marginLeft: 10 }}>DANH MỤC SẢN PHẨM</Text> */}
+            <FlatList
                 horizontal 
                 data= {Data}
                 keyExtractor={item=>item.id}
                 renderItem={renderitem}
-                />
-            </LinearGradient>
-        )
-
+            />
+        </LinearGradient>
+    )
 }
-
 
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
@@ -71,8 +68,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         margin : 5,
         alignContent : 'center',
-
-
+        padding:10
     },
     item:{
         alignContent : 'center',

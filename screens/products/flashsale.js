@@ -11,6 +11,7 @@ export default function Flashsales(){
    
 useEffect(() => {
     getdatasale();
+    console.log("Chạy nz nè")
 }, [])
 
 const getdatasale= async()=>{
@@ -30,17 +31,17 @@ const renderitem= ({item,index})=>{
             color="green"
             distance={15}
             extent={0.0}
-            style={{fontSize: 12,
-                color: 'white',
-                textAlign: 'center',
-                alignItems: 'center',
+            style={{
+                    fontSize: 12,
+                    color: 'white',
+                    textAlign: 'center',
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    }}
-
+            }}
             shadowProps={{ shadowColor: "#C8C8C8",
-                                shadowOffset: { width: 0, height: 12, },  
-                                shadowOpacity: 0.2, shadowRadius: 8, 
-                                elevation: 2 }}
+                            shadowOffset: { width: 0, height: 12, },  
+                            shadowOpacity: 0.2, shadowRadius: 8, 
+                            elevation: 2 }}
         >
             <View style={{...styles.itemdetail, backgroundColor: "#FDE0C7"}}>
             <Image source={{uri :SetHTTP(item.image) }} 
@@ -60,18 +61,18 @@ const renderitem= ({item,index})=>{
     return(
 
         <LinearGradient  colors= {["#EDDAF5","white"]} style={styles.container}>
-                <LinearGradient  colors= {['#F767C3', '#8fcbbc','white']} style={styles.Sale}>
+            <LinearGradient  colors= {['#F767C3', '#8fcbbc','white']} style={styles.Sale}>
                 <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
                 <Text style={{ color: 'white', fontSize: 15, fontWeight:'bold', marginLeft: 15 }}>FLASHSALE</Text>
-                <Text style={{ color: '#149FF9', fontSize: 15 , marginRight:10 }}>{`xem thêm>>`}</Text> 
+                <Text style={{ color: '#149FF9', fontSize: 15 , marginRight:10 }}>{`Xem thêm >>`}</Text> 
                 </View>
                 <View style={styles.productsale}>
-                  <FlatList
-                  horizontal
-                  data={Data}
-                  keyExtractor= {item=>item.id}
-                  renderItem={renderitem}
-                  />
+                    <FlatList
+                    horizontal
+                    data={Data}
+                    keyExtractor= {item=>item.id}
+                    renderItem={renderitem}
+                    />
                 </View>
             </LinearGradient>
         </LinearGradient>

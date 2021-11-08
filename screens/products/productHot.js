@@ -24,6 +24,7 @@ export default function ProductHot(){
         // return () => {
         //     clearInterval(interval)
         // }
+        console.log("có chạy lại k")
     }, [])
 
 const getProductSale= async()=>{
@@ -32,7 +33,7 @@ const getProductSale= async()=>{
 }
 
 const renderitem = ({item,index})=>{
-        const titleSale = 100-(Math.round((item.promotional*100)/item.price))
+    const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
         <View style={{ marginHorizontal: 6 }}>
             <Label
@@ -48,7 +49,6 @@ const renderitem = ({item,index})=>{
                     alignItems: 'center',
                         justifyContent: 'center',
                         }}
-
                 shadowProps={{ shadowColor: "#C8C8C8",
                                     shadowOffset: { width: 0, height: 12, },  
                                     shadowOpacity: 0.2, shadowRadius: 8, 
@@ -66,15 +66,14 @@ const renderitem = ({item,index})=>{
             </Label>
         </View>
     )
-}
+    }
     return(
 
         <LinearGradient  colors= {["#C790E5","#EDDAF5"]} style={styles.container}>
                 <LinearGradient  colors= {["#6C2DC6","#9C30FF","#C482F7","#B7A4F7"]} style={styles.Sale}>
                 <View style={styles.LogoSale}>
                     <LinearGradient colors= {["#9C30FF","#C482F7","#B7A4F7","#FEFFFF"]} style={styles.deal}>
-                    <Text style={{...styles.text,color : '#E0FF4E'}}>SIÊU SALE 11/11</Text>
-                        
+                        <Text style={{...styles.text,color : '#E0FF4E'}}>SIÊU SALE</Text>  
                     </LinearGradient>
                 </View>
                 <View style={styles.productsale}>
@@ -122,7 +121,8 @@ const styles = StyleSheet.create({
         borderColor:"#51FEC7",
         justifyContent: "center",
         alignContent:"center",
-        alignItems:"center"
+        alignItems:"center", 
+        padding:10
     },
     text:{
         
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignContent: "space-around",
         alignItems: "center",
-        marginTop: 2
+        marginTop: 10,
+        marginLeft:5
     },
     productsaleLable:{
         width: windowW*0.28,
