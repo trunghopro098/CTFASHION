@@ -1,5 +1,5 @@
 import React, {useEffect,useRef} from "react";
-import {View, Text, Image, Dimensions,StyleSheet, Animated, SafeAreaView} from 'react-native';
+import {View, Text, StatusBar, Dimensions,StyleSheet, Animated, SafeAreaView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 export default function SplashScreen({navigation}){
@@ -34,6 +34,10 @@ export default function SplashScreen({navigation}){
 
         return (
             <SafeAreaView style={styles.container}>
+                <StatusBar 
+                    backgroundColor="#F2AF90"
+    
+                />
                 <LinearGradient
                 // colors={["#B0FCFC",'#FDB3D8']}
                 colors={["#F2AF90",'#F4F7D8',"#F4EDE8"]}
