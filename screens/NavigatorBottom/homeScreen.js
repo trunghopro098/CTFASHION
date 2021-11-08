@@ -7,10 +7,11 @@ import ProductHot from "../products/productHot";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import GetfullProduct from "../products/getfullProduct";
-import * as GETAPI from '../../util/fetchApi'
+import * as GETAPI from '../../util/fetchApi';
 export default function HomeScreen({navigation,props}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
+    
     const [DataProducthot, setDataproducthost] = useState([]);
     const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
     const [Datacategory, setDatacategory] = useState([]);
@@ -37,6 +38,7 @@ const getdatasale= async()=>{
         setDatacategory(res)
     }
 
+    const [bgHeader, setbgHeader] = useState(false);
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -50,15 +52,19 @@ const getdatasale= async()=>{
         if(value>80){
             setbgcolorStatusBar("white")
             setcolorSearch("white")
+            setbgHeader(true)
+            scrollY.setValue(value)
         }else{
             setbgcolorStatusBar("#764FE2")
             setcolorSearch(null)
+            setbgHeader(false)
+            scrollY.setValue(0)
         }
-        if(value<0){
-          scrollY.setValue(0)
-        }else{
-          scrollY.setValue(value)
-        } 
+        // if(value<0){
+        //   scrollY.setValue(0)
+        // }else{
+        //   scrollY.setValue(value)
+        // } 
     }
   
     return(
@@ -78,7 +84,7 @@ const getdatasale= async()=>{
                         zIndex:1
                     }} 
                 >
-                    <HeaderScreen navigation={navigation} colorSearch={colorSearch}/>
+                    <HeaderScreen navigation={navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 </Animated.View>
                 <VirtualizedView setValue={handleSetValueScrollY}>           
                     <CategoryScreen Data={Datacategory}/>
