@@ -1,43 +1,45 @@
-import React,{useState,useEffect} from "react";
-import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions} from "react-native"; 
+import React,{useState,useEffect,} from "react";
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,View} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
 import ProductHot from "../products/productHot";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
-import GetfullProduct from "../products/getfullProduct";
 import * as GETAPI from '../../util/fetchApi';
-export default function HomeScreen(props){
-
+export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
-
     const [DataProducthot, setDataproducthost] = useState([]);
     const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
     const [Datacategory, setDatacategory] = useState([]);
+    const [bgHeader, setbgHeader] = useState(false);
 
-
+    //Animation header
+    const scrollY = new Animated.Value(0);
+    const diffClamp = Animated.diffClamp(scrollY,0,50);
+    const translateY = diffClamp.interpolate({
+        inputRange:[0,50],
+        outputRange:[0,-50]
+    })
     useEffect(() => {
         getCategory();
         getProductSale();
         getdatasale();
-        console.log("ddang chay laij")
     }, [])
-
-const getProductSale= async()=>{
-    const res = await GETAPI.getAPI('/product/getTopProductSale');
-    setDataproducthost(res);
-}
-const getdatasale= async()=>{
-    const res = await GETAPI.getAPI('/product/getproductSale')
-    setDataProductFlashsale(res)
-}
-
+    const getProductSale= async()=>{
+        const res = await GETAPI.getAPI('/product/getTopProductSale');
+        setDataproducthost(res);
+    }
+    const getdatasale= async()=>{
+        const res = await GETAPI.getAPI('/product/getproductSale')
+        setDataProductFlashsale(res) 
+    }
     const getCategory = async()=>{
         const res = await GETAPI.getAPI('/product/getCategory');
         setDatacategory(res)
     }
+<<<<<<< HEAD
     const [bgHeader, setbgHeader] = useState(false);
     //Animation header
     const scrollY = new Animated.Value(0);
@@ -47,25 +49,26 @@ const getdatasale= async()=>{
         inputRange:[0,50],
         outputRange:[0,-50]
     })
+=======
+
+>>>>>>> 718a62ee27fcd5008323223c02f44a85c8fedd20
     //Animation header
     const handleSetValueScrollY = (e)=>{
         const value = e.nativeEvent.contentOffset.y;
-        if(value>80){
-            setbgcolorStatusBar("white")
-            setcolorSearch("white")
-            setbgHeader(true)
-            scrollY.setValue(value)
+        if(value<0){
+          scrollY.setValue(0)
         }else{
-            setbgcolorStatusBar("#764FE2")
-            setcolorSearch(null)
-            setbgHeader(false)
-            scrollY.setValue(0)
-        }
-        // if(value<0){
-        //   scrollY.setValue(0)
-        // }else{
-        //   scrollY.setValue(value)
-        // } 
+            if(value>80){
+                setbgcolorStatusBar("white")
+                setcolorSearch("white")
+                setbgHeader(true)
+            }else{
+                setbgcolorStatusBar("#764FE2")
+                setcolorSearch(null)
+                setbgHeader(false) 
+            }
+            scrollY.setValue(value)
+        } 
     }
   
     return(
@@ -87,8 +90,9 @@ const getdatasale= async()=>{
                 >
                     <HeaderScreen navigation={props.navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 </Animated.View>
-                <VirtualizedView setValue={handleSetValueScrollY}>           
-                    <CategoryScreen Data={Datacategory}/>
+               
+                <VirtualizedView setValue={handleSetValueScrollY}>      
+                    <CategoryScreen Data={Datacategory} />
                     <ProductHot Data={DataProducthot}/>
                     <Flashsales Data={DataProductFlashsale}/>
                     {/* <GetfullProduct/> */}
@@ -96,6 +100,7 @@ const getdatasale= async()=>{
                     <Test2/>
                     <Test2/>
                 </VirtualizedView>
+            
             </SafeAreaView>
 
     )

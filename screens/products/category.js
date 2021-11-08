@@ -1,14 +1,11 @@
-import React, {useEffect,useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet ,Image,Dimensions, FlatList,TouchableOpacity } from 'react-native';
-import * as FetchAPI from '../../util/fetchApi'
 import { SetHTTP } from '../../util/setHTTP';
-
 import LinearGradient from 'react-native-linear-gradient';
 
 export default function CategoryScreen(props){
 
-
- const renderitem = ({item,index})=>{
+ const renderitem = ({item})=>{
         return(
         <View style={styles.item}>
             <TouchableOpacity onPress={()=>{console.log("xin chaof")}}>
@@ -40,7 +37,6 @@ export default function CategoryScreen(props){
     )
 }
 
-const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{
