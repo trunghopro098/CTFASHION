@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
@@ -7,10 +7,36 @@ import ProductHot from "../products/productHot";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import GetfullProduct from "../products/getfullProduct";
-export default function HomeScreen({navigation}){
+import * as GETAPI from '../../util/fetchApi'
+export default function HomeScreen({navigation,props}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
-    
+    const [DataProducthot, setDataproducthost] = useState([]);
+    const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
+    const [Datacategory, setDatacategory] = useState([]);
+
+
+    useEffect(() => {
+        getCategory();
+        getProductSale();
+        getdatasale();
+        console.log("ddang chay laij")
+    }, [])
+
+const getProductSale= async()=>{
+    const res = await GETAPI.getAPI('/product/getTopProductSale');
+    setDataproducthost(res);
+}
+const getdatasale= async()=>{
+    const res = await GETAPI.getAPI('/product/getproductSale')
+    setDataProductFlashsale(res)
+}
+
+    const getCategory = async()=>{
+        const res = await GETAPI.getAPI('/product/getCategory');
+        setDatacategory(res)
+    }
+
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -55,10 +81,10 @@ export default function HomeScreen({navigation}){
                     <HeaderScreen navigation={navigation} colorSearch={colorSearch}/>
                 </Animated.View>
                 <VirtualizedView setValue={handleSetValueScrollY}>           
-                    <CategoryScreen/>
-                    <ProductHot/>
-                    <Flashsales/>
-                    <GetfullProduct/>
+                    <CategoryScreen Data={Datacategory}/>
+                    <ProductHot Data={DataProducthot}/>
+                    <Flashsales Data={DataProductFlashsale}/>
+                    {/* <GetfullProduct/> */}
                     <Test2/>
                     <Test2/>
                     <Test2/>

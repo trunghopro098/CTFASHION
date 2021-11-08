@@ -6,19 +6,7 @@ import * as GETAPI from '../../util/fetchApi'
 import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 
-export default function Flashsales(){
-    const [Data, setData] = useState([])
-   
-useEffect(() => {
-    getdatasale();
-    console.log("Chạy nz nè")
-}, [])
-
-const getdatasale= async()=>{
-    const res = await GETAPI.getAPI('/product/getproductSale')
-    setData(res)
-}
-
+export default function Flashsales(props){
 const renderitem= ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
@@ -69,7 +57,7 @@ const renderitem= ({item,index})=>{
                 <View style={styles.productsale}>
                     <FlatList
                     horizontal
-                    data={Data}
+                    data={props.Data}
                     keyExtractor= {item=>item.id}
                     renderItem={renderitem}
                     />

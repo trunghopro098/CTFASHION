@@ -5,18 +5,7 @@ import { SetHTTP } from '../../util/setHTTP';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function CategoryScreen(){
-    const [Data, setData] = useState([]);
-
-
-    useEffect(() => {
-        getCategory();
-    }, [])
-
-    const getCategory = async()=>{
-        const res = await FetchAPI.getAPI('/product/getCategory');
-        setData(res)
-    }
+export default function CategoryScreen(props){
 
 
  const renderitem = ({item,index})=>{
@@ -43,7 +32,7 @@ export default function CategoryScreen(){
                 {/* <Text style={{color : 'white',fontWeight : 'bold', marginLeft: 10 }}>DANH MỤC SẢN PHẨM</Text> */}
             <FlatList
                 horizontal 
-                data= {Data}
+                data= {props.Data}
                 keyExtractor={item=>item.id}
                 renderItem={renderitem}
             />

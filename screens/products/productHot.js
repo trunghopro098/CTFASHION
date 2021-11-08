@@ -6,31 +6,7 @@ import * as GETAPI from '../../util/fetchApi'
 import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 
-export default function ProductHot(){
-
-    const [Data, setData] = useState([])
-    const [text,Settext]  = useState(true)
-
-    useEffect(() => {
-        getProductSale();
-        // const interval = setInterval(() => {
-        //     Settext(()=>{
-        //         return Settext(!text)
-        //     })
-            
-
-        //     // console.log("abcder")
-        //       }, 1000);
-        // return () => {
-        //     clearInterval(interval)
-        // }
-        console.log("có chạy lại k")
-    }, [])
-
-const getProductSale= async()=>{
-    const res = await GETAPI.getAPI('/product/getTopProductSale');
-    setData(res);
-}
+export default function ProductHot(props){
 
 const renderitem = ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
@@ -47,7 +23,7 @@ const renderitem = ({item,index})=>{
                     color: 'white',
                     textAlign: 'center',
                     alignItems: 'center',
-                        justifyContent: 'center',
+                    justifyContent: 'center',
                         }}
                 shadowProps={{ shadowColor: "#C8C8C8",
                                     shadowOffset: { width: 0, height: 12, },  
@@ -80,7 +56,7 @@ const renderitem = ({item,index})=>{
                 
                 <FlatList
                     horizontal
-                    data={Data}
+                    data={props.Data}
                     keyExtractor={item=>item.id}
                     renderItem={renderitem}
                 />
