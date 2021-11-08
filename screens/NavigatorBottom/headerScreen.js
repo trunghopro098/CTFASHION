@@ -22,12 +22,10 @@ export default function HeaderScreen(props,{navigation}){
             <View style={{...style.search1,backgroundColor:props.colorSearch}}>
                 <View style={style.input}>
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
-                    <TouchableOpacity onPress={()=>{
-                        navigation.navigate('search')
-                    }}>
+                    <TouchableOpacity onPress={()=>{ props.navigation.navigate('search')}}>
                         <TextInput style={style.textinput}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('search')}}>
+                    <TouchableOpacity onPress={()=>{props.navigation.navigate('search')}}>
                         <LinearGradient 
                             colors={["#C790E5",'#9C30FF','#BEE6F0']}
                             style={style.search}

@@ -8,10 +8,11 @@ import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import GetfullProduct from "../products/getfullProduct";
 import * as GETAPI from '../../util/fetchApi';
-export default function HomeScreen({navigation,props}){
+export default function HomeScreen(props){
+
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
-    
+
     const [DataProducthot, setDataproducthost] = useState([]);
     const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
     const [Datacategory, setDatacategory] = useState([]);
@@ -37,10 +38,10 @@ const getdatasale= async()=>{
         const res = await GETAPI.getAPI('/product/getCategory');
         setDatacategory(res)
     }
-
     const [bgHeader, setbgHeader] = useState(false);
     //Animation header
     const scrollY = new Animated.Value(0);
+    // diffClamp nhanaj thay ddooir
     const diffClamp = Animated.diffClamp(scrollY,0,50);
     const translateY = diffClamp.interpolate({
         inputRange:[0,50],
@@ -84,7 +85,7 @@ const getdatasale= async()=>{
                         zIndex:1
                     }} 
                 >
-                    <HeaderScreen navigation={navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                    <HeaderScreen navigation={props.navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 </Animated.View>
                 <VirtualizedView setValue={handleSetValueScrollY}>           
                     <CategoryScreen Data={Datacategory}/>
