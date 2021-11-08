@@ -10,7 +10,7 @@ import GetfullProduct from "../products/getfullProduct";
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
-    
+    const [bgHeader, setbgHeader] = useState(false);
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -24,15 +24,19 @@ export default function HomeScreen({navigation}){
         if(value>80){
             setbgcolorStatusBar("white")
             setcolorSearch("white")
+            setbgHeader(true)
+            scrollY.setValue(value)
         }else{
             setbgcolorStatusBar("#764FE2")
             setcolorSearch(null)
+            setbgHeader(false)
+            scrollY.setValue(0)
         }
-        if(value<0){
-          scrollY.setValue(0)
-        }else{
-          scrollY.setValue(value)
-        } 
+        // if(value<0){
+        //   scrollY.setValue(0)
+        // }else{
+        //   scrollY.setValue(value)
+        // } 
     }
   
     return(
@@ -52,7 +56,7 @@ export default function HomeScreen({navigation}){
                         zIndex:1
                     }} 
                 >
-                    <HeaderScreen navigation={navigation} colorSearch={colorSearch}/>
+                    <HeaderScreen navigation={navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 </Animated.View>
                 <VirtualizedView setValue={handleSetValueScrollY}>           
                     <CategoryScreen/>

@@ -1,22 +1,22 @@
 import React from "react";
 import {View, Text, TextInput, StyleSheet, Dimensions,Image,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
-
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function HeaderScreen(props,{navigation}){
+    const {bgWhite} = props;
     return(
         <Animated.View>
         <LinearGradient
             colors={["#764FE2",'#9C30FF']}
             style= {style.container}
         >
-            <View style= {style.header}>
-                <Text style={style.label}>CT FASHION</Text>
+            <View style= {bgWhite?{...style.header,backgroundColor:'white'}:{...style.header}}>
+                <Text style={bgWhite?{...style.label,color:'tomato'}:{...style.label}}>CT FASHION</Text>
                 <View style={{ flexDirection:'row' }}>
-                    <Image source={require('../../assets/icons/cartwhite.png')} resizeMode="contain"
-                    style={{ width : 30, height: 30, marginRight :12 }}></Image>
+                    <AntDesign name="shoppingcart" color={bgWhite?"black":"white"} size={24} style={{marginRight:10}}/>
 
-                    <Image source={require('../../assets/icons/wallet.png')} resizeMode="contain"
-                    style={{ width : 30, height: 30 }}></Image>
+                    <Feather name="user" color={bgWhite?"black":"white"} size={24}/>
                 </View>
             </View>
             <View style={{...style.search1,backgroundColor:props.colorSearch}}>
@@ -86,9 +86,9 @@ const style = StyleSheet.create({
     header:{
         flexDirection: "row",
         justifyContent: 'space-between',
-        marginRight : 15,
+        paddingRight : 15,
         paddingTop:10,
-        marginBottom:10
+        paddingBottom:10
     },
     search1:{
         justifyContent : "center",
