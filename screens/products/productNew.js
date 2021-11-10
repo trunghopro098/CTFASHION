@@ -1,9 +1,8 @@
 import React from "react";
 import {View, Text, StyleSheet,Dimensions, Image,TouchableOpacity} from 'react-native';
 import {SliderBox} from 'react-native-image-slider-box';
-import LinearGradient from "react-native-linear-gradient";
-import Label, {Orientation} from "react-native-label";
 import { SetHTTP } from "../../util/setHTTP";
+import truncate from "../../util/truncate";
 export default function ProductNew(props,{navigation}){
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
@@ -23,7 +22,7 @@ export default function ProductNew(props,{navigation}){
                     />
                 </View>
                 <View style={{ flex:1 }} >
-                    <Text style={{ fontSize:10 }}>{item.name}</Text>
+                    <Text style={{ fontSize:10 }}>{truncate(item.name)}</Text>
                 </View>
             </TouchableOpacity>
         )

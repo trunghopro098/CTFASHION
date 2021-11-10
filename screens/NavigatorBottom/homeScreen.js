@@ -75,7 +75,6 @@ export default function HomeScreen({navigation}){
     }
     const getCategory = async()=>{
         const res = await GETAPI.getAPI('/product/getCategory');
-        // console.log(res)
         setDatacategory(res)
     }
     const getDataBox = async()=>{
