@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Image
 import { SetHTTP } from "../../util/setHTTP";
 import Label, {Orientation} from "react-native-label";
 import { FormatNumber } from "../../util/formatNumber";
+import truncate from "../../util/truncate";
+
 export default function GetfullProduct(props){
 
-   const datafullproduct=props.DatafullProduct
+    const datafullproduct=props.DatafullProduct
  
-
+    
     const renderitem = (item)=>{
         const name = item.name;
         const titleSale = 100-(Math.round((item.promotional*100)/item.price))
@@ -25,30 +27,32 @@ export default function GetfullProduct(props){
                         style={{
                                 fontSize: 15,
                                 color: 'white',
-                                textAlign: 'center',
+                                // textAlign: 'center',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                         }}
                         shadowProps={{ shadowColor: "#C8C8C8",
                                         shadowOffset: { width: 0, height: 12, },  
                                         shadowOpacity: 0.2, shadowRadius: 8, 
-                                        elevation: 2 }}>
+                                        elevation: 2 }}
+                        >
                         <View >
                             <Image 
                                     source={{ uri:SetHTTP(item.image)}} 
                                     resizeMode='contain'
-                                    style={{ width : windowW*0.46,
+                                    style={{ 
+                                        width : windowW*0.46,
                                         height : windowH*0.35,
-                                        borderRadius:10,
+                                        borderRadius:6,
                                     }}
                                 />
                         </View >
-                            <View style={{ justifyContent: "center",flexDirection:"row" }}>
-                                <Text>{name.toLowerCase()}</Text>
+                            <View style={{ flexDirection:"row",paddingLeft:5 }}>
+                                <Text>{truncate(name)}</Text>
                             </View>
-                            <View style={{ flex : 1, justifyContent:"space-around", margin : 3 ,flexDirection:"row",}}>
+                            <View style={{ flex : 1, justifyContent:"space-between", margin : 3 ,flexDirection:"row",}}>
                                     <Text style={{...styles.price ,color : "#777777", textDecorationLine:"line-through", marginRight:5 }}>{FormatNumber(item.price)}đ</Text>
-                                    <Text style={{ ...styles.price ,color:"red"}}>{FormatNumber(item.promotional)}đ</Text>
+                                    <Text style={{ ...styles.price ,color:"red",marginRight:10}}>{FormatNumber(item.promotional)}đ</Text>
                                 
                                 {/* <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text> */}
                             </View>  
@@ -63,14 +67,14 @@ export default function GetfullProduct(props){
                                     resizeMode='contain'
                                     style={{ width : windowW*0.46,
                                         height : windowH*0.35,
-                                        borderRadius:10,
+                                        borderRadius:6,
                                     }}
                                 />
                         </View>
-                            <View style={{ justifyContent: "center",flexDirection:"row" }}>
-                                <Text>{name.toLowerCase()}</Text>
+                            <View style={{ flexDirection:"row",paddingLeft:5 }}>
+                                <Text>{truncate(name)}</Text>
                             </View>
-                            <View style={{ flex : 1, justifyContent:"space-around", margin : 3 ,flexDirection:"row",}}>
+                            <View style={{ flex : 1, margin : 3 ,flexDirection:"row",}}>
                                 <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text>
                             </View>  
                             <Text>DDanhs gia sao</Text>          

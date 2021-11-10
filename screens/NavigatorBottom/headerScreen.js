@@ -48,9 +48,8 @@ const windowH = Dimensions.get('window').height;
 const style = StyleSheet.create({
     container:{
         
-        height : windowH*0.155,
+        height : windowH*0.14,
         backgroundColor : "#764FE2",
-
     },
     input:{
         justifyContent: "space-between",
