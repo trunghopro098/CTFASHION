@@ -4,6 +4,7 @@ import {FlatList,ScrollView} from 'react-native';
 export default function VirtualizedView(props) {
     return(
       <ScrollView 
+      // nestedScrollEnabled
         contentContainerStyle={{ paddingTop:90,elevation:5 }}
         onScroll={(e)=>{
           props.setValue(e);

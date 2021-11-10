@@ -5,7 +5,7 @@ import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
 import ProductHot from "../products/productHot";
 import ProductNew from "../products/productNew";
-
+import GetfullProduct from "../products/getfullProduct";
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import * as GETAPI from '../../util/fetchApi';
@@ -22,6 +22,9 @@ export default function HomeScreen({navigation}){
     const [DataProductNew, setDataProductNew] = useState([]);//data hiển thị sản phẩm mới nhất trong box
     const [DataProductNewImageSlideBox, setDataProductNewImageSlideBox] = useState([]);//hình ảnh hiển thị lên slide
     const [DataProductNewSlideBox, setDataProductNewSlideBox] = useState([]);//data khi click vào slider
+    const [Datafullproduct, setDatafullproduct] = useState([])
+
+
     const arr = [
         {
         name: "áo cà xa "
@@ -49,7 +52,7 @@ export default function HomeScreen({navigation}){
         getProductSale();
         getdatasale();
         getDataBox();
-        getDataSliderBox();
+        getDatafullProduct();
         const interval = setInterval(()=>{
             // console.log(arr.length);
             const random = Math.floor((Math.random()*arr.length));
@@ -91,17 +94,17 @@ export default function HomeScreen({navigation}){
         for(let j = 5; j <= res.item.length-1; j++){
             ArrProductNew.push(res.item[j])
         }
-        console.log(ArrProductNew)
+        // console.log(ArrProductNew)
         setDataProductNewImageSlideBox(ArrDtaImage)
         setDataProductNew(ArrProductNew)
         setDataProductNewSlideBox(ArrDtaProductImage)
         
     }
 
-    const getDataSliderBox = ()=>{
-        // console.log('gbgcv ')
-        // console.log(DataSlideBox)
-        // console.log(DataSlideBox.length)
+    const getDatafullProduct = async()=>{
+        const res = await GETAPI.getAPI('/product/getFullProduct');
+        // console.log(res)
+        setDatafullproduct(res)
     }
 
 
@@ -150,7 +153,7 @@ export default function HomeScreen({navigation}){
                     <ProductHot Data={DataProducthot}/>
                     <Flashsales Data={DataProductFlashsale}/>
                     <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
-                    {/* <GetfullProduct/> */}
+                    <GetfullProduct DatafullProduct={Datafullproduct}/>
                     <Test2/>
                     <Test2/>
                     <Test2/>

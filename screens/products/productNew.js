@@ -43,6 +43,7 @@ export default function ProductNew(props,{navigation}){
             <View style =  {{ ...styles.box,backgroundColor:'#E7E9EB' }}> 
                  <Text>fvfdkj</Text>     
                  <FlatList
+                    horizontal
                     data={dataNewProduct}
                     keyExtractor= {item=>item.id}
                     renderItem={renderitem}
@@ -55,7 +56,7 @@ const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{
-        height: windowH*0.44,
+        height: windowH*0.43,
         backgroundColor: 'white',
         flexDirection: "row",
         justifyContent: "space-around",
