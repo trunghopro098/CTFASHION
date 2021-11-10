@@ -11,7 +11,10 @@ export default function ProductNew(props,{navigation}){
 
     const renderitem = (item)=>{
         return(
-            <TouchableOpacity key={item.id} style={styles.wrapperitemProductNew}>
+            <TouchableOpacity key={item.id} style={styles.wrapperitemProductNew}
+             onPress={()=>{
+                    // console.log(`${SetHTTP(item.image)}`)
+            }}>
                 <View  >
                     <Image 
                         source={{ uri:SetHTTP(item.image)}} 
@@ -20,7 +23,7 @@ export default function ProductNew(props,{navigation}){
                     />
                 </View>
                 <View style={{ flex:1 }} >
-                    <Text style={{ fontSize:12 }}>{item.name}</Text>
+                    <Text style={{ fontSize:10 }}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -49,12 +52,6 @@ export default function ProductNew(props,{navigation}){
         />
             </View>
                 <View style =  {{ ...styles.box,backgroundColor:'#E7E9EB' }}> 
-                 
-                    {/* <FlatList
-                        data={dataNewProduct}
-                        keyExtractor= {item=>item.id}
-                        renderItem={renderitem}
-                    /> */}
                     {dataNewProduct!==undefined &&
                         dataNewProduct.map(e=>{
                             return(

@@ -115,7 +115,7 @@ export default function HomeScreen({navigation}){
         if(value<0){
           scrollY.setValue(0)
         }else{
-            if(value>80){
+            if(value>windowH*0.9){
                 setbgcolorStatusBar("white")
                 setcolorSearch("white")
                 setbgHeader(true)
