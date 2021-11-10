@@ -65,11 +65,9 @@ const style = StyleSheet.create({
         
     },
     textinput:{
-       
+        flex:1,
         paddingLeft: 10,
         paddingTop: 2,
-        textAlign:"left",
-        marginTop: 3,
         marginLeft: 8,
         backgroundColor : 'white',
         height : windowH*0.035,
@@ -77,7 +75,8 @@ const style = StyleSheet.create({
         // borderWidth : 1,
         borderTopLeftRadius : 50,
         borderBottomLeftRadius:50,
-        fontSize: 12
+        fontSize: 12,
+        paddingTop:7
     },
     search:{
         marginRight:3,

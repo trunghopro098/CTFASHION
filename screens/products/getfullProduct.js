@@ -14,7 +14,7 @@ export default function GetfullProduct(props){
 
     return(
         <View>
-            <FlatList
+            {/* <FlatList
                     removeClippedSubviews={true}
                     nestedScrollEnabled={true}
                     initialNumToRender={2}
@@ -22,7 +22,7 @@ export default function GetfullProduct(props){
             data={props.DatafullProduct}
             keyExtractor={item=>item.id}
             renderItem={renderItem}
-            />
+            /> */}
         </View>
     )
 }

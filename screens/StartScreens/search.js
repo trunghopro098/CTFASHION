@@ -8,23 +8,21 @@ export default function SearchScreen({ navigation }){
 const [searhHistory, setsearhHistory] = useState('');
 
 
-const addhistory = async()=>{
-    let arrHistorySearch = [];
-    const getArrAsync = await AsyncStorage.getItem('SEARCHHISTORY');
-    console.log("asd")
-    if(getArrAsync == null){
-        arrHistorySearch = [{name: searhHistory}]
-        console.log("ddeens dday roi")
-    }else{
-        console.log("den eles")
-        const add = [{name: searhHistory}]
-        arrHistorySearch= add.concat(arrHistorySearch)
+    const addhistory = async()=>{
+        let arrHistorySearch = [];
+        const getArrAsync = await AsyncStorage.getItem('SEARCHHISTORY');
+        console.log("asd")
+        if(getArrAsync == null){
+            arrHistorySearch = [{name: searhHistory}]
+            console.log("ddeens dday roi")
+        }else{
+            console.log("den eles")
+            const add = [{name: searhHistory}]
+            arrHistorySearch= add.concat(arrHistorySearch)
+        }
+        await AsyncStorage.setItem('SEARCHHISTORY',JSON.stringify(arrHistorySearch))
+        console.log("xong rồi")
     }
-    await AsyncStorage.setItem('SEARCHHISTORY',JSON.stringify(arrHistorySearch))
-    console.log("xong rồi")
-}
-
-
 
     return(
         <View style={style.container}>
@@ -35,11 +33,13 @@ const addhistory = async()=>{
         <View style={style.input} >
             <TouchableOpacity>
             {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
-                <TextInput style={{ ...style.textinput}} 
-                            placeholder={'Search'}
-                            value = {searhHistory}
-                            onChangeText={(value)=>setsearhHistory(value)} />
-                
+                <TextInput  
+                    style={{ ...style.textinput}} 
+                    
+                    placeholder={'Search'}
+                    value = {searhHistory}
+                    onChangeText={(value)=>setsearhHistory(value)} 
+                />
                 </TouchableOpacity>
                 <LinearGradient 
                     colors={["#C790E5",'#9C30FF','#BEE6F0']}
@@ -82,20 +82,17 @@ const style = StyleSheet.create({
         elevation: 4,
         },
     textinput:{
-        borderWidth: 1,
+        flex:1,
         paddingLeft: 15,
-        marginTop: 6,
-        paddingTop: 2,
         textAlign:"left",
-        marginTop: 3,
         marginLeft: 8,
         backgroundColor : 'white',
         height : windowH*0.05,
         width : windowW*0.60,
-        
         borderTopLeftRadius : 50,
         borderBottomLeftRadius:50,
-        fontSize: 12
+        fontSize: 12,
+       
     },
     search:{
         marginRight:3,
