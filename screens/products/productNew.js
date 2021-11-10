@@ -68,7 +68,7 @@ const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{
-        height: windowH*0.43,
+        height: windowH*0.42,
         backgroundColor: 'white',
         flexDirection: "row",
         justifyContent: "space-around",
