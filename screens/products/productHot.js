@@ -68,12 +68,12 @@ const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{
-        height: windowH*0.31,
+        height: windowH*0.33,
     },
     Sale:{
         marginHorizontal: 6,
         marginTop: 10,
-        height:windowH*0.29,
+        height:windowH*0.31,
         borderWidth: 1,
         borderColor: 'white',
         borderRadius: 20,

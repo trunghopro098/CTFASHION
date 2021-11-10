@@ -1,8 +1,9 @@
 
 import React, { Component } from 'react';
 import { View, Text, Button, StyleSheet ,Image,Dimensions } from 'react-native';
-export default class Productdetail extends Component{
-    render(){
+
+export default function Productdetail({navigation}){
+
         return(
             <View>
                 <Text>
@@ -10,5 +11,5 @@ export default class Productdetail extends Component{
                 </Text>
             </View>
         )
-    }
+    
 }

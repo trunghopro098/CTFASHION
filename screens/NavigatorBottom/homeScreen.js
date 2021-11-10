@@ -4,9 +4,13 @@ import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
 import ProductHot from "../products/productHot";
+import ProductNew from "../products/productNew";
+
 import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import * as GETAPI from '../../util/fetchApi';
+import { SetHTTP } from "../../util/setHTTP";
+
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
@@ -14,7 +18,24 @@ export default function HomeScreen({navigation}){
     const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
     const [Datacategory, setDatacategory] = useState([]);
     const [bgHeader, setbgHeader] = useState(false);
-
+    const [textsearch, settextsearch] = useState('');
+    const [DataProductNew, setDataProductNew] = useState([]);//data hiển thị sản phẩm mới nhất trong box
+    const [DataProductNewImageSlideBox, setDataProductNewImageSlideBox] = useState([]);//hình ảnh hiển thị lên slide
+    const [DataProductNewSlideBox, setDataProductNewSlideBox] = useState([]);//data khi click vào slider
+    const arr = [
+        {
+        name: "áo cà xa "
+       },
+       {
+        name: "Quần sa tăng "
+       },
+       {
+        name: "mủ ngộ không "
+       },
+       {
+        name: "Bụng trư bát giới "
+       },
+]
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -22,11 +43,25 @@ export default function HomeScreen({navigation}){
         inputRange:[0,50],
         outputRange:[0,-50]
     })
+
     useEffect(() => {
         getCategory();
         getProductSale();
         getdatasale();
+        getDataBox();
+        getDataSliderBox();
+        const interval = setInterval(()=>{
+            // console.log(arr.length);
+            const random = Math.floor((Math.random()*arr.length));
+            settextsearch(arr[random].name)
+        },6000);
+
+
+        return () => {cleanup(interval)}
+
+        
     }, [])
+
     const getProductSale= async()=>{
         const res = await GETAPI.getAPI('/product/getTopProductSale');
         setDataproducthost(res);
@@ -37,21 +72,40 @@ export default function HomeScreen({navigation}){
     }
     const getCategory = async()=>{
         const res = await GETAPI.getAPI('/product/getCategory');
+        // console.log(res)
         setDatacategory(res)
     }
-<<<<<<< HEAD
-    const [bgHeader, setbgHeader] = useState(false);
-    //Animation header
-    const scrollY = new Animated.Value(0);
-    // diffClamp nhanaj thay ddooir
-    const diffClamp = Animated.diffClamp(scrollY,0,50);
-    const translateY = diffClamp.interpolate({
-        inputRange:[0,50],
-        outputRange:[0,-50]
-    })
-=======
+    const getDataBox = async()=>{
+        const ArrDtaImage = [];
+        const ArrDtaProductImage = [];
+        const ArrProductNew = [];
+        const res = await GETAPI.getAPI('/product/getProductNew/1');
+        console.log("duc rooif")
 
->>>>>>> 718a62ee27fcd5008323223c02f44a85c8fedd20
+        // lấy 4 sản phẩm đầu tiên
+        for(let i = 0; i <= 4; i++){
+            ArrDtaProductImage.push(res.item[i])
+            ArrDtaImage.push(SetHTTP(res.item[i].image))
+        }
+        // lấy 3 sản phẩm sau cùng
+        for(let j = 5; j <= res.item.length-1; j++){
+            ArrProductNew.push(res.item[j])
+        }
+        console.log(ArrProductNew)
+        setDataProductNewImageSlideBox(ArrDtaImage)
+        setDataProductNew(ArrProductNew)
+        setDataProductNewSlideBox(ArrDtaProductImage)
+        
+    }
+
+    const getDataSliderBox = ()=>{
+        // console.log('gbgcv ')
+        // console.log(DataSlideBox)
+        // console.log(DataSlideBox.length)
+    }
+
+
+
     //Animation header
     const handleSetValueScrollY = (e)=>{
         const value = e.nativeEvent.contentOffset.y;
@@ -88,13 +142,14 @@ export default function HomeScreen({navigation}){
                         zIndex:1
                     }} 
                 >
-                    <HeaderScreen navigation={props.navigation} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                    <HeaderScreen navigation={navigation} textsearch={textsearch} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 </Animated.View>
                
                 <VirtualizedView setValue={handleSetValueScrollY}>      
                     <CategoryScreen Data={Datacategory} />
                     <ProductHot Data={DataProducthot}/>
                     <Flashsales Data={DataProductFlashsale}/>
+                    <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
                     {/* <GetfullProduct/> */}
                     <Test2/>
                     <Test2/>

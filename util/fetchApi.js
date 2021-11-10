@@ -1,6 +1,9 @@
-import {API_URL} from "@env"
+// import {API_URL} from "@env"
+// API_URL = 'http://192.168.1.7:5000'
+// API_URL = 'http://192.168.43.41:5000'
 export const getAPI = async(url)=>{
-    const res = await fetch(API_URL+url)
+    // console.log(API_URL)
+    const res = await fetch("http://192.168.43.41:5000"+url)
     .then((response)=>response.json())
     .then((responseJson)=>{
         return responseJson;

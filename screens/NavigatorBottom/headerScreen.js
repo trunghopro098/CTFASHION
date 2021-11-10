@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import {View, Text, TextInput, StyleSheet, Dimensions,Image,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Feather from 'react-native-vector-icons/Feather';
@@ -20,23 +20,23 @@ export default function HeaderScreen(props){
                 </View>
             </View>
             <View style={{...style.search1,backgroundColor:props.colorSearch}}>
-                <View style={style.input}>
-                    {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
-                    <TouchableOpacity onPress={()=>{
-                        props.navigation.navigate('search')
-                    }}>
-                        <TextInput style={style.textinput}/>
-                    </TouchableOpacity>
+ 
+                <View style={style.input} >
                     <TouchableOpacity onPress={()=>{props.navigation.navigate('search')}}>
+                    {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
+                        {/* <TextInput style={{ ...style.textinput}}/> */}
+                        <Text style={{ ...style.textinput}}>{props.textsearch}</Text>
+                        </TouchableOpacity>
                         <LinearGradient 
                             colors={["#C790E5",'#9C30FF','#BEE6F0']}
                             style={style.search}
                         >
-                            <Text style= {{ color: 'white' }}>Tìm kiếm</Text>
+                            <TouchableOpacity onPress={()=>{props.navigation.navigate('search')}}>
+                            <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
+                            </TouchableOpacity>
                         </LinearGradient>
-                    </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
         </LinearGradient>
         </Animated.View>
     )
@@ -53,9 +53,10 @@ const style = StyleSheet.create({
 
     },
     input:{
+        justifyContent: "space-between",
         flexDirection:"row",
-        height : windowH*0.055,
-        width : windowW*0.8,
+        height : windowH*0.048,
+        width : windowW*0.9,
         borderWidth : 1,
         borderColor: 'red',
         backgroundColor: 'white',
@@ -64,17 +65,25 @@ const style = StyleSheet.create({
         
     },
     textinput:{
-
+       
+        paddingLeft: 10,
+        paddingTop: 2,
+        textAlign:"left",
+        marginTop: 3,
+        marginLeft: 8,
         backgroundColor : 'white',
-        height : windowH*0.05,
-        width : windowW*0.556,
-        borderWidth : 0,
+        height : windowH*0.035,
+        width : windowW*0.58,
+        // borderWidth : 1,
         borderTopLeftRadius : 50,
-        borderBottomLeftRadius:50
+        borderBottomLeftRadius:50,
+        fontSize: 12
     },
     search:{
+        marginRight:3,
+        marginBottom:1,
         backgroundColor : "red",
-        height : windowH*0.045,
+        height : windowH*0.038,
         width : windowW*0.23,
         borderRadius :50,
         marginTop : 2,

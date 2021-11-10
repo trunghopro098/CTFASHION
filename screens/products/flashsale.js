@@ -16,7 +16,7 @@ const renderitem= ({item,index})=>{
             orientation={Orientation.TOP_RIGHT}
             containerStyle={styles.productsaleLable}
             title={`${titleSale}%`}
-            color="green"
+            // colors={['green','red','white']}
             distance={15}
             extent={0.0}
             style={{
@@ -70,12 +70,12 @@ const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{
-        height: windowH*0.38,
+        height: windowH*0.39,
     },
     Sale:{
         
         marginTop: 10,
-        height:windowH*0.31,
+        height:windowH*0.35,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15
 
@@ -87,18 +87,7 @@ const styles = StyleSheet.create({
         alignContent : "center",
         alignItems:"center"
     },
-    deal:{ 
-        backgroundColor: "white" , 
-        width: 120,
-        height: 40,
-        borderBottomRightRadius: 30,
-        borderBottomLeftRadius:30,
-        borderWidth: 2,
-        borderColor:"#51FEC7",
-        justifyContent: "center",
-        alignContent:"center",
-        alignItems:"center"
-    },
+
     text:{
         
         fontWeight : 'bold',
@@ -116,7 +105,7 @@ const styles = StyleSheet.create({
     productsaleLable:{
         width: windowW*0.35,
         backgroundColor: "white",
-        height : windowH*0.35,
+        height : windowH*0.31,
         borderRadius : 10,
     },
     productitemsale:{

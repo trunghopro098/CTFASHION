@@ -8,7 +8,7 @@ import TabNavigation from './screens/NavigatorBottom/tabNavigation';
 import SplashScreen from './screens/StartScreens/splash';
 import CollapsibleHeader1 from './screens/products/test';
 import SearchScreen from './screens/StartScreens/search';
-
+import ProductDetail from './screens/products/productDetail';
 const Tab = createStackNavigator();
 
 const App = ()=>{
@@ -32,6 +32,7 @@ const App = ()=>{
           <Tab.Screen name='splash' component={SplashScreen}/>
           <Tab.Screen name="test" component ={CollapsibleHeader1}/>
           <Tab.Screen name="search" component ={SearchScreen}/>
+          <Tab.Screen name="productDetail" component ={ProductDetail}/>
         </Tab.Navigator>
       </NavigationContainer>
 
