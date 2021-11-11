@@ -52,7 +52,7 @@ export default function HomeScreen({navigation}){
         getCategory();
         getProductSale();
         getdatasale();
-        // handleProduct();
+
         getDataBox();
         getDatafullProduct();
         const interval = setInterval(()=>{
@@ -67,24 +67,6 @@ export default function HomeScreen({navigation}){
         
     }, [])
 
-const handleProduct = async()=>{
-    try {
-     // get 3 san phaam khuyen mai mhieuf nhaats
-    const getProductSale = await GETAPI.getAPI('/product/getTopProductSale');
-    setDataproducthost(getProductSale);
-    // get san pham khuyn mai
-    const getdatasale = await GETAPI.getAPI('/product/getproductSale');
-    setDataProductFlashsale(getdatasale) 
-    // get category
-    const getCategory = await GETAPI.getAPI('/product/getCategory');
-    setDatacategory(getCategory)
-
-        
-    } catch (error) {
-        console.log(error)
-    }
-
-}
 
     const getProductSale= async()=>{    
         const res = await GETAPI.getAPI('/product/getTopProductSale');
@@ -156,11 +138,6 @@ const handleProduct = async()=>{
                 <StatusBar  backgroundColor={bgcolorStatusBar} 
                             animated 
                             barStyle={bgcolorStatusBar=="white"?"dark-content":null}/>
-                {/* <SkeletonContent 
-                animationDirection={"horizontalRight"}
-                    isLoading={true}
-
-                 > */}
                     <Animated.View style={{
                                     transform:[{translateY:translateY}], 
                                     position:'absolute',

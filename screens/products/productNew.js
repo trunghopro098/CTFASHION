@@ -3,7 +3,9 @@ import {View, Text, StyleSheet,Dimensions, Image,TouchableOpacity} from 'react-n
 import {SliderBox} from 'react-native-image-slider-box';
 import { SetHTTP } from "../../util/setHTTP";
 import truncate from "../../util/truncate";
-export default function ProductNew(props,{navigation}){
+import { LoadingSkeletonSliderbox } from "../StartScreens/loadingSkeleton";
+
+export default function ProductNew(props){
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
 
@@ -30,36 +32,42 @@ export default function ProductNew(props,{navigation}){
 
     return(
 
-        <View style={styles.container}>
-            <View style = {{ ...styles.box,backgroundColor:'#E7E9EB'}}> 
-            <SliderBox
-                sliderBoxHeight={windowH*0.4}
-                parentWidth={windowW*0.475}            
-                images={props.images}
-                onCurrentImagePressed={index => {
-                    props.navigation.navigate('productDetail',{
-                        data : dataImage[index]
-                    });
-                   console.log(dataImage[index])
-                    console.log(dataImage[index].id)
-                }}
-                dotColor="#FFEE58"
-                inactiveDotColor="#90A4AE"
-                // paginationBoxVerticalPadding={20}
-                autoplay
-                circleLoop
-        />
-            </View>
-                <View style =  {{ ...styles.box,backgroundColor:'#E7E9EB' }}> 
-                    {dataNewProduct!==undefined &&
-                        dataNewProduct.map(e=>{
-                            return(
-                                renderitem(e)
-                            )
-                        })
-                    }
+        <View>
+            {dataNewProduct == null ? 
+            <><LoadingSkeletonSliderbox/></>:
+            <>
+            <View style={styles.container}>
+                <View style = {{ ...styles.box,backgroundColor:'#E7E9EB'}}> 
+                    <SliderBox
+                        sliderBoxHeight={windowH*0.4}
+                        parentWidth={windowW*0.475}            
+                        images={props.images}
+                        onCurrentImagePressed={index => {
+                            props.navigation.navigate('productDetail',{
+                                data : dataImage[index]
+                            });
+                        console.log(dataImage[index])
+                            console.log(dataImage[index].id)
+                        }}
+                        dotColor="#FFEE58"
+                        inactiveDotColor="#90A4AE"
+                        // paginationBoxVerticalPadding={20}
+                        autoplay
+                        circleLoop
+                />
+                    </View>
+                        <View style =  {{ ...styles.box,backgroundColor:'#E7E9EB' }}> 
+                            {dataNewProduct!==undefined &&
+                                dataNewProduct.map(e=>{
+                                    return(
+                                        renderitem(e)
+                                    )
+                                })
+                            }
                 </View>
-        
+                
+            </View>
+            </>}
         </View>
     )
 }

@@ -29,7 +29,7 @@ const App = ()=>{
         initialRouteName="splash"
         screenOptions={{ headerShown:false}}
         >
-         
+
           <Tab.Screen name="home" component={TabNavigation}/>
           <Tab.Screen name='splash' component={SplashScreen}/>
           <Tab.Screen name="test" component ={CollapsibleHeader1}/>

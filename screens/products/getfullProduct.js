@@ -4,7 +4,7 @@ import { SetHTTP } from "../../util/setHTTP";
 import Label, {Orientation} from "react-native-label";
 import { FormatNumber } from "../../util/formatNumber";
 import truncate from "../../util/truncate";
-
+import Star from 'react-native-star-view';
 export default function GetfullProduct(props){
 
     const datafullproduct=props.DatafullProduct
@@ -12,6 +12,14 @@ export default function GetfullProduct(props){
     
     const renderitem = (item)=>{
         const name = item.name;
+        let star = item.reviewStar;
+        let quanityReview = 0;
+        if(item.reviewStar===null){
+            star = 5
+        }else{
+            quanityReview = item.quanityReview;
+            star = item.reviewStar
+        }
         const titleSale = 100-(Math.round((item.promotional*100)/item.price))
         return(
             <TouchableOpacity key={item.id} onPress={()=>{console.log(SetHTTP(item.image))}}>
@@ -50,13 +58,17 @@ export default function GetfullProduct(props){
                             <View style={{ flexDirection:"row",paddingLeft:5 }}>
                                 <Text>{truncate(name)}</Text>
                             </View>
-                            <View style={{ flex : 1, justifyContent:"space-between", margin : 3 ,flexDirection:"row",}}>
+                            <View style={{ flex : 1, justifyContent:"space-between", marginHorizontal: 3, marginTop: 3 ,flexDirection:"row",}}>
                                     <Text style={{...styles.price ,color : "#777777", textDecorationLine:"line-through", marginRight:5 }}>{FormatNumber(item.price)}đ</Text>
                                     <Text style={{ ...styles.price ,color:"red",marginRight:10}}>{FormatNumber(item.promotional)}đ</Text>
                                 
                                 {/* <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text> */}
                             </View>  
-                            <Text>DDanhs gia sao</Text>          
+                            <View style={{ flex:1,flexDirection:"row"}}>
+                                <Star score={star} style={{width:80,height:15}}/>
+                                <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
+                            </View>
+                                
                     </Label>
                 </>:
                 <>
@@ -74,10 +86,13 @@ export default function GetfullProduct(props){
                             <View style={{ flexDirection:"row",paddingLeft:5 }}>
                                 <Text>{truncate(name)}</Text>
                             </View>
-                            <View style={{ flex : 1, margin : 3 ,flexDirection:"row",}}>
+                            <View style={{ flex : 1, marginHorizontal: 3, marginTop: 3  ,flexDirection:"row",}}>
                                 <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text>
                             </View>  
-                            <Text>DDanhs gia sao</Text>          
+                            <View style={{flex:1, flexDirection:"row"}}>
+                                <Star score={star} style={{width:80,height:15}}/>
+                                <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
+                            </View>
                     </View>
                 </>}
                 

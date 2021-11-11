@@ -5,8 +5,11 @@ import Label, {Orientation} from "react-native-label";
 import * as GETAPI from '../../util/fetchApi'
 import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
+import { LoadingSkeletonflashsale } from "../StartScreens/loadingSkeleton";
 
 export default function Flashsales(props){
+const data = props.Data
+
 const renderitem= ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
@@ -48,22 +51,28 @@ const renderitem= ({item,index})=>{
 
     return(
 
-        <LinearGradient  colors= {["#EDDAF5","white"]} style={styles.container}>
-            <LinearGradient  colors= {['#F767C3', '#8fcbbc','white']} style={styles.Sale}>
-                <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
-                <Text style={{ color: 'white', fontSize: 15, fontWeight:'bold', marginLeft: 15 }}>FLASHSALE</Text>
-                <Text style={{ color: '#149FF9', fontSize: 15 , marginRight:10 }}>{`Xem thêm >>`}</Text> 
-                </View>
-                <View style={styles.productsale}>
-                    <FlatList
-                    horizontal
-                    data={props.Data}
-                    keyExtractor= {item=>item.id}
-                    renderItem={renderitem}
-                    />
-                </View>
+        <View>
+            {data == null ? 
+            <><LoadingSkeletonflashsale/></>:
+            <>
+            <LinearGradient  colors= {["#EDDAF5","white"]} style={styles.container}>
+                <LinearGradient  colors= {['#F767C3', '#8fcbbc','white']} style={styles.Sale}>
+                    <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
+                    <Text style={{ color: 'white', fontSize: 15, fontWeight:'bold', marginLeft: 15 }}>FLASHSALE</Text>
+                    <Text style={{ color: '#149FF9', fontSize: 15 , marginRight:10 }}>{`Xem thêm >>`}</Text> 
+                    </View>
+                    <View style={styles.productsale}>
+                        <FlatList
+                        horizontal
+                        data={data}
+                        keyExtractor= {item=>item.id}
+                        renderItem={renderitem}
+                        />
+                    </View>
+                </LinearGradient>
             </LinearGradient>
-        </LinearGradient>
+            </>}
+        </View>
     )
 }
 const windowW = Dimensions.get('window').width;

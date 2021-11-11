@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet ,Image,Dimensions, FlatList,TouchableOpacity } from 'react-native';
 import { SetHTTP } from '../../util/setHTTP';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { LoadingSkeletonCategory } from '../StartScreens/loadingSkeleton';
 export default function CategoryScreen(props){
-
+ const data = props.Data
  const renderitem = ({item})=>{
         return(
         <View style={styles.item}>
@@ -23,17 +23,25 @@ export default function CategoryScreen(props){
     }
 
     return(
-        <LinearGradient
-        colors={['#9C30FF',"#C790E5"]}
-            style= {styles.container}>
-                {/* <Text style={{color : 'white',fontWeight : 'bold', marginLeft: 10 }}>DANH MỤC SẢN PHẨM</Text> */}
-            <FlatList
-                horizontal 
-                data= {props.Data}
-                keyExtractor={item=>item.id}
-                renderItem={renderitem}
-            />
+        <View>
+            {data == null ? 
+            <><LoadingSkeletonCategory/></>:
+            <>
+            <LinearGradient
+                 colors={['#9C30FF',"#C790E5"]}
+                style= {styles.container}>
+                    {/* <Text style={{color : 'white',fontWeight : 'bold', marginLeft: 10 }}>DANH MỤC SẢN PHẨM</Text> */}
+                <FlatList
+                    horizontal 
+                    data= {data}
+                    keyExtractor={item=>item.id}
+                    renderItem={renderitem}
+                />
         </LinearGradient>
+            </>}
+        </View>
+        
+
     )
 }
 
