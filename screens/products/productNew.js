@@ -3,7 +3,7 @@ import {View, Text, StyleSheet,Dimensions, Image,TouchableOpacity} from 'react-n
 import {SliderBox} from 'react-native-image-slider-box';
 import { SetHTTP } from "../../util/setHTTP";
 import truncate from "../../util/truncate";
-export default function ProductNew(props,{navigation}){
+export default function ProductNew(props){
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
 
