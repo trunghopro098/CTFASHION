@@ -1,5 +1,6 @@
 import React,{useState,useEffect,} from "react";
 import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,View} from "react-native"; 
+// import SkeletonContent from "react-native-skeleton-content";
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
@@ -51,6 +52,7 @@ export default function HomeScreen({navigation}){
         getCategory();
         getProductSale();
         getdatasale();
+        // handleProduct();
         getDataBox();
         getDatafullProduct();
         const interval = setInterval(()=>{
@@ -65,9 +67,29 @@ export default function HomeScreen({navigation}){
         
     }, [])
 
-    const getProductSale= async()=>{
+const handleProduct = async()=>{
+    try {
+     // get 3 san phaam khuyen mai mhieuf nhaats
+    const getProductSale = await GETAPI.getAPI('/product/getTopProductSale');
+    setDataproducthost(getProductSale);
+    // get san pham khuyn mai
+    const getdatasale = await GETAPI.getAPI('/product/getproductSale');
+    setDataProductFlashsale(getdatasale) 
+    // get category
+    const getCategory = await GETAPI.getAPI('/product/getCategory');
+    setDatacategory(getCategory)
+
+        
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+    const getProductSale= async()=>{    
         const res = await GETAPI.getAPI('/product/getTopProductSale');
         setDataproducthost(res);
+
     }
     const getdatasale= async()=>{
         const res = await GETAPI.getAPI('/product/getproductSale')
@@ -129,35 +151,39 @@ export default function HomeScreen({navigation}){
   
     return(
             <SafeAreaView style= {{ flex: 1 }}>
-                 {/* barStyle="dark-content" */}
-                <StatusBar 
-                    backgroundColor={bgcolorStatusBar} 
-                    animated 
-                    barStyle={bgcolorStatusBar=="white"?"dark-content":null}/>
-                <Animated.View  
-                    style={{
-                        transform:[{translateY:translateY}], 
-                        position:'absolute',
-                        top:0,
-                        left:0,
-                        right:0,
-                        zIndex:1
-                    }} 
-                >
-                    <HeaderScreen navigation={navigation} textsearch={textsearch} colorSearch={colorSearch} bgWhite={bgHeader}/>
-                </Animated.View>
                
-                <VirtualizedView setValue={handleSetValueScrollY}>      
-                    <CategoryScreen Data={Datacategory} />
-                    <ProductHot Data={DataProducthot}/>
-                    <Flashsales Data={DataProductFlashsale}/>
-                    <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
-                    <GetfullProduct DatafullProduct={Datafullproduct}/>
-                    <Test2/>
-                    <Test2/>
-                    <Test2/>
-                </VirtualizedView>
-            
+                 {/* barStyle="dark-content" */}
+                <StatusBar  backgroundColor={bgcolorStatusBar} 
+                            animated 
+                            barStyle={bgcolorStatusBar=="white"?"dark-content":null}/>
+                {/* <SkeletonContent 
+                animationDirection={"horizontalRight"}
+                    isLoading={true}
+
+                 > */}
+                    <Animated.View style={{
+                                    transform:[{translateY:translateY}], 
+                                    position:'absolute',
+                                    top:0,
+                                    left:0,
+                                    right:0,
+                                    zIndex:1
+                                    }} >
+                    
+                        <HeaderScreen navigation={navigation} textsearch={textsearch} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                    </Animated.View>
+                
+                    <VirtualizedView setValue={handleSetValueScrollY}>      
+                        <CategoryScreen Data={Datacategory} />
+                        <ProductHot Data={DataProducthot}/>
+                        <Flashsales Data={DataProductFlashsale}/>
+                        <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
+                        <GetfullProduct DatafullProduct={Datafullproduct}/>
+                        <Test2/>
+                        <Test2/>
+                        <Test2/>
+                    </VirtualizedView>
+                {/* </SkeletonContent> */}
             </SafeAreaView>
 
     )

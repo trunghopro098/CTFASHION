@@ -9,6 +9,7 @@ import SplashScreen from './screens/StartScreens/splash';
 import CollapsibleHeader1 from './screens/products/test';
 import SearchScreen from './screens/StartScreens/search';
 import ProductDetail from './screens/products/productDetail';
+
 const Tab = createStackNavigator();
 
 const App = ()=>{
@@ -28,6 +29,7 @@ const App = ()=>{
         initialRouteName="splash"
         screenOptions={{ headerShown:false}}
         >
+         
           <Tab.Screen name="home" component={TabNavigation}/>
           <Tab.Screen name='splash' component={SplashScreen}/>
           <Tab.Screen name="test" component ={CollapsibleHeader1}/>
