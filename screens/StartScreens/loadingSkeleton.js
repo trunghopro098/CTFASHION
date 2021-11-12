@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, Dimensions} from 'react-native';
+import { Dimensions} from 'react-native';
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 
@@ -59,7 +59,7 @@ export const LoadingSkeletonSieuSale = ()=>{
    }
 
 
-   export const LoadingSkeletonflashsale = ()=>{
+export const LoadingSkeletonflashsale = ()=>{
     return (
        <SkeletonPlaceholder  backgroundColor='#E7EAED' flex={1}>
          <SkeletonPlaceholder.Item flexDirection="row" justifyContent='space-around'

@@ -7,6 +7,7 @@ import { FormatNumber } from "../../util/formatNumber";
 import { LoadingSkeletonSieuSale } from "../StartScreens/loadingSkeleton";
 export default function ProductHot(props){
 const data = props.Data
+console.log(data)
 const renderitem = ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
@@ -45,7 +46,7 @@ const renderitem = ({item,index})=>{
     return(
 
         <View>
-            {data == null ? 
+            {data.length===0 || data==undefined ? 
             <><LoadingSkeletonSieuSale/></>:
             <>
             <LinearGradient  colors= {["#C790E5","#EDDAF5"]} style={styles.container}>

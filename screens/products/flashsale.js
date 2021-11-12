@@ -52,7 +52,7 @@ const renderitem= ({item,index})=>{
     return(
 
         <View>
-            {data == null ? 
+            {data.length===0 || data==undefined  ? 
             <><LoadingSkeletonflashsale/></>:
             <>
             <LinearGradient  colors= {["#EDDAF5","white"]} style={styles.container}>

@@ -4,7 +4,7 @@ import { SetHTTP } from '../../util/setHTTP';
 import LinearGradient from 'react-native-linear-gradient';
 import { LoadingSkeletonCategory } from '../StartScreens/loadingSkeleton';
 export default function CategoryScreen(props){
- const data = props.Data
+ const data = props.Data;
  const renderitem = ({item})=>{
         return(
         <View style={styles.item}>
@@ -24,7 +24,7 @@ export default function CategoryScreen(props){
 
     return(
         <View>
-            {data == null ? 
+            {data.length===0 || data==undefined ? 
             <><LoadingSkeletonCategory/></>:
             <>
             <LinearGradient

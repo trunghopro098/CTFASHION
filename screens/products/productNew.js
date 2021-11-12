@@ -9,7 +9,7 @@ export default function ProductNew(props){
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
 
-
+    console.log(dataNewProduct)
     const renderitem = (item)=>{
         return(
             <TouchableOpacity key={item.id} style={styles.wrapperitemProductNew}
@@ -33,7 +33,7 @@ export default function ProductNew(props){
     return(
 
         <View>
-            {dataNewProduct == null ? 
+            {dataNewProduct.length===0 || dataNewProduct==undefined  ? 
             <><LoadingSkeletonSliderbox/></>:
             <>
             <View style={styles.container}>
