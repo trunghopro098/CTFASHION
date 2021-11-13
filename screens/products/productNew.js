@@ -6,16 +6,21 @@ import truncate from "../../util/truncate";
 import { LoadingSkeletonSliderbox } from "../StartScreens/loadingSkeleton";
 
 export default function ProductNew(props){
+
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
 
-    console.log(dataNewProduct)
+    // console.log(dataNewProduct)
     const renderitem = (item)=>{
         return(
             <TouchableOpacity key={item.id} style={styles.wrapperitemProductNew}
-             onPress={()=>{
-                    // console.log(`${SetHTTP(item.image)}`)
-            }}>
+            onPress={()=>{
+                props.navigation.navigate('productDetail',{
+                idProduct : item.id,
+                idProductType : item.idProductType
+                
+            });
+         }}>
                 <View  >
                     <Image 
                         source={{ uri:SetHTTP(item.image)}} 
@@ -43,11 +48,14 @@ export default function ProductNew(props){
                         parentWidth={windowW*0.475}            
                         images={props.images}
                         onCurrentImagePressed={index => {
+                            // console.log(dataImage[index])
                             props.navigation.navigate('productDetail',{
-                                data : dataImage[index]
+                                idProduct : dataImage[index].id,
+                                idProductType : dataImage[index].idProductType
+                                
                             });
-                        console.log(dataImage[index])
-                            console.log(dataImage[index].id)
+                           
+                            
                         }}
                         dotColor="#FFEE58"
                         inactiveDotColor="#90A4AE"

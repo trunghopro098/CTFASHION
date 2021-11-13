@@ -3,6 +3,7 @@ import { View,Text,StyleSheet, Dimensions,TouchableOpacity,TextInput } from "rea
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Check } from "../../util/checkProduct";
+import LoadingCircle from "./loadingCircle";
 export default function SearchScreen({ navigation }){
 
 const [searhHistory, setsearhHistory] = useState('');
@@ -29,28 +30,31 @@ const [searhHistory, setsearhHistory] = useState('');
             <View style={style.header}>
             <Text style={{ marginTop: 6, marginLeft : 15 }}>Search</Text>
             </View>
-        <View style={{...style.search1}}>
-        <View style={style.input} >
-            <TouchableOpacity>
-            {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
-                <TextInput  
-                    style={{ ...style.textinput}} 
-                    
-                    placeholder={'Search'}
-                    value = {searhHistory}
-                    onChangeText={(value)=>setsearhHistory(value)} 
-                />
-                </TouchableOpacity>
-                <LinearGradient 
-                    colors={["#C790E5",'#9C30FF','#BEE6F0']}
-                    style={style.search}
-                >
-                    <TouchableOpacity onPress={()=>{addhistory()}}>
-                    <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
-                    </TouchableOpacity>
-                </LinearGradient>
-            </View>
-        </View>
+            <View style={{...style.search1}}>
+                <View style={style.input} >
+                    <TouchableOpacity>
+                    {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
+                        <TextInput  
+                            style={{ ...style.textinput}} 
+                            
+                            placeholder={'Search'}
+                            value = {searhHistory}
+                            onChangeText={(value)=>setsearhHistory(value)} 
+                        />
+                        </TouchableOpacity>
+                        <LinearGradient 
+                            colors={["#C790E5",'#9C30FF','#BEE6F0']}
+                            style={style.search}
+                        >
+                            <TouchableOpacity onPress={()=>{addhistory()}}>
+                            <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
+                            </TouchableOpacity>
+                        </LinearGradient>
+                    </View>
+                </View>
+                <View style= {{ flex:1 ,justifyContent: "center", alignContent: "center", alignItems: "center" }}>
+                    <LoadingCircle/>
+                </View>
         </View>
     )
 }

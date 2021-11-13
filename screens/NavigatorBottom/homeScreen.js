@@ -147,15 +147,15 @@ export default function HomeScreen({navigation}){
                                     zIndex:1
                                     }} >
                     
-                        <HeaderScreen navigation={navigation} textsearch={textsearch} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                        <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={true} heightHeader={windowH*0.145} colorSearch={colorSearch} bgWhite={bgHeader}/>
                     </Animated.View>
                 
                     <VirtualizedView setValue={handleSetValueScrollY}>      
                         <CategoryScreen Data={Datacategory} />
-                        <ProductHot Data={DataProducthot}/>
-                        <Flashsales Data={DataProductFlashsale}/>
+                        <ProductHot Data={DataProducthot} navigation={navigation}/>
+                        <Flashsales Data={DataProductFlashsale} navigation={navigation}/>
                         <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
-                        <GetfullProduct DatafullProduct={Datafullproduct}/>
+                        <GetfullProduct DatafullProduct={Datafullproduct} navigation={navigation}/>
                         <Test2/>
                         <Test2/>
                         <Test2/>
@@ -167,6 +167,7 @@ export default function HomeScreen({navigation}){
     
 }
 const windowH = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
     fakebox:{
         height : 250,

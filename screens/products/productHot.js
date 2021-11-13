@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Text, StyleSheet,Dimensions,FlatList, Image} from 'react-native';
+import {View, Text, StyleSheet,Dimensions, TouchableOpacity,FlatList, Image} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Label, {Orientation} from "react-native-label";
 import { SetHTTP } from "../../util/setHTTP";
@@ -7,11 +7,18 @@ import { FormatNumber } from "../../util/formatNumber";
 import { LoadingSkeletonSieuSale } from "../StartScreens/loadingSkeleton";
 export default function ProductHot(props){
 const data = props.Data
-console.log(data)
+// console.log(data)
 const renderitem = ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
         <View style={{ marginHorizontal: 6 }}>
+         <TouchableOpacity onPress={()=>{
+                                         props.navigation.navigate('productDetail',{
+                                            idProduct : item.id,
+                                            idProductType : item.idProductType
+                                            
+                                        });
+                               }}>
             <Label
                 orientation={Orientation.TOP_RIGHT}
                 containerStyle={styles.productsaleLable}
@@ -30,6 +37,7 @@ const renderitem = ({item,index})=>{
                                     shadowOpacity: 0.2, shadowRadius: 8, 
                                     elevation: 2 }}
             >
+                
                 <View style={{...styles.itemdetail, backgroundColor: "#FDE0C7"}}>
                 <Image source={{uri :SetHTTP(item.image) }} 
                     resizeMode='contain'
@@ -40,6 +48,7 @@ const renderitem = ({item,index})=>{
                     </View>
                 </View>
             </Label>
+            </TouchableOpacity>
         </View>
     )
     }
