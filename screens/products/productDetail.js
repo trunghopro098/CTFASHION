@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import { View, Text, Button,Modal,Pressable, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
 import HeaderScreen from '../NavigatorBottom/headerScreen';
 import * as GETAPI from '../../util/fetchApi';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -15,7 +15,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Check } from '../../util/checkProduct';
-
+import ModalFavorite from '../StartScreens/modal';
 export default function Productdetail(props,{navigation}){
     const [textsearch, settextsearch] = useState('');
     const [colorSearch, setcolorSearch] = useState(null);
@@ -30,6 +30,9 @@ export default function Productdetail(props,{navigation}){
     const [description, setdescription] = useState({})
     const [checkPromotional, setcheckPromotional] = useState(null);
     const [isFavourite, setisFavourite] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleDelete, setModalVisibleDelete] = useState(false);
+    const [modalVisibleAddcart, setmodalVisibleAddcart] = useState(false)
     // const imageslidebox = [];
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
@@ -86,13 +89,12 @@ export default function Productdetail(props,{navigation}){
                 <Text>Nhắn tin</Text>
             </TouchableOpacity>
             <View style={{ flex:0.5,flexDirection:"row",justifyContent:'flex-end' }}>
-                <TouchableOpacity style={{ backgroundColor:'red',borderRadius:15,padding:10,alignItems:'center',marginRight:10,flex:1 }}>
+                <TouchableOpacity  onPress={()=>{setmodalVisibleAddcart(true)}} style={{ backgroundColor:'red',borderRadius:15,padding:10,alignItems:'center',marginRight:10,flex:1 }}>
                     <Text style={{ color:'white',fontWeight:'bold' }}>Thêm vào giỏ hàng</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
-
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
             let quantytiReview1 = 0;
@@ -153,13 +155,15 @@ const addFavorite = async()=>{
         let getData = await AsyncStorage.getItem("FAVORITE");
         if(getData == null){
             arr = [{'id': id }]
-            alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+            // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
             setisFavourite(true)
+            setModalVisible(true)
         }else{
             arr = JSON.parse(getData);
             arr = arr.concat([{'id':id}]);
-            alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+            // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
             setisFavourite(true)
+            setModalVisible(true)
             
         }
         await AsyncStorage.setItem('FAVORITE', JSON.stringify(arr))
@@ -184,9 +188,10 @@ const DeleteFavorite = async()=>{
         }
         await AsyncStorage.removeItem("FAVORITE");
         await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
-        alert('đã xoa khoi thuw mucj yeu thich');
+        // alert('đã xoa khoi thuw mucj yeu thich');
         console.log(arr)
         setisFavourite(false)
+        setModalVisibleDelete(true)
     } catch (error) {
         console.log(error)
     }
@@ -216,6 +221,7 @@ const DisplayProductFavorite = async()=>{
 
     return(
             <View style={{ flex: 1 }}>
+                
                 <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={false} heightHeader={windowH*0.07} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 {!isLoading && !isLoading1? 
                 <>
@@ -338,10 +344,13 @@ const DisplayProductFavorite = async()=>{
                                 </View>
                     </ScrollView>
                     <ViewOrder />
+                    <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'}/>
+                    <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'}/>
+                    <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'}/>
                 </>:
                 <View style={{ flex:1, justifyContent: 'center', alignContent: 'center' }}>
                 <LoadingCircle/>
-                </View>
+                </View>                
                 }
             </View>
 
@@ -429,6 +438,6 @@ const styles = StyleSheet.create({
         height: '80%',
         width: 1,
         backgroundColor: '#808080',
-    }
-
+    },
+    
 })
