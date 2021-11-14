@@ -1,11 +1,9 @@
-
-import React, { Component, useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity } from 'react-native';
- import HeaderScreen from '../NavigatorBottom/headerScreen';
- import * as GETAPI from '../../util/fetchApi';
- import {SliderBox} from 'react-native-image-slider-box';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import HeaderScreen from '../NavigatorBottom/headerScreen';
+import * as GETAPI from '../../util/fetchApi';
+import {SliderBox} from 'react-native-image-slider-box';
 import { SetHTTP } from '../../util/setHTTP';
-import LinearGradient from 'react-native-linear-gradient';
 import { FormatNumber } from '../../util/formatNumber';
 import LoadingCircle from '../StartScreens/loadingCircle';
 import Star from 'react-native-star-view';
@@ -13,6 +11,8 @@ import LottieView from "lottie-react-native";
 import RenderHtml from 'react-native-render-html';
 import Carousel from 'react-native-snap-carousel';
 import truncate from '../../util/truncate';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 export default function Productdetail(props,{navigation}){
     const [textsearch, settextsearch] = useState('');
     const [colorSearch, setcolorSearch] = useState(null);
@@ -69,7 +69,24 @@ export default function Productdetail(props,{navigation}){
 
     }
 
-
+    const ViewOrder = ()=>(
+        <View style={styles.wrapperBottom}>
+            <TouchableOpacity style={{ flexDirection:'column',alignItems:'center',flex:0.25 }}>
+                <Entypo name="shop" color="red" size={20}/>
+                <Text>Giỏ hàng</Text>
+            </TouchableOpacity>
+            <View style={styles.verticleLine}></View>
+            <TouchableOpacity style={{flexDirection:'column',alignItems:'center',flex:0.25 }} >
+                <MaterialCommunityIcons name="message-processing-outline" size={20}  color="gray"/>
+                <Text>Nhắn tin</Text>
+            </TouchableOpacity>
+            <View style={{ flex:0.5,flexDirection:"row",justifyContent:'flex-end' }}>
+                <TouchableOpacity style={{ backgroundColor:'red',borderRadius:15,padding:10,alignItems:'center',marginRight:10,flex:1 }}>
+                    <Text style={{ color:'white',fontWeight:'bold' }}>Thêm vào giỏ hàng</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
 
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
@@ -83,13 +100,17 @@ export default function Productdetail(props,{navigation}){
             // console.log(star1)
         return(
             <View style={styles.itemCart}>
-                <TouchableOpacity onPress={()=>{
-                                                props.navigation.replace('productDetail',{
-                                                idProduct : item.id,
-                                                idProductType : item.idProductType
-                                                
-                                            });
-                                         }}>
+                <StatusBar backgroundColor="white" barStyle="dark-content"/>
+                <TouchableOpacity 
+                    onPress={()=>
+                        {
+                            props.navigation.replace('productDetail',{
+                            idProduct : item.id,
+                            idProductType : item.idProductType
+                                
+                        });
+                    }}
+                >
                 <View style={styles.viewItem}>
                     <Image source={{ uri: SetHTTP(item.image) }}
                         resizeMode='cover' 
@@ -115,30 +136,29 @@ export default function Productdetail(props,{navigation}){
                  <Text style = {{ marginLeft :5 }}>({quantytiReview1} đánh giá)</Text>
                 </View>
                 
-                
             </View>
         )
 
     }
-        return(
+    return(
             <View style={{ flex: 1 }}>
-                <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={false} heightHeader={windowH*0.08} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={false} heightHeader={windowH*0.07} colorSearch={colorSearch} bgWhite={bgHeader}/>
                 {!isLoading && !isLoading1? 
                 <>
                 <ScrollView >
                     <View style= {styles.box}>
                         <SliderBox
-                                    sliderBoxHeight={windowH*0.5}
-                                    parentWidth={windowW*0.9}            
-                                    images={imageslidebox}
-                                    dotColor="#FFEE58"
-                                    inactiveDotColor="#90A4AE"
-                                    // paginationBoxVerticalPadding={20}
-                                    resizeMode='contain'
-                                    circleLoop
-                            />
-                        </View>
-                        <View style={styles.Price}>
+                            sliderBoxHeight={windowH*0.5}
+                            parentWidth={windowW*0.9}            
+                            images={imageslidebox}
+                            dotColor="#FFEE58"
+                            inactiveDotColor="#90A4AE"
+                            // paginationBoxVerticalPadding={20}
+                            resizeMode='contain'
+                            circleLoop
+                        />
+                    </View>
+                    <View style={styles.Price}>
                             <View style={{...styles.priceItem}}>
                             {checkPromotional == null ? 
                             <>
@@ -152,18 +172,16 @@ export default function Productdetail(props,{navigation}){
                                 </View>
                             </>}   
                             </View>
-                                <TouchableOpacity onPress={()=>{  }}>
-                                        
-                                        <View>
+                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{  }}>
+                                    <View>
                                         <LottieView  
-                                        source={require('../../assets/lottierfiles/favoriteNo.json')}
-                                                 style={{ width:40, height:40}}
-                                                 autoPlay
-                                                 loop
+                                            source={require('../../assets/lottierfiles/favoriteNo.json')}
+                                            style={{ width:40, height:40}}
+                                            autoPlay
+                                            loop
                                                             
                                      />
                                      </View>
-                           
                             </TouchableOpacity>
                         </View>
                         <View style = {{ borderBottomWidth: 1, borderColor: "#D3D3D3", }}>
@@ -182,12 +200,11 @@ export default function Productdetail(props,{navigation}){
                                     
                                     <View>
                                         <LottieView  
-                                        source={require('../../assets/lottierfiles/location-lottie-animation.json')}
-                                                 style={{ width:25, height:20}}
-                                                 autoPlay
-                                                 loop
-                                                            
-                                     />
+                                            source={require('../../assets/lottierfiles/location-lottie-animation.json')}
+                                            style={{ width:25, height:20}}
+                                            autoPlay
+                                            loop           
+                                        />
                                      </View>
                                     <Text style = {{  fontSize : 12, fontWeight: 'bold', marginRight: 5 }}>Nông Sơn, Quảng Nam</Text>
                                     </View>
@@ -201,35 +218,34 @@ export default function Productdetail(props,{navigation}){
                             <View style={{ marginTop : 5, marginHorizontal : 15 }}>
                                 <Text>CHI TIẾT SẢN PHẨM</Text>
                                 <RenderHtml
-                                contentWidth={windowW}
-                                source={description}
+                                    contentWidth={windowW}
+                                    source={description}
                                 />
                             </View>
-
                         </View>
                             <Text style={{ marginTop: 10 , marginLeft: 15, color: 'red'}}>SẢN PHẨM ĐỀ XUẤT </Text>
-                            <View style={styles.CarouselCart}>
+                                <View style={styles.CarouselCart}>
 
-                                <Carousel                  
-                                    layout={"stack"}
-                                    activeSlideOffset={5}
-                                    data={DataProductType}
-                                    sliderWidth={windowW*0.9}
-                                    itemWidth={windowW*0.9}
-                                    callbackOffsetMargin={20}
-                                    layoutCardOffset={24}
-                                    renderItem={renderItemproductype}
-                                    loop={true}
-                                                />
-                            
-                            </View>
+                                    <Carousel                  
+                                        layout={"stack"}
+                                        activeSlideOffset={5}
+                                        data={DataProductType}
+                                        sliderWidth={windowW*0.9}
+                                        itemWidth={windowW*0.9}
+                                        callbackOffsetMargin={20}
+                                        layoutCardOffset={24}
+                                        renderItem={renderItemproductype}
+                                        loop={true}
+                                    />
+                                
+                                </View>
                     </ScrollView>
+                    <ViewOrder />
                 </>:
                 <View style={{ flex:1, justifyContent: 'center', alignContent: 'center' }}>
                 <LoadingCircle/>
                 </View>
                 }
-
             </View>
 
         )
@@ -238,17 +254,14 @@ export default function Productdetail(props,{navigation}){
 const windowH = Dimensions.get('window').height;
 const windowW = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-    box:{
-        
+    box:{   
         flex: 1, 
         flexDirection: 'row',
         justifyContent: 'center',
         borderBottomWidth: 0,
         borderBottomColor: "#D3D3D3"
     },
-
     Price:{
-        
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 2,
@@ -259,7 +272,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,   
     },
     itemCart:{
-
         backgroundColor:'white',
         borderRadius: 5,
         height: windowH*0.6,
@@ -276,26 +288,50 @@ const styles = StyleSheet.create({
         elevation: 4,
         borderWidth: 0.4,
         borderColor: 'red'
-        },
-
-        CarouselCart:{flex:1,
-                     marginTop : 10, 
-                     flexDirection: 'column', 
-                     justifyContent: 'center',
-                     alignItems:'center',
-                     alignContent:'center',  
-                     height: windowH*0.7
-        },
-        viewItem:{
-             flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 8
-        },
-        viewItemStar:{
+    },
+    CarouselCart:{flex:1,
+                    marginTop : 10, 
+                    flexDirection: 'column', 
+                    justifyContent: 'center',
+                    alignItems:'center',
+                    alignContent:'center',  
+                    height: windowH*0.7
+    },
+    viewItem:{
             flexDirection: 'row',
-            marginTop: 8,
-            marginLeft: 15
-        }
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 8
+    },
+    viewItemStar:{
+        flexDirection: 'row',
+        marginTop: 8,
+        marginLeft: 15
+    },
+    wrapperBottom:{
+        borderTopColor:'gray',
+        borderTopWidth:0.2,
+        flex:1,
+        backgroundColor:'white',
+        flexDirection:'row',
+        position:'absolute',
+        width:'100%',
+        alignItems:'center',
+        bottom:0,
+        height:50,
+        shadowColor: "#000",
+        shadowOffset:{
+            width:0,
+            height: 2
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 4,
+    },
+    verticleLine: {
+        height: '80%',
+        width: 1,
+        backgroundColor: '#808080',
+    }
 
 })
