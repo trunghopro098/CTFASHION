@@ -25,7 +25,8 @@ export default function Productdetail(props,{navigation}){
     const [star,setstar] = useState(5);
     const [quantityReview, setquantityReview] = useState(0);
     const [description, setdescription] = useState({})
-    const [checkPromotional, setcheckPromotional] = useState(null)
+    const [checkPromotional, setcheckPromotional] = useState(null);
+    const [isFavourite, setisFavourite] = useState(false);
     // const imageslidebox = [];
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
@@ -172,17 +173,33 @@ export default function Productdetail(props,{navigation}){
                                 </View>
                             </>}   
                             </View>
-                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{  }}>
+                            {isFavourite ?
+                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{ setisFavourite(!isFavourite) }}>
+                                  
                                     <View>
                                         <LottieView  
-                                            source={require('../../assets/lottierfiles/favoriteNo.json')}
+                                            source={require('../../assets/lottierfiles/ccc.json')}
                                             style={{ width:40, height:40}}
                                             autoPlay
-                                            loop
-                                                            
-                                     />
-                                     </View>
-                            </TouchableOpacity>
+                                            loop                   
+                                        />
+                                    </View>
+                                    
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{ setisFavourite(!isFavourite) }}>
+                                    <View>
+                                        <LottieView  
+                                            source={require('../../assets/lottierfiles/hearts-loading.json')}
+                                            style={{ width:40, height:40,marginRight:5}}
+                                            autoPlay
+                                            loop                   
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                                }
+                                    
+                           
                         </View>
                         <View style = {{ borderBottomWidth: 1, borderColor: "#D3D3D3", }}>
                             <Text style={{ color: 'black', fontSize: 14, marginTop: 5,fontWeight: 'bold', marginLeft: 15}}>{DataProductDetail[0].name} </Text>   
