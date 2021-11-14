@@ -12,7 +12,10 @@ import RenderHtml from 'react-native-render-html';
 import Carousel from 'react-native-snap-carousel';
 import truncate from '../../util/truncate';
 import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Check } from '../../util/checkProduct';
+
 export default function Productdetail(props,{navigation}){
     const [textsearch, settextsearch] = useState('');
     const [colorSearch, setcolorSearch] = useState(null);
@@ -35,6 +38,7 @@ export default function Productdetail(props,{navigation}){
     useEffect(() => {
         getProductDetail();
         getProductType();
+        DisplayProductFavorite();
        
     }, [])
 
@@ -141,6 +145,75 @@ export default function Productdetail(props,{navigation}){
         )
 
     }
+
+const addFavorite = async()=>{
+    try {       
+        let arr = [];
+        let id = DataProductDetail[0].id;
+        let getData = await AsyncStorage.getItem("FAVORITE");
+        if(getData == null){
+            arr = [{'id': id }]
+            alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+            setisFavourite(true)
+        }else{
+            arr = JSON.parse(getData);
+            arr = arr.concat([{'id':id}]);
+            alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+            setisFavourite(true)
+            
+        }
+        await AsyncStorage.setItem('FAVORITE', JSON.stringify(arr))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+const DeleteFavorite = async()=>{
+    try {
+        let id = DataProductDetail[0].id;
+        let arr = [];
+        let getData = await AsyncStorage.getItem('FAVORITE');
+        if(getData != null){
+            arr = JSON.parse(getData);
+            for(let i = 0; i < arr.length; i++){
+                if(arr[i].id === id){
+                    arr.splice(i,1);
+                }
+            }
+        }
+        await AsyncStorage.removeItem("FAVORITE");
+        await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
+        alert('đã xoa khoi thuw mucj yeu thich');
+        console.log(arr)
+        setisFavourite(false)
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+const DisplayProductFavorite = async()=>{
+    try {
+        let id = Data.idProduct;
+        let arr = [];
+        let getData = await AsyncStorage.getItem('FAVORITE')
+        if(getData != null){
+            arr = JSON.parse(getData);
+            for(const item of arr){
+                if(item.id == id){
+                    // console.log('aaaab')
+                    console.log(item.id)
+                    setisFavourite(true)
+                    return 0;
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
     return(
             <View style={{ flex: 1 }}>
                 <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={false} heightHeader={windowH*0.07} colorSearch={colorSearch} bgWhite={bgHeader}/>
@@ -174,7 +247,11 @@ export default function Productdetail(props,{navigation}){
                             </>}   
                             </View>
                             {isFavourite ?
-                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{ setisFavourite(!isFavourite) }}>
+                                <TouchableOpacity style={{ paddingRight:10 }}
+                                                    onPress={()=>{  
+                                                        DeleteFavorite()
+                                                         
+                                                        }}>
                                   
                                     <View>
                                         <LottieView  
@@ -187,7 +264,10 @@ export default function Productdetail(props,{navigation}){
                                     
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity style={{ paddingRight:10 }} onPress={()=>{ setisFavourite(!isFavourite) }}>
+                                <TouchableOpacity style={{ paddingRight:10 }}
+                                                 onPress={()=>{ 
+                                                     addFavorite()
+                                                    }}>
                                     <View>
                                         <LottieView  
                                             source={require('../../assets/lottierfiles/hearts-loading.json')}
