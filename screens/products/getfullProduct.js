@@ -23,6 +23,7 @@ export default function GetfullProduct(props){
         const titleSale = 100-(Math.round((item.promotional*100)/item.price))
         return(
             <TouchableOpacity key={item.id} onPress={()=>{
+                // console.log(item)
                                                 props.navigation.navigate('productDetail',{
                                                 idProduct : item.id,
                                                 idProductType : item.idProductType

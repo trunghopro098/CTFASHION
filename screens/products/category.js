@@ -24,7 +24,7 @@ export default function CategoryScreen(props){
 
     return(
         <View>
-            {data.length===0 || data==undefined ? 
+            {data.length==0 || data==undefined ? 
             <><LoadingSkeletonCategory/></>:
             <>
             <LinearGradient

@@ -156,9 +156,7 @@ export default function HomeScreen({navigation}){
                         <Flashsales Data={DataProductFlashsale} navigation={navigation}/>
                         <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
                         <GetfullProduct DatafullProduct={Datafullproduct} navigation={navigation}/>
-                        <Test2/>
-                        <Test2/>
-                        <Test2/>
+
                     </VirtualizedView>
                 {/* </SkeletonContent> */}
             </SafeAreaView>
