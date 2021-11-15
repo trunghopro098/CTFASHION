@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { View, Text, Button,Modal,Pressable, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import ActionSheet from "react-native-actions-sheet";
 import HeaderScreen from '../NavigatorBottom/headerScreen';
 import * as GETAPI from '../../util/fetchApi';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -16,6 +18,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Check } from '../../util/checkProduct';
 import ModalFavorite from '../StartScreens/modal';
+
+
+const actionSheetRef = createRef();
 export default function Productdetail(props,{navigation}){
     const [textsearch, settextsearch] = useState('');
     const [colorSearch, setcolorSearch] = useState(null);
@@ -33,6 +38,7 @@ export default function Productdetail(props,{navigation}){
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleDelete, setModalVisibleDelete] = useState(false);
     const [modalVisibleAddcart, setmodalVisibleAddcart] = useState(false)
+    const [selectedValue, setSelectedValue] = useState();
     // const imageslidebox = [];
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
@@ -125,7 +131,7 @@ export default function Productdetail(props,{navigation}){
             await AsyncStorage.removeItem("FAVORITE");
             await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
             // alert('đã xoa khoi thuw mucj yeu thich');
-            console.log(arr)
+            // console.log(arr)
             setisFavourite(false)
             setModalVisibleDelete(true)
         } catch (error) {
@@ -144,7 +150,7 @@ export default function Productdetail(props,{navigation}){
                 for(const item of arr){
                     if(item.id == id){
                         // console.log('aaaab')
-                        console.log(item.id)
+                        // console.log(item.id)
                         setisFavourite(true)
                         return 0;
                     }
@@ -180,12 +186,12 @@ export default function Productdetail(props,{navigation}){
                             item.quantity +=1;
                         }
                     }
-                    alert('san pham ton taij trong gio hang !');
+                    alert('Sản phẩm đã có trong giỏ hàng !');
                 }else{
                     const arr1 = [{'id': id, 'quantity': 1, 'starus': false}]
                     arr = arr1.concat(arr);
                     setmodalVisibleAddcart(true)
-                    // alert('them gio hangf thanh coong');
+                    
                 }
             }
             
@@ -200,7 +206,11 @@ export default function Productdetail(props,{navigation}){
 
     const ViewOrder = ()=>(
         <View style={styles.wrapperBottom}>
-            <TouchableOpacity style={{ flexDirection:'column',alignItems:'center',flex:0.25 }}>
+            <TouchableOpacity style={{ flexDirection:'column',alignItems:'center',flex:0.25 }}
+                            onPress={()=>{
+                                props.navigation.navigate('cart')
+                            }}
+                            >
                 <Entypo name="shop" color="red" size={20}/>
                 <Text>Giỏ hàng</Text>
             </TouchableOpacity>
@@ -217,13 +227,91 @@ export default function Productdetail(props,{navigation}){
                                          alignItems:'center',
                                          marginRight:10,flex:1 }}
                                     onPress={()=>{
-                                        AddCart()
-                                        }} >
+                                        // AddCart()
+                                        actionSheetRef.current?.show();
+                                        }}>
                     <Text style={{ color:'white',fontWeight:'bold' }}>Thêm vào giỏ hàng</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
+
+const ActionSheetPopup = ()=>{
+
+    return(
+    <View>
+        <ActionSheet  ref={actionSheetRef}>
+            <View style= { styles.Actionsheet}>
+                    <View style={{ flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            marginHorizontal: 15,
+                            marginVertical: 7,
+                            borderBottomWidth: 0.5,
+                            borderColor: '#D3D3D3',
+                            width: windowW*0.33,
+                            }}>
+                    
+                        <Image source={{ uri: SetHTTP(DataProductDetail[0].image) }} resizeMode='cover' 
+                        style={{ width: windowW*0.33, height: windowH*0.20,}}
+                        />
+                        <View style={{ flexDirection:'column',
+                                        justifyContent: 'flex-start',
+                                        marginLeft:15,
+                                        width: windowW*0.64}}>
+                            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', paddingRight: 15 }}>{DataProductDetail[0].name}</Text>
+                        </View>
+                    </View>
+                    <View style = {{ flexDirection: 'row',
+                                     justifyContent: 'space-between',
+                                     alignContent: 'center',
+                                     
+                                     marginTop: 5,
+                                     marginLeft: 15,
+                                              }}>
+                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
+
+                                <Picker
+                                    // selectedValue={selectedValue}
+                                    style={{ height: 40, width: 150}}
+                                    onValueChange={(itemValue, itemIndex) => 
+                                        {
+                                        // setSelectedValue(itemValue)
+                                        console.log(itemValue)
+                                        }}
+                                >
+                                    <Picker.Item label='PHP' value = 'php'/>
+                                    <Picker.Item label="Java" value="java1" />
+                                    <Picker.Item label="JavaScript" value="js1"/>
+                                </Picker>
+
+                            </View>
+                            <View style = {{ flexDirection: 'row',
+                                             justifyContent: 'space-between',
+                                             marginTop: 5,
+                                             marginLeft: 15
+                                              }}>
+                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
+                                <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', textAlign:'right',marginRight: 20 }}>CUSTOM LAI MET QUA</Text>
+                            </View>
+
+            </View>
+            <TouchableOpacity 
+                onPress ={()=>{actionSheetRef.current?.hide();}}
+                >
+                <View style={ styles.btnaddcartPopUp}>
+                    <View style={styles.btnadd}>
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Thêm vào giỏ hàng</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+
+
+        </ActionSheet>
+    </View>
+    )
+    
+}
+
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
             let quantytiReview1 = 0;
@@ -404,6 +492,7 @@ export default function Productdetail(props,{navigation}){
                                 </View>
                     </ScrollView>
                     <ViewOrder />
+                    <ActionSheetPopup/>
                     <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'} width={120} height={120}/>
@@ -499,5 +588,26 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: '#808080',
     },
+    Actionsheet:{
+        height: windowH*0.6,
+
+    },
+
+    btnaddcartPopUp:{
+        height:50,
+        width: windowW,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        bottom: 5
+    },
+    btnadd:{
+        width: windowW*0.94,
+        backgroundColor: 'red',
+        flexDirection: 'row',
+        justifyContent:'center',
+        height: 40,
+        borderRadius: 5,
+    }
+
     
 })

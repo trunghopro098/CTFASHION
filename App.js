@@ -9,7 +9,9 @@ import SplashScreen from './screens/StartScreens/splash';
 import CollapsibleHeader1 from './screens/products/test';
 import SearchScreen from './screens/StartScreens/search';
 import ProductDetail from './screens/products/productDetail';
-// import { ModalFavorite } from './screens/StartScreens/modal';
+import CartScreen from './screens/NavigatorBottom/cartScreen';
+import Test2 from './screens/products/test2';
+
 const Tab = createStackNavigator();
 
 const App = ()=>{
@@ -29,7 +31,8 @@ const App = ()=>{
         initialRouteName="splash"
         screenOptions={{ headerShown:false}}
         >
-{/* <Tab.Screen name="ww" component={ModalFavorite}/> */}
+          <Tab.Screen name="aa" component={Test2}/>
+          <Tab.Screen name="cart" component={CartScreen}/>
           <Tab.Screen name="home" component={TabNavigation}/>
           <Tab.Screen name='splash' component={SplashScreen}/>
           <Tab.Screen name="test" component ={CollapsibleHeader1}/>

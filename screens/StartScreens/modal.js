@@ -16,7 +16,8 @@ export default function ModalFavorite(props){
                 <View>
                     <LottieView  
                         source={props.require}
-                        style={{ width:120, height:120}}
+                        // style={{ width:120, height:120}}
+                        style={{ width: props.width, height: props.height }}
                         autoPlay
                         // loop                   
                     />
