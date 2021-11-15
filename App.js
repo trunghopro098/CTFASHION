@@ -26,7 +26,7 @@ const App = ()=>{
   return(
       <NavigationContainer>
         <Tab.Navigator
-        initialRouteName="home"
+        initialRouteName="splash"
         screenOptions={{ headerShown:false}}
         >
 {/* <Tab.Screen name="ww" component={ModalFavorite}/> */}

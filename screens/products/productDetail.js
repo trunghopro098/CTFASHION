@@ -46,36 +46,157 @@ export default function Productdetail(props,{navigation}){
     }, [])
 
     const getProductDetail = async()=>{
-        const imageslide = [];
-        const res = await GETAPI.postDataAPI('/product/getProductDetails',idProduct);
-        setDataProductDetail(res);
-        imageslide.push(SetHTTP(res[0].image));
-        res[0].imageDecription1 != null ? imageslide.push(SetHTTP(res[0].imageDecription1)): null;
-        res[0].imageDecription2 != null ? imageslide.push(SetHTTP(res[0].imageDecription2)): null;
-        res[0].imageDecription3 != null ? imageslide.push(SetHTTP(res[0].imageDecription3)): null;
-        res[0].imageDecription4 != null ? imageslide.push(SetHTTP(res[0].imageDecription4)): null;
-        if(res[0].reviewStar!==null){
-            setstar(Math.round(res[0].reviewStar*10)/10)
-            setquantityReview(res[0].quanityReview)
+        try {
+            const imageslide = [];
+            const res = await GETAPI.postDataAPI('/product/getProductDetails',idProduct);
+            setDataProductDetail(res);
+            imageslide.push(SetHTTP(res[0].image));
+            res[0].imageDecription1 != null ? imageslide.push(SetHTTP(res[0].imageDecription1)): null;
+            res[0].imageDecription2 != null ? imageslide.push(SetHTTP(res[0].imageDecription2)): null;
+            res[0].imageDecription3 != null ? imageslide.push(SetHTTP(res[0].imageDecription3)): null;
+            res[0].imageDecription4 != null ? imageslide.push(SetHTTP(res[0].imageDecription4)): null;
+            if(res[0].reviewStar!==null){
+                setstar(Math.round(res[0].reviewStar*10)/10)
+                setquantityReview(res[0].quanityReview)
+            }
+            if(res[0].promotional !==null){
+                setcheckPromotional(res[0].promotional)
+            }
+            if(res[0].description!==null){
+                setdescription({html: res[0].description})
+            }else{
+                setdescription({html:` <h3 style={color:'red'}>SẢN PHẨM KHÔNG CÓ MÔ TẢ</h3> `})
+            }
+            setimageslidebox(imageslide)
+            setisLoading(false);
+        } catch (error) {
+            console.log(error)
         }
-        if(res[0].promotional !==null){
-            setcheckPromotional(res[0].promotional)
-        }
-        if(res[0].description!==null){
-            setdescription({html: res[0].description})
-        }else{
-            setdescription({html:` <h3 style={color:'red'}>SẢN PHẨM KHÔNG CÓ MÔ TẢ</h3> `})
-        }
-        setimageslidebox(imageslide)
-        setisLoading(false);
-
     }
     const getProductType = async()=>{
-        const res = await GETAPI.postDataAPI('/product/getProductByType',idProductType);
-        setDataProductType(res);
-        setisLoading1(false)
-
+        try {
+            const res = await GETAPI.postDataAPI('/product/getProductByType',idProductType);
+            setDataProductType(res);
+            setisLoading1(false)
+        } catch (error) {
+            
+        }
     }
+
+
+    const addFavorite = async()=>{
+        try {       
+            let arr = [];
+            let id = DataProductDetail[0].id;
+            let getData = await AsyncStorage.getItem("FAVORITE");
+            if(getData == null){
+                arr = [{'id': id }]
+                // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+                setisFavourite(true)
+                setModalVisible(true)
+            }else{
+                arr = JSON.parse(getData);
+                arr = arr.concat([{'id':id}]);
+                // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
+                setisFavourite(true)
+                setModalVisible(true)
+                
+            }
+            await AsyncStorage.setItem('FAVORITE', JSON.stringify(arr))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    
+    const DeleteFavorite = async()=>{
+        try {
+            let id = DataProductDetail[0].id;
+            let arr = [];
+            let getData = await AsyncStorage.getItem('FAVORITE');
+            if(getData != null){
+                arr = JSON.parse(getData);
+                for(let i = 0; i < arr.length; i++){
+                    if(arr[i].id === id){
+                        arr.splice(i,1);
+                    }
+                }
+            }
+            await AsyncStorage.removeItem("FAVORITE");
+            await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
+            // alert('đã xoa khoi thuw mucj yeu thich');
+            console.log(arr)
+            setisFavourite(false)
+            setModalVisibleDelete(true)
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    const DisplayProductFavorite = async()=>{
+        try {
+            let id = Data.idProduct;
+            let arr = [];
+            let getData = await AsyncStorage.getItem('FAVORITE')
+            if(getData != null){
+                arr = JSON.parse(getData);
+                for(const item of arr){
+                    if(item.id == id){
+                        // console.log('aaaab')
+                        console.log(item.id)
+                        setisFavourite(true)
+                        return 0;
+                    }
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    
+    }
+    const RemoveCart = async()=>{
+        await AsyncStorage.removeItem('CART');
+        alert('xoa thanh cong')
+    }
+    
+    const AddCart = async()=>{
+        try {
+            let id = Data.idProduct;
+            console.log('cart arr')
+            console.log(id)
+            let arr = [];
+            let getData = await AsyncStorage.getItem('CART');
+            if(getData == null){
+                arr = [{'id' : id, 'quantity': 1 , 'status': false}]
+                setmodalVisibleAddcart(true)
+            }else{
+                arr = JSON.parse(getData);
+                if(Check(arr,id) == true){
+                    for( let item of arr){
+                        if(item.id === id){
+                            console.log('ne ne')
+                            console.log(item.id)
+                            item.quantity +=1;
+                        }
+                    }
+                    alert('san pham ton taij trong gio hang !');
+                }else{
+                    const arr1 = [{'id': id, 'quantity': 1, 'starus': false}]
+                    arr = arr1.concat(arr);
+                    setmodalVisibleAddcart(true)
+                    // alert('them gio hangf thanh coong');
+                }
+            }
+            
+            console.log(arr)
+            await AsyncStorage.setItem('CART',JSON.stringify(arr));
+        } catch (error) {
+            console.log(error)
+        }
+    
+    }
+
 
     const ViewOrder = ()=>(
         <View style={styles.wrapperBottom}>
@@ -84,12 +205,20 @@ export default function Productdetail(props,{navigation}){
                 <Text>Giỏ hàng</Text>
             </TouchableOpacity>
             <View style={styles.verticleLine}></View>
-            <TouchableOpacity style={{flexDirection:'column',alignItems:'center',flex:0.25 }} >
+            <TouchableOpacity style={{flexDirection:'column',alignItems:'center',flex:0.25 }} onPress={()=>{RemoveCart()}} >
                 <MaterialCommunityIcons name="message-processing-outline" size={20}  color="gray"/>
                 <Text>Nhắn tin</Text>
             </TouchableOpacity>
             <View style={{ flex:0.5,flexDirection:"row",justifyContent:'flex-end' }}>
-                <TouchableOpacity  onPress={()=>{setmodalVisibleAddcart(true)}} style={{ backgroundColor:'red',borderRadius:15,padding:10,alignItems:'center',marginRight:10,flex:1 }}>
+                <TouchableOpacity  style={{
+                                         backgroundColor:'red',
+                                         borderRadius:15,
+                                         padding:10,
+                                         alignItems:'center',
+                                         marginRight:10,flex:1 }}
+                                    onPress={()=>{
+                                        AddCart()
+                                        }} >
                     <Text style={{ color:'white',fontWeight:'bold' }}>Thêm vào giỏ hàng</Text>
                 </TouchableOpacity>
             </View>
@@ -148,76 +277,7 @@ export default function Productdetail(props,{navigation}){
 
     }
 
-const addFavorite = async()=>{
-    try {       
-        let arr = [];
-        let id = DataProductDetail[0].id;
-        let getData = await AsyncStorage.getItem("FAVORITE");
-        if(getData == null){
-            arr = [{'id': id }]
-            // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
-            setisFavourite(true)
-            setModalVisible(true)
-        }else{
-            arr = JSON.parse(getData);
-            arr = arr.concat([{'id':id}]);
-            // alert('đã thêm sản phẩm'+DataProductDetail[0].name+'vào danh mục yêu thích');
-            setisFavourite(true)
-            setModalVisible(true)
-            
-        }
-        await AsyncStorage.setItem('FAVORITE', JSON.stringify(arr))
-    } catch (error) {
-        console.log(error)
-    }
-}
 
-
-const DeleteFavorite = async()=>{
-    try {
-        let id = DataProductDetail[0].id;
-        let arr = [];
-        let getData = await AsyncStorage.getItem('FAVORITE');
-        if(getData != null){
-            arr = JSON.parse(getData);
-            for(let i = 0; i < arr.length; i++){
-                if(arr[i].id === id){
-                    arr.splice(i,1);
-                }
-            }
-        }
-        await AsyncStorage.removeItem("FAVORITE");
-        await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
-        // alert('đã xoa khoi thuw mucj yeu thich');
-        console.log(arr)
-        setisFavourite(false)
-        setModalVisibleDelete(true)
-    } catch (error) {
-        console.log(error)
-    }
-    
-}
-const DisplayProductFavorite = async()=>{
-    try {
-        let id = Data.idProduct;
-        let arr = [];
-        let getData = await AsyncStorage.getItem('FAVORITE')
-        if(getData != null){
-            arr = JSON.parse(getData);
-            for(const item of arr){
-                if(item.id == id){
-                    // console.log('aaaab')
-                    console.log(item.id)
-                    setisFavourite(true)
-                    return 0;
-                }
-            }
-        }
-    } catch (error) {
-        console.log(error)
-    }
-
-}
 
     return(
             <View style={{ flex: 1 }}>
@@ -344,9 +404,9 @@ const DisplayProductFavorite = async()=>{
                                 </View>
                     </ScrollView>
                     <ViewOrder />
-                    <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'}/>
-                    <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'}/>
-                    <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'}/>
+                    <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'} width={120} height={120}/>
+                    <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'} width={120} height={120}/>
+                    <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'} width={120} height={120}/>
                 </>:
                 <View style={{ flex:1, justifyContent: 'center', alignContent: 'center' }}>
                 <LoadingCircle/>
