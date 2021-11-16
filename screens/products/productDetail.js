@@ -21,6 +21,80 @@ import ModalFavorite from '../StartScreens/modal';
 
 
 const actionSheetRef = createRef();
+const ActionSheetPopup = React.memo(props => {
+    const {image,name} = props.data
+    return(
+    <View>
+        <ActionSheet ref={actionSheetRef}>
+            <View style= { styles.Actionsheet}>
+                    <View style={{ flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            marginHorizontal: 15,
+                            marginVertical: 7,
+                            borderBottomWidth: 0.5,
+                            borderColor: '#D3D3D3',
+                            width: windowW*0.33,
+                            }}>
+                    
+                        <Image source={{ uri: SetHTTP(image) }} resizeMode='cover' 
+                        style={{ width: windowW*0.33, height: windowH*0.20,}}
+                        />
+                        <View style={{ flexDirection:'column',
+                                        justifyContent: 'flex-start',
+                                        marginLeft:15,
+                                        width: windowW*0.64}}>
+                            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', paddingRight: 15 }}>{name}</Text>
+                        </View>
+                    </View>
+                    <View style = {{ flexDirection: 'row',
+                                     justifyContent: 'space-between',
+                                     alignContent: 'center',
+                                     
+                                     marginTop: 5,
+                                     marginLeft: 15,
+                                              }}>
+                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
+
+                                <Picker
+                                    selectedValue={props.selectValue}
+                                    style={{ height: 40, width: 150}}
+                                    onValueChange={(itemValue, itemIndex) => 
+                                        {
+                                        props.setSelectedValue(itemValue)
+                                        console.log(itemValue)
+                                        }}
+                                >
+                                    <Picker.Item label='PHP' value ="php"/>
+                                    <Picker.Item label="Java" value="java1" />
+                                    <Picker.Item label="JavaScript" value="js1"/>
+                                </Picker>
+
+                            </View>
+                            <View style = {{ flexDirection: 'row',
+                                             justifyContent: 'space-between',
+                                             marginTop: 5,
+                                             marginLeft: 15
+                                              }}>
+                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
+                                <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', textAlign:'right',marginRight: 20 }}>CUSTOM LAI MET QUA</Text>
+                            </View>
+
+            </View>
+            <TouchableOpacity 
+                onPress ={()=>{actionSheetRef.current?.hide();}}
+                >
+                <View style={ styles.btnaddcartPopUp}>
+                    <View style={styles.btnadd} >
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Thêm vào giỏ hàng</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+
+        </ActionSheet>
+    </View>
+    )
+}
+)
 export default function Productdetail(props,{navigation}){
     const [textsearch, settextsearch] = useState('');
     const [colorSearch, setcolorSearch] = useState(null);
@@ -39,12 +113,15 @@ export default function Productdetail(props,{navigation}){
     const [modalVisibleDelete, setModalVisibleDelete] = useState(false);
     const [modalVisibleAddcart, setmodalVisibleAddcart] = useState(false)
     const [selectedValue, setSelectedValue] = useState();
+    
+    const [statusActionSheet, setstatusActionSheet] = useState(false);
     // const imageslidebox = [];
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
     const idProductType= {id: Data.idProductType}
 
     useEffect(() => {
+        console.log("say 2")
         getProductDetail();
         getProductType();
         DisplayProductFavorite();
@@ -236,81 +313,9 @@ export default function Productdetail(props,{navigation}){
         </View>
     )
 
-const ActionSheetPopup = ()=>{
-
-    return(
-    <View>
-        <ActionSheet  ref={actionSheetRef}>
-            <View style= { styles.Actionsheet}>
-                    <View style={{ flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            marginHorizontal: 15,
-                            marginVertical: 7,
-                            borderBottomWidth: 0.5,
-                            borderColor: '#D3D3D3',
-                            width: windowW*0.33,
-                            }}>
-                    
-                        <Image source={{ uri: SetHTTP(DataProductDetail[0].image) }} resizeMode='cover' 
-                        style={{ width: windowW*0.33, height: windowH*0.20,}}
-                        />
-                        <View style={{ flexDirection:'column',
-                                        justifyContent: 'flex-start',
-                                        marginLeft:15,
-                                        width: windowW*0.64}}>
-                            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', paddingRight: 15 }}>{DataProductDetail[0].name}</Text>
-                        </View>
-                    </View>
-                    <View style = {{ flexDirection: 'row',
-                                     justifyContent: 'space-between',
-                                     alignContent: 'center',
-                                     
-                                     marginTop: 5,
-                                     marginLeft: 15,
-                                              }}>
-                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
-
-                                <Picker
-                                    // selectedValue={selectedValue}
-                                    style={{ height: 40, width: 150}}
-                                    onValueChange={(itemValue, itemIndex) => 
-                                        {
-                                        // setSelectedValue(itemValue)
-                                        console.log(itemValue)
-                                        }}
-                                >
-                                    <Picker.Item label='PHP' value = 'php'/>
-                                    <Picker.Item label="Java" value="java1" />
-                                    <Picker.Item label="JavaScript" value="js1"/>
-                                </Picker>
-
-                            </View>
-                            <View style = {{ flexDirection: 'row',
-                                             justifyContent: 'space-between',
-                                             marginTop: 5,
-                                             marginLeft: 15
-                                              }}>
-                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
-                                <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', textAlign:'right',marginRight: 20 }}>CUSTOM LAI MET QUA</Text>
-                            </View>
-
-            </View>
-            <TouchableOpacity 
-                onPress ={()=>{actionSheetRef.current?.hide();}}
-                >
-                <View style={ styles.btnaddcartPopUp}>
-                    <View style={styles.btnadd}>
-                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Thêm vào giỏ hàng</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
 
 
-        </ActionSheet>
-    </View>
-    )
-    
-}
+
 
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
@@ -492,7 +497,7 @@ const ActionSheetPopup = ()=>{
                                 </View>
                     </ScrollView>
                     <ViewOrder />
-                    <ActionSheetPopup/>
+                    <ActionSheetPopup data={DataProductDetail[0]} selectValue={selectedValue} setSelectedValue={(e)=>setSelectedValue(e)}/>
                     <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'} width={120} height={120}/>
