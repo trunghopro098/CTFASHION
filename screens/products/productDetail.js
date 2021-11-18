@@ -23,6 +23,12 @@ import ModalFavorite from '../StartScreens/modal';
 const actionSheetRef = createRef();
 const ActionSheetPopup = React.memo(props => {
     const {image,name} = props.data
+    const dataenventory = props.dataenventory;
+    const quantity = props.quantity;
+    const quantityDisplayScreen = props.quantityDisplayScreen;
+    
+
+    // let quantity = 0;
     return(
     <View>
         <ActionSheet ref={actionSheetRef}>
@@ -48,48 +54,69 @@ const ActionSheetPopup = React.memo(props => {
                     </View>
                     <View style = {{ flexDirection: 'row',
                                      justifyContent: 'space-between',
-                                     alignContent: 'center',
-                                     
                                      marginTop: 5,
-                                     marginLeft: 15,
+                                     marginLeft: 10,
+                                     alignContent: 'center'
+                                     
                                               }}>
-                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
+                                <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
 
                                 <Picker
                                     selectedValue={props.selectValue}
                                     style={{ height: 40, width: 150}}
                                     onValueChange={(itemValue, itemIndex) => 
                                         {
+                                        // xét lại props cho value option và số lươngj sau khi chọn value
                                         props.setSelectedValue(itemValue)
-                                        console.log(itemValue)
+                                        props.setquantity( dataenventory[itemIndex].quanity-dataenventory[itemIndex].sold)
+                                        //nếu chọn lại size xét lại số lượng
+                                        props.setquantityDisplayScreen(1) 
                                         }}
                                 >
-                                    <Picker.Item label='PHP' value ="php"/>
-                                    <Picker.Item label="Java" value="java1" />
-                                    <Picker.Item label="JavaScript" value="js1"/>
+                                    {
+                                    dataenventory.map((item)=>{
+                                        
+                                        return(
+                                           <Picker.Item key={item.size}  label={item.size} value ={item.size}/>                                                              
+                                        )
+                                    })}                      
                                 </Picker>
-
+                            </View>
+                            <View style= {{ flexDirection: 'row',
+                                             justifyContent: 'flex-start',
+                                             marginTop: 5,
+                                             marginLeft: 15 }}>
+                                    <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold' }}>Sản phẩm còn trong kho :</Text>
+                                    <Text style={{ fontSize: 16 }}> {quantity} sản phẩm</Text>
                             </View>
                             <View style = {{ flexDirection: 'row',
-                                             justifyContent: 'space-between',
-                                             marginTop: 5,
+                                             justifyContent: 'flex-start',
+                                             marginTop: 20,
                                              marginLeft: 15
                                               }}>
                                 <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
-                                <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', textAlign:'right',marginRight: 20 }}>CUSTOM LAI MET QUA</Text>
-                            </View>
+                                <View style ={{ flexDirection: 'row', justifyContent:'flex-start',marginLeft : 90 }}>
+                                    <TouchableOpacity onPress={()=>{props.Reducer()}}>
+                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>-</Text>
+                                    </TouchableOpacity>
+                                    
+                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: '#764FE2', width: 60}}>{quantityDisplayScreen}</Text>
+                                    <TouchableOpacity onPress={()=>{props.Increase()}}>
+                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>+</Text>
+                                    </TouchableOpacity>
 
+                                </View>
+                            </View>
             </View>
             <TouchableOpacity 
-                onPress ={()=>{actionSheetRef.current?.hide();}}
-                >
+                onPress ={()=>{ props.AddCart()}}
+            >
                 <View style={ styles.btnaddcartPopUp}>
                     <View style={styles.btnadd} >
                             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Thêm vào giỏ hàng</Text>
                     </View>
                 </View>
             </TouchableOpacity>
-
         </ActionSheet>
     </View>
     )
@@ -112,20 +139,20 @@ export default function Productdetail(props,{navigation}){
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleDelete, setModalVisibleDelete] = useState(false);
     const [modalVisibleAddcart, setmodalVisibleAddcart] = useState(false)
+
     const [selectedValue, setSelectedValue] = useState();
-    
-    const [statusActionSheet, setstatusActionSheet] = useState(false);
-    // const imageslidebox = [];
+    const [DataEnventory, setDataEnventory] = useState([]);
+    const [quantity, setquantity] = useState(0);// số lượng của sản phẩm trên enventory
+    const [quantityDisplayScreen, setquantityDisplayScreen] = useState(1);// số lượng xét giá trị tăng giảm số lượng
+
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
     const idProductType= {id: Data.idProductType}
-
     useEffect(() => {
-        console.log("say 2")
         getProductDetail();
         getProductType();
         DisplayProductFavorite();
-       
+        getInventory();
     }, [])
 
     const getProductDetail = async()=>{
@@ -159,8 +186,32 @@ export default function Productdetail(props,{navigation}){
     const getProductType = async()=>{
         try {
             const res = await GETAPI.postDataAPI('/product/getProductByType',idProductType);
+            console.log(res)
+            for( let i= 0; i < res.length ; i++){//xoa bỏ sản phẩm đã hiển thị
+                if(res[i].id === Data.idProduct){
+                    res.splice(i,1);
+                }
+            }
             setDataProductType(res);
             setisLoading1(false)
+        } catch (error) {
+            
+        }
+    }
+    const getInventory = async()=>{
+        try {
+            const res = await GETAPI.postDataAPI('/product/getProductInventory',idProduct);
+            for( let i= 0; i < res.length ; i++){//xoa bỏ sản phẩm có quannity = 0 ra khỏi mảng
+                if(res[i].quanity === 0){
+                    res.splice(i,1);
+                }
+                if(i === res.length-1){
+                    // xét mặt định cgo SelectedValue và quantiy của sản phẩm
+                    setDataEnventory(res)
+                    setSelectedValue(res[0].size)
+                    setquantity(res[0].quanity-res[0].sold)
+                }
+            }
         } catch (error) {
             
         }
@@ -226,8 +277,6 @@ export default function Productdetail(props,{navigation}){
                 arr = JSON.parse(getData);
                 for(const item of arr){
                     if(item.id == id){
-                        // console.log('aaaab')
-                        // console.log(item.id)
                         setisFavourite(true)
                         return 0;
                     }
@@ -243,6 +292,30 @@ export default function Productdetail(props,{navigation}){
         alert('xoa thanh cong')
     }
     
+    var Increase =()=>{
+        if(quantityDisplayScreen >= quantity){
+            alert('Sản phẩm không đủ số lượng, quý khách vui lòng chọn sản phẩm khác !')
+        }else if(quantityDisplayScreen >= 5){
+            alert('Tối đa mua được 5 sản phẩm !')
+        }else{
+            let increase = quantityDisplayScreen+1;
+            setquantityDisplayScreen(increase)
+        }
+
+        // console.log(increase)
+        console.log(quantity)
+    }
+
+    var Reducer =()=>{
+        if(quantityDisplayScreen <= 1){
+            alert('Thêm giỏ hàng tối thiểu 1 sản phẩm !')
+        }else{
+            const reducer = quantityDisplayScreen-1;
+            setquantityDisplayScreen(reducer)
+        }
+    }
+
+
     const AddCart = async()=>{
         try {
             let id = Data.idProduct;
@@ -251,7 +324,8 @@ export default function Productdetail(props,{navigation}){
             let arr = [];
             let getData = await AsyncStorage.getItem('CART');
             if(getData == null){
-                arr = [{'id' : id, 'quantity': 1 , 'status': false}]
+                arr = [{'id' : id, 'quantity': quantityDisplayScreen , 'option': selectedValue}]
+                actionSheetRef.current?.hide();
                 setmodalVisibleAddcart(true)
             }else{
                 arr = JSON.parse(getData);
@@ -263,10 +337,12 @@ export default function Productdetail(props,{navigation}){
                             item.quantity +=1;
                         }
                     }
+                    actionSheetRef.current?.hide();
                     alert('Sản phẩm đã có trong giỏ hàng !');
                 }else{
-                    const arr1 = [{'id': id, 'quantity': 1, 'starus': false}]
+                    const arr1 = [{'id' : id, 'quantity': quantityDisplayScreen , 'option': selectedValue}]
                     arr = arr1.concat(arr);
+                    actionSheetRef.current?.hide();
                     setmodalVisibleAddcart(true)
                     
                 }
@@ -420,7 +496,6 @@ export default function Productdetail(props,{navigation}){
                                             loop                   
                                         />
                                     </View>
-                                    
                                 </TouchableOpacity>
                                 :
                                 <TouchableOpacity style={{ paddingRight:10 }}
@@ -481,7 +556,11 @@ export default function Productdetail(props,{navigation}){
                         </View>
                             <Text style={{ marginTop: 10 , marginLeft: 15, color: 'red'}}>SẢN PHẨM ĐỀ XUẤT </Text>
                                 <View style={styles.CarouselCart}>
-
+                                {DataProductType.length == 0 ? 
+                                <>
+                                    <Text style={{ fontSize: 14, color: 'red', textAlign: 'center' }}>CHÁY HÀNG ! KHÔNG CÒN SẢN PHẨM NÀO CÙNG LOẠI VỚI SẢN PHẨM NÀY!</Text>
+                                </>:
+                                <>
                                     <Carousel                  
                                         layout={"stack"}
                                         activeSlideOffset={5}
@@ -493,11 +572,23 @@ export default function Productdetail(props,{navigation}){
                                         renderItem={renderItemproductype}
                                         loop={true}
                                     />
+                                </>}
+
                                 
                                 </View>
                     </ScrollView>
                     <ViewOrder />
-                    <ActionSheetPopup data={DataProductDetail[0]} selectValue={selectedValue} setSelectedValue={(e)=>setSelectedValue(e)}/>
+                    <ActionSheetPopup data={DataProductDetail[0]}
+                                     selectValue={selectedValue} 
+                                     setSelectedValue={(e)=>setSelectedValue(e)} 
+                                     dataenventory ={DataEnventory} 
+                                     quantity = {quantity} 
+                                     setquantity={(e)=>setquantity(e)}
+                                     setquantityDisplayScreen={(e)=>setquantityDisplayScreen(e)}
+                                     Increase={()=>Increase()} 
+                                     Reducer={()=>{Reducer()}} 
+                                     quantityDisplayScreen ={quantityDisplayScreen}
+                                     AddCart={()=>{AddCart()}}/>
                     <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'} width={120} height={120}/>
@@ -612,7 +703,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         height: 40,
         borderRadius: 5,
-    }
+    },
+
 
     
 })
