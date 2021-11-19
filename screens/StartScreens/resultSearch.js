@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import {View, Text,TextInput,StyleSheet,Dimensions,TouchableOpacity,ScrollView} from "react-native";
+import {View, Text,TextInput,StyleSheet,Dimensions,TouchableOpacity,ScrollView,StatusBar} from "react-native";
 import LoadingCircle from "./loadingCircle";
 import LinearGradient from "react-native-linear-gradient";
 import { useSelector,useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import {updateDataSearch} from '../../redux/reducer/product.reducer';
 import GetfullProduct from '../products/getfullProduct';
 import * as GETAPI from '../../util/fetchApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 export default function ResultSearch ({navigation}){
     const datasearch = useSelector(e=>e.productReducer.datasearch);
     const dispatch = useDispatch();
@@ -46,8 +47,13 @@ export default function ResultSearch ({navigation}){
     }
     return(
         <View style={style.container}>
+            <StatusBar 
+                backgroundColor="white"
+                barStyle="dark-content"
+            />
             {showContent ?
             <View style={{...style.search1}}>
+                
                 <View style={style.input} >
                     <TouchableOpacity>
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}

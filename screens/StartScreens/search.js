@@ -4,7 +4,8 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useRoute} from '@react-navigation/native';
 import { useDispatch } from "react-redux";
-import {updateDataSearch} from '../../redux/reducer/product.reducer'
+import {updateDataSearch} from '../../redux/reducer/product.reducer';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function SearchScreen({ navigation }){
     const [searhHistory, setsearhHistory] = useState('');
     const route = useRoute();
@@ -47,16 +48,59 @@ export default function SearchScreen({ navigation }){
     }
     const handleSearch = ()=>{
         if(searhHistory!==""){
-            navigation.navigate("resultSearch")
+            navigation.replace("resultSearch")
             dispatch(updateDataSearch(searhHistory))
         }
     }
-    const renderItemHistory = ({item}) =>{
+    const handleSearchByHistoty = (data)=>{
+        if(data!==""){
+            navigation.replace("resultSearch")
+            dispatch(updateDataSearch(data))
+        }
+    }
+    const removeHistory = async(data)=>{
+        const history = await AsyncStorage.getItem('SEARCHHISTORY');
+        if(history !== null){
+            let arr = JSON.parse(history)
+            const index = arr.findIndex(x=>x.name===data)
+            arr.splice(index,1)
+            await AsyncStorage.setItem('SEARCHHISTORY',JSON.stringify(arr));
+            getHistory();
+        }
+
+    }
+    const renderItemHistory = ({item,index}) =>{
+        if(index<6){
         return(
-            <View style={{ width:'30%',padding:5,borderRadius:50,marginLeft:5,backgroundColor:'white',marginBottom:10,paddingLeft:10}}>
+            <TouchableOpacity 
+                    style={{ 
+                        width:'30%',
+                        padding:5,
+                        borderRadius:50,
+                        marginLeft:5,
+                        backgroundColor:'white',
+                        marginBottom:10,
+                        paddingLeft:10,
+                        flexDirection:"row",
+                        justifyContent : "space-between",
+                    }}
+                    onPress={()=>handleSearchByHistoty(item.name)}
+                >
                 <Text>{item.name}</Text>
-            </View>
+                <TouchableOpacity 
+                    style={{ 
+                        padding:2,
+                        borderRadius:50,
+                        backgroundColor:'rgba(180, 180, 180, 0.2)' 
+                    }} 
+                    onPress={()=>removeHistory(item.name)}
+                >
+                    <AntDesign name="close" size={16}/>
+                </TouchableOpacity>
+
+            </TouchableOpacity>
         )
+        }
     }
     return(
         <View style={style.container}>

@@ -63,6 +63,7 @@ const ActionSheetPopup = React.memo(props => {
                         <Picker
                             selectedValue={props.selectValue}
                             style={{ height: 40, width: 150}}
+                            placeholder="Chọn size/màu"
                             onValueChange={(itemValue, itemIndex) => 
                                 {
                                 // xét lại props cho value option và số lươngj sau khi chọn value
