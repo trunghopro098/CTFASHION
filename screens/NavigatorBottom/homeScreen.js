@@ -11,6 +11,7 @@ import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import * as GETAPI from '../../util/fetchApi';
 import { SetHTTP } from "../../util/setHTTP";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
@@ -19,27 +20,11 @@ export default function HomeScreen({navigation}){
     const [DataProductFlashsale, setDataProductFlashsale] = useState([]);
     const [Datacategory, setDatacategory] = useState([]);
     const [bgHeader, setbgHeader] = useState(false);
-    const [textsearch, settextsearch] = useState('');
+    const [textsearch, settextsearch] = useState('CTFASHION WELCOME !!!');
     const [DataProductNew, setDataProductNew] = useState([]);//data hiển thị sản phẩm mới nhất trong box
     const [DataProductNewImageSlideBox, setDataProductNewImageSlideBox] = useState([]);//hình ảnh hiển thị lên slide
     const [DataProductNewSlideBox, setDataProductNewSlideBox] = useState([]);//data khi click vào slider
     const [Datafullproduct, setDatafullproduct] = useState([])
-
-
-    const arr = [
-        {
-        name: "áo cà xa "
-       },
-       {
-        name: "Quần sa tăng "
-       },
-       {
-        name: "mủ ngộ không "
-       },
-       {
-        name: "Bụng trư bát giới "
-       },
-]
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -52,21 +37,28 @@ export default function HomeScreen({navigation}){
         getCategory();
         getProductSale();
         getdatasale();
-
         getDataBox();
         getDatafullProduct();
-        const interval = setInterval(()=>{
-            // console.log(arr.length);
-            const random = Math.floor((Math.random()*arr.length));
-            settextsearch(arr[random].name)
-        },6000);
-
-
-        return () => {cleanup(interval)}
-
-        
+        getHistory();      
     }, [])
 
+        const getHistory = async()=>{
+            const history = await AsyncStorage.getItem('SEARCHHISTORY');
+            console.log(typeof(history))
+            if(history!==null){
+                const arrH = JSON.parse(history)
+                if(arrH.length !== 0){
+                    console.log('aaaa')
+                    const interval = setInterval(()=>{
+                        const random = Math.floor((Math.random()*arrH.length));
+                        settextsearch(arrH[random].name)
+                        // console.log(arrH[random].name)
+                    },5000);
+                    return () => {cleanup(interval)}                   
+                }
+                
+            }
+        }
 
     const getProductSale= async()=>{    
         const res = await GETAPI.getAPI('/product/getTopProductSale');
