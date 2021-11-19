@@ -335,7 +335,7 @@ export default function Productdetail(props,{navigation}){
             let arr = [];
             let getData = await AsyncStorage.getItem('CART');
             if(getData == null){
-                arr = [{'id' : id, 'quantity': quantityDisplayScreen , 'option': selectedValue}]
+                arr = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue}]
                 actionSheetRef.current?.hide();
                 setmodalVisibleAddcart(true)
             }else{
@@ -346,14 +346,14 @@ export default function Productdetail(props,{navigation}){
                             // console.log('ne ne')
                             // console.log(item.id)  
                             if(item.quanity < 5 && item.quanity < quantity){
-                                item.quantity +=1;
+                                item.quanity +=1;
                             }
                         }
                     }
                     actionSheetRef.current?.hide();
                     Alert.alert('CTFASHION','Sản phẩm đã có trong giỏ hàng !');
                 }else{
-                    const arr1 = [{'id' : id, 'quantity': quantityDisplayScreen , 'option': selectedValue}]
+                    const arr1 = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue}]
                     arr = arr1.concat(arr);
                     actionSheetRef.current?.hide();
                     setmodalVisibleAddcart(true)
