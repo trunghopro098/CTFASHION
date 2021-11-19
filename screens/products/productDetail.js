@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { View, Text, Button,Modal,Pressable,Alert, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import { View, Text, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import ActionSheet from "react-native-actions-sheet";
 import HeaderScreen from '../NavigatorBottom/headerScreen';
@@ -27,86 +27,85 @@ const ActionSheetPopup = React.memo(props => {
     const quantity = props.quantity;
     const quantityDisplayScreen = props.quantityDisplayScreen;
     
-
-    // let quantity = 0;
     return(
     <View>
         <ActionSheet ref={actionSheetRef}>
             <View style= { styles.Actionsheet}>
-                    <View style={{ flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            marginHorizontal: 15,
-                            marginVertical: 7,
-                            borderBottomWidth: 0.5,
-                            borderColor: '#D3D3D3',
-                            width: windowW*0.33,
-                            }}>
-                    
-                        <Image source={{ uri: SetHTTP(image) }} resizeMode='cover' 
-                        style={{ width: windowW*0.33, height: windowH*0.20,}}
-                        />
-                        <View style={{ flexDirection:'column',
+                <View style={{ flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        marginHorizontal: 15,
+                        marginVertical: 7,
+                        borderBottomWidth: 0.5,
+                        borderColor: '#D3D3D3',
+                        width: windowW*0.33,
+                        }}>
+                
+                    <Image source={{ uri: SetHTTP(image) }} resizeMode='cover' 
+                    style={{ width: windowW*0.33, height: windowH*0.20,}}
+                    />
+                    <View style={{ flexDirection:'column',
+                                    justifyContent: 'flex-start',
+                                    marginLeft:15,
+                                    width: windowW*0.64}}>
+                        <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', paddingRight: 15 }}>{name}</Text>
+                    </View>
+                </View>
+                <View 
+                    style = {{ flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    marginTop: 5,
+                                    marginLeft: 10,
+                                    alignContent: 'center'       
+                            }}
+                >
+                        <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
+
+                        <Picker
+                            selectedValue={props.selectValue}
+                            style={{ height: 40, width: 150}}
+                            onValueChange={(itemValue, itemIndex) => 
+                                {
+                                // xét lại props cho value option và số lươngj sau khi chọn value
+                                props.setSelectedValue(itemValue)
+                                props.setquantity( dataenventory[itemIndex].quanity-dataenventory[itemIndex].sold)
+                                //nếu chọn lại size xét lại số lượng
+                                props.setquantityDisplayScreen(1) 
+                                }}
+                        >
+                            {
+                            dataenventory.map((item)=>{
+                                
+                                return(
+                                    <Picker.Item key={item.size}  label={item.size} value ={item.size}/>                                                              
+                                )
+                            })}                      
+                        </Picker>
+                    </View>
+                    <View style= {{ flexDirection: 'row',
                                         justifyContent: 'flex-start',
-                                        marginLeft:15,
-                                        width: windowW*0.64}}>
-                            <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold', paddingRight: 15 }}>{name}</Text>
-                        </View>
+                                        marginTop: 5,
+                                        marginLeft: 15 }}>
+                            <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold' }}>Sản phẩm còn trong kho :</Text>
+                            <Text style={{ fontSize: 16 }}> {quantity} sản phẩm</Text>
                     </View>
                     <View style = {{ flexDirection: 'row',
-                                     justifyContent: 'space-between',
-                                     marginTop: 5,
-                                     marginLeft: 10,
-                                     alignContent: 'center'
-                                     
-                                              }}>
-                                <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold',marginTop : 12}}>  Chọn size/màu sắc:</Text>
+                                        justifyContent: 'flex-start',
+                                        marginTop: 20,
+                                        marginLeft: 15
+                                        }}>
+                            <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
+                            <View style ={{ flexDirection: 'row', justifyContent:'flex-start',marginLeft : 90 }}>
+                                <TouchableOpacity onPress={()=>{props.Reducer()}}>
+                                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>-</Text>
+                                </TouchableOpacity>
+                                
+                                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: '#764FE2', width: 60}}>{quantityDisplayScreen}</Text>
+                                <TouchableOpacity onPress={()=>{props.Increase()}}>
+                                        <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>+</Text>
+                                </TouchableOpacity>
 
-                                <Picker
-                                    selectedValue={props.selectValue}
-                                    style={{ height: 40, width: 150}}
-                                    onValueChange={(itemValue, itemIndex) => 
-                                        {
-                                        // xét lại props cho value option và số lươngj sau khi chọn value
-                                        props.setSelectedValue(itemValue)
-                                        props.setquantity( dataenventory[itemIndex].quanity-dataenventory[itemIndex].sold)
-                                        //nếu chọn lại size xét lại số lượng
-                                        props.setquantityDisplayScreen(1) 
-                                        }}
-                                >
-                                    {
-                                    dataenventory.map((item)=>{
-                                        
-                                        return(
-                                           <Picker.Item key={item.size}  label={item.size} value ={item.size}/>                                                              
-                                        )
-                                    })}                      
-                                </Picker>
                             </View>
-                            <View style= {{ flexDirection: 'row',
-                                             justifyContent: 'flex-start',
-                                             marginTop: 5,
-                                             marginLeft: 15 }}>
-                                    <Text style={{ color: 'red', fontSize: 16, fontWeight: 'bold' }}>Sản phẩm còn trong kho :</Text>
-                                    <Text style={{ fontSize: 16 }}> {quantity} sản phẩm</Text>
-                            </View>
-                            <View style = {{ flexDirection: 'row',
-                                             justifyContent: 'flex-start',
-                                             marginTop: 20,
-                                             marginLeft: 15
-                                              }}>
-                                <Text style={{ color: 'red', fontSize: 18, fontWeight: 'bold' }}>Số lượng:</Text>
-                                <View style ={{ flexDirection: 'row', justifyContent:'flex-start',marginLeft : 90 }}>
-                                    <TouchableOpacity onPress={()=>{props.Reducer()}}>
-                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>-</Text>
-                                    </TouchableOpacity>
-                                    
-                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: '#764FE2', width: 60}}>{quantityDisplayScreen}</Text>
-                                    <TouchableOpacity onPress={()=>{props.Increase()}}>
-                                         <Text style={{ color: 'black', fontSize: 16, fontWeight: 'bold', textAlign:'center', borderWidth: 1, borderColor: 'red', width: 35}}>+</Text>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </View>
+                    </View>
             </View>
                 {dataenventory.length == 0 ? 
                 <>
@@ -401,7 +400,6 @@ export default function Productdetail(props,{navigation}){
             </View>
         </View>
     )
-
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
             let quantytiReview1 = 0;
@@ -454,8 +452,6 @@ export default function Productdetail(props,{navigation}){
         )
 
     }
-
-
 
     return(
             <View style={{ flex: 1 }}>
@@ -587,23 +583,25 @@ export default function Productdetail(props,{navigation}){
                                 </View>
                     </ScrollView>
                     <ViewOrder />
-                    <ActionSheetPopup data={DataProductDetail[0]}
-                                     selectValue={selectedValue} 
-                                     setSelectedValue={(e)=>setSelectedValue(e)} 
-                                     dataenventory ={DataEnventory} 
-                                     quantity = {quantity} 
-                                     setquantity={(e)=>setquantity(e)}
-                                     setquantityDisplayScreen={(e)=>setquantityDisplayScreen(e)}
-                                     Increase={()=>Increase()} 
-                                     Reducer={()=>{Reducer()}} 
-                                     quantityDisplayScreen ={quantityDisplayScreen}
-                                     AddCart={()=>{AddCart()}}/>
+                    <ActionSheetPopup   
+                        data={DataProductDetail[0]}
+                        selectValue={selectedValue} 
+                        setSelectedValue={(e)=>setSelectedValue(e)} 
+                        dataenventory ={DataEnventory} 
+                        quantity = {quantity} 
+                        setquantity={(e)=>setquantity(e)}
+                        setquantityDisplayScreen={(e)=>setquantityDisplayScreen(e)}
+                        Increase={()=>Increase()} 
+                        Reducer={()=>{Reducer()}} 
+                        quantityDisplayScreen ={quantityDisplayScreen}
+                        AddCart={()=>{AddCart()}}
+                    />
                     <ModalFavorite ModalVisible= {modalVisible} setModalVisible={(e)=>setModalVisible(e)} require= {require('../../assets/lottierfiles/modalFavorite.json')} text={'Đã thêm vào danh mục yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleDelete} setModalVisible={(e)=>setModalVisibleDelete(e)} require= {require('../../assets/lottierfiles/broken-heart.json')} text={'Đã xóa sản phẩm yêu thích'} width={120} height={120}/>
                     <ModalFavorite ModalVisible= {modalVisibleAddcart} setModalVisible={(e)=>setmodalVisibleAddcart(e)} require= {require('../../assets/lottierfiles/addtocart.json')} text={'Đã thêm giỏ hàng !'} width={120} height={120}/>
                 </>:
                 <View style={{ flex:1, justifyContent: 'center', alignContent: 'center' }}>
-                <LoadingCircle/>
+                    <LoadingCircle/>
                 </View>                
                 }
             </View>

@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import {View, Text, TextInput, StyleSheet, Dimensions,Image,TouchableOpacity,Animated } from 'react-native';
+import React from "react";
+import {View, Text, TextInput, StyleSheet, Dimensions,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -26,13 +26,13 @@ export default function HeaderScreen(props){
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
                         {/* <TextInput style={{ ...style.textinput}}/> */}
                         <Text style={{ ...style.textinput}}>{props.textsearch}</Text>
-                        </TouchableOpacity>
+                    </TouchableOpacity>
                         <LinearGradient 
                             colors={["#C790E5",'#9C30FF','#BEE6F0']}
                             style={style.search}
                         >
                             <TouchableOpacity onPress={()=>{props.navigation.navigate('search')}}>
-                            <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
+                                <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>

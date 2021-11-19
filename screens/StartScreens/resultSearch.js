@@ -1,44 +1,38 @@
 import React,{useState, useEffect} from "react";
-import { View,Text,StyleSheet, Dimensions,TouchableOpacity,TextInput,StatusBar,FlatList } from "react-native";
+import {View, Text,TextInput,StyleSheet,Dimensions,TouchableOpacity,ScrollView} from "react-native";
+import LoadingCircle from "./loadingCircle";
 import LinearGradient from "react-native-linear-gradient";
+import { useSelector,useDispatch } from "react-redux";
+import {updateDataSearch} from '../../redux/reducer/product.reducer';
+import GetfullProduct from '../products/getfullProduct';
+import * as GETAPI from '../../util/fetchApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useRoute} from '@react-navigation/native';
-import { useDispatch } from "react-redux";
-import {updateDataSearch} from '../../redux/reducer/product.reducer'
-export default function SearchScreen({ navigation }){
-    const [searhHistory, setsearhHistory] = useState('');
-    const route = useRoute();
-    const [dataSearchHistory, setdataSearchHistory] = useState([]);
+export default function ResultSearch ({navigation}){
+    const datasearch = useSelector(e=>e.productReducer.datasearch);
     const dispatch = useDispatch();
+    const [dataProduct, setdataProduct] = useState();
+    const [showContent, setshowContent] = useState(false);
     useEffect(() => {
-        navigation.setOptions({
-            headerShown:true,
-            title:"Tìm kiếm"
-        })
+        getDataProduct()
     },[])
-    useEffect(() => {
-        getHistory()
-    },[route.name])
-    const getHistory = async()=>{
-        const history = await AsyncStorage.getItem('SEARCHHISTORY');
-        if(history!==null){
-            const arrH = JSON.parse(history)
-            setdataSearchHistory(arrH)
-        }
+    const getDataProduct = async()=>{
+        setshowContent(false)
+        const res = await GETAPI.postDataAPI("/product/searchProduct",{"datasearch":datasearch});
+        setdataProduct(res)
+        setshowContent(true)
     }
-    
     const addhistory = async()=>{
-        if(searhHistory!==""){
+        if(datasearch!==""){
             let arrHistorySearch = [];
             const getArrAsync = await AsyncStorage.getItem('SEARCHHISTORY');
 
             if(getArrAsync == null){
-                arrHistorySearch = [{name: searhHistory}]
+                arrHistorySearch = [{name: datasearch}]
             }else{
                 arrHistorySearch = JSON.parse(getArrAsync);
-                const index = arrHistorySearch.findIndex(x=> x.name===searhHistory)
+                const index = arrHistorySearch.findIndex(x=> x.name===datasearch)
                 if(index===-1){
-                    let add = [{name: searhHistory}]
+                    let add = [{name: datasearch}]
                     arrHistorySearch= add.concat(arrHistorySearch)
                 }
             }
@@ -46,24 +40,13 @@ export default function SearchScreen({ navigation }){
         }
     }
     const handleSearch = ()=>{
-        if(searhHistory!==""){
-            navigation.navigate("resultSearch")
-            dispatch(updateDataSearch(searhHistory))
+        if(datasearch!==""){
+            getDataProduct()
         }
-    }
-    const renderItemHistory = ({item}) =>{
-        return(
-            <View style={{ width:'30%',padding:5,borderRadius:50,marginLeft:5,backgroundColor:'white',marginBottom:10,paddingLeft:10}}>
-                <Text>{item.name}</Text>
-            </View>
-        )
     }
     return(
         <View style={style.container}>
-            <StatusBar 
-                backgroundColor="white"
-                barStyle="dark-content"
-            />
+            {showContent ?
             <View style={{...style.search1}}>
                 <View style={style.input} >
                     <TouchableOpacity>
@@ -72,8 +55,8 @@ export default function SearchScreen({ navigation }){
                             style={{ ...style.textinput}} 
                             
                             placeholder={'Search'}
-                            value = {searhHistory}
-                            onChangeText={(value)=>setsearhHistory(value)} 
+                            value = {datasearch}
+                            onChangeText={(value)=>dispatch(updateDataSearch(value))} 
                         />
                         </TouchableOpacity>
                         <LinearGradient 
@@ -81,24 +64,25 @@ export default function SearchScreen({ navigation }){
                             style={style.search}
                         >
                             <TouchableOpacity onPress={()=>{addhistory();handleSearch()}}>
-                            <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
+                                <Text style= {{ color: 'white', fontSize: 12 }}>Tìm kiếm</Text>
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>
+                    <ScrollView
+                          contentContainerStyle={{ paddingBottom:20 }}
+                    >
+                        <GetfullProduct DatafullProduct={dataProduct} navigation={navigation}/>
+                    </ScrollView>
                 </View>
-                <View style= {{ flex:1,padding:20}}>
-                   <Text style={{ fontWeight:'bold',fontSize: 15}}>Lịch sử tìm kiếm</Text>
-                   <FlatList 
-                        data={dataSearchHistory}
-                        renderItem={renderItemHistory}
-                        numColumns={3}
-                        keyExtractor={(item) => item.name}
-                        style={{ marginTop:10 }}
-                   />
+                :
+                <View style={{ flex:1,justifyContent:'center',alignItems:'center' }}>
+                    <LoadingCircle />
                 </View>
+               }
         </View>
     )
 }
+
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 
@@ -110,6 +94,7 @@ const style = StyleSheet.create({
     input:{
         justifyContent: "space-between",
         flexDirection:"row",
+        marginBottom:10,
         height : windowH*0.059,
         width : windowW*0.9,
         borderWidth : 1,
@@ -156,8 +141,7 @@ const style = StyleSheet.create({
         justifyContent : "center",
         alignContent : "center",
         alignItems:"center",
-        paddingBottom:10,
-        backgroundColor:'white'
+        backgroundColor:'white', 
         // borderBottomWidth: 1,
         // borderColor: "#9999"
     },

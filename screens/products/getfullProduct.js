@@ -22,45 +22,47 @@ export default function GetfullProduct(props){
         }
         const titleSale = 100-(Math.round((item.promotional*100)/item.price))
         return(
-            <TouchableOpacity key={item.id} onPress={()=>{
-                // console.log(item)
-                                                props.navigation.navigate('productDetail',{
-                                                idProduct : item.id,
-                                                idProductType : item.idProductType
-                                                
-                                            });
-                                         }}>
+            <TouchableOpacity 
+                key={item.id} 
+                onPress={()=>{
+                        props.navigation.navigate('productDetail',{
+                            idProduct : item.id,
+                            idProductType : item.idProductType
+                        });
+                }}
+            >
                 {item.promotional > 0 ? 
                 <>
                 <Label
-                        orientation={Orientation.TOP_RIGHT}
-                        containerStyle={styles.cart_item}
-                        title={`${titleSale}%`}
-                        // colors={['green','red','white']}
-                        distance={18}
-                        extent={0.0}
-                        style={{
-                                fontSize: 15,
-                                color: 'white',
-                                // textAlign: 'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                    orientation={Orientation.TOP_RIGHT}
+                    containerStyle={styles.cart_item}
+                    title={`${titleSale}%`}
+                    distance={18}
+                    extent={0.0}
+                    style={{
+                            fontSize: 15,
+                            color: 'white',
+                            // textAlign: 'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                    }}
+                    shadowProps={{ 
+                            shadowColor: "#C8C8C8",
+                            shadowOffset: { width: 0, height: 12, },  
+                            shadowOpacity: 0.2, shadowRadius: 8, 
+                            elevation: 2 
                         }}
-                        shadowProps={{ shadowColor: "#C8C8C8",
-                                        shadowOffset: { width: 0, height: 12, },  
-                                        shadowOpacity: 0.2, shadowRadius: 8, 
-                                        elevation: 2 }}
-                        >
+                >
                         <View >
                             <Image 
-                                    source={{ uri:SetHTTP(item.image)}} 
-                                    resizeMode='contain'
-                                    style={{ 
-                                        width : windowW*0.46,
-                                        height : windowH*0.35,
-                                        borderRadius:6,
-                                    }}
-                                />
+                                source={{ uri:SetHTTP(item.image)}} 
+                                resizeMode='contain'
+                                style={{ 
+                                    width : windowW*0.46,
+                                    height : windowH*0.35,
+                                    borderRadius:6,
+                                }}
+                            />
                         </View >
                             <View style={{ flexDirection:"row",paddingLeft:5 }}>
                                 <Text>{truncate(name)}</Text>
@@ -112,7 +114,7 @@ export default function GetfullProduct(props){
             {datafullproduct!==undefined &&
                 datafullproduct.map(e=>{
                     return(
-                         renderitem(e)
+                        renderitem(e)
                     )
                 })}
         </ScrollView>

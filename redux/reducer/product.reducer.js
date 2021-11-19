@@ -4,7 +4,8 @@ const productSlice = createSlice({
     name: 'product',
     initialState:{
         cart:{},
-        quanityCart:0
+        quanityCart:0,
+        datasearch:''
     },
     reducers:{
         updateQuanityProduct: (state,action) =>{
@@ -12,10 +13,13 @@ const productSlice = createSlice({
         },
         updateCart :(state,action) =>{
             state.cart = action.payload;
+        },
+        updateDataSearch :(state,action)=>{
+            state.datasearch = action.payload;
         }
     }
 })
 
-export const {updateQuanityProduct,updateCart} = productSlice.actions;
+export const {updateQuanityProduct,updateCart,updateDataSearch} = productSlice.actions;
 
 export default productSlice.reducer;
