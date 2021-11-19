@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { View, Text, Button,Modal,Pressable, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import { View, Text, Button,Modal,Pressable,Alert, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import ActionSheet from "react-native-actions-sheet";
 import HeaderScreen from '../NavigatorBottom/headerScreen';
@@ -108,15 +108,26 @@ const ActionSheetPopup = React.memo(props => {
                                 </View>
                             </View>
             </View>
-            <TouchableOpacity 
-                onPress ={()=>{ props.AddCart()}}
-            >
+                {dataenventory.length == 0 ? 
+                <>
+             <TouchableOpacity  onPress ={()=>{actionSheetRef.current?.hide(); }} >
+                <View style={ styles.btnaddcartPopUp}>
+                    <View style={styles.btnaddNotEnventory} >
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Sản phẩm này đã hết</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+                </>:
+                <>
+            <TouchableOpacity onPress ={()=>{ props.AddCart()}}>
                 <View style={ styles.btnaddcartPopUp}>
                     <View style={styles.btnadd} >
                             <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold',marginTop: 8 }}>Thêm vào giỏ hàng</Text>
                     </View>
                 </View>
             </TouchableOpacity>
+                </>}
+
         </ActionSheet>
     </View>
     )
@@ -294,7 +305,7 @@ export default function Productdetail(props,{navigation}){
     
     var Increase =()=>{
         if(quantityDisplayScreen >= quantity){
-            alert('Sản phẩm không đủ số lượng, quý khách vui lòng chọn sản phẩm khác !')
+            Alert.alert('CTFASHION','Sản phẩm không đủ số lượng, quý khách vui lòng chọn sản phẩm khác !')
         }else if(quantityDisplayScreen >= 5){
             alert('Tối đa mua được 5 sản phẩm !')
         }else{
@@ -308,7 +319,7 @@ export default function Productdetail(props,{navigation}){
 
     var Reducer =()=>{
         if(quantityDisplayScreen <= 1){
-            alert('Thêm giỏ hàng tối thiểu 1 sản phẩm !')
+            Alert.alert('CTFASHION','Thêm giỏ hàng tối thiểu 1 sản phẩm !')
         }else{
             const reducer = quantityDisplayScreen-1;
             setquantityDisplayScreen(reducer)
@@ -332,13 +343,15 @@ export default function Productdetail(props,{navigation}){
                 if(Check(arr,id) == true){
                     for( let item of arr){
                         if(item.id === id){
-                            console.log('ne ne')
-                            console.log(item.id)
-                            item.quantity +=1;
+                            // console.log('ne ne')
+                            // console.log(item.id)  
+                            if(item.quanity < 5 && item.quanity < quantity){
+                                item.quantity +=1;
+                            }
                         }
                     }
                     actionSheetRef.current?.hide();
-                    alert('Sản phẩm đã có trong giỏ hàng !');
+                    Alert.alert('CTFASHION','Sản phẩm đã có trong giỏ hàng !');
                 }else{
                     const arr1 = [{'id' : id, 'quantity': quantityDisplayScreen , 'option': selectedValue}]
                     arr = arr1.concat(arr);
@@ -388,10 +401,6 @@ export default function Productdetail(props,{navigation}){
             </View>
         </View>
     )
-
-
-
-
 
     const renderItemproductype = ({item, index})=>{
             let star1 = 0;
@@ -704,6 +713,14 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 5,
     },
+    btnaddNotEnventory:{
+        width: windowW*0.94,
+        backgroundColor: 'grey',
+        flexDirection: 'row',
+        justifyContent:'center',
+        height: 40,
+        borderRadius: 5, 
+    }
 
 
     
