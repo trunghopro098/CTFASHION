@@ -48,7 +48,7 @@ export default function HomeScreen({navigation}){
             if(history!==null){
                 const arrH = JSON.parse(history)
                 if(arrH.length !== 0){
-                    console.log('aaaa')
+                    // console.log('aaaa')
                     const interval = setInterval(()=>{
                         const random = Math.floor((Math.random()*arrH.length));
                         settextsearch(arrH[random].name)

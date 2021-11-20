@@ -20,6 +20,7 @@ export default function SearchScreen({ navigation }){
     useEffect(() => {
         getHistory()
     },[route.name])
+    
     const getHistory = async()=>{
         const history = await AsyncStorage.getItem('SEARCHHISTORY');
         if(history!==null){

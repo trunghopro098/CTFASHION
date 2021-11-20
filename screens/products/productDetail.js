@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { View, Text, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar } from 'react-native';
+import { View, Text, StyleSheet ,Image,Dimensions, ScrollView,TouchableOpacity,StatusBar, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import ActionSheet from "react-native-actions-sheet";
 import HeaderScreen from '../NavigatorBottom/headerScreen';
@@ -335,7 +335,7 @@ export default function Productdetail(props,{navigation}){
             let arr = [];
             let getData = await AsyncStorage.getItem('CART');
             if(getData == null){
-                arr = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue}]
+                arr = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue, 'status': false}]
                 actionSheetRef.current?.hide();
                 setmodalVisibleAddcart(true)
             }else{
@@ -348,12 +348,13 @@ export default function Productdetail(props,{navigation}){
                             if(item.quanity < 5 && item.quanity < quantity){
                                 item.quanity +=1;
                             }
+                            item.option = selectedValue;
                         }
                     }
                     actionSheetRef.current?.hide();
                     Alert.alert('CTFASHION','Sản phẩm đã có trong giỏ hàng !');
                 }else{
-                    const arr1 = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue}]
+                    const arr1 = [{'id' : id, 'quanity': quantityDisplayScreen , 'option': selectedValue, 'status': false}]
                     arr = arr1.concat(arr);
                     actionSheetRef.current?.hide();
                     setmodalVisibleAddcart(true)
@@ -366,7 +367,6 @@ export default function Productdetail(props,{navigation}){
         } catch (error) {
             console.log(error)
         }
-    
     }
 
 
