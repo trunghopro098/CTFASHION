@@ -273,8 +273,36 @@ const renderItem = ({item})=>{
                     <Image source={{uri:SetHTTP(item[0].image)}} resizeMode='contain'
                     style={{ width: windowW*0.25, height: windowH*0.11 }}/>  
                 </TouchableOpacity>
-
-                <View style={{ flexDirection: "column",flex:1}}>
+                
+                <TouchableOpacity 
+                        onLongPress={()=>{
+                            Alert.alert('CTFASHION','Bạn muốn xóa sản phẩm này !!',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    style: "cancel"
+                                },
+                                {
+                                    text: 'OK',
+                                    onPress:async()=>{
+                                        let dataAnsynstore = DataAnsynStore;
+                                        if(dataAnsynstore.length > 1){
+                                            for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
+                                                if(dataAnsynstore[j].id==item[0].id){
+                                                    dataAnsynstore.splice(j,1)
+                                                    await AsyncStorage.setItem("CART",JSON.stringify(dataAnsynstore))
+                                                    getDataAnsynStore()
+                                                
+                                                }
+                                            }
+                                        }else{
+                                            removeAllCart();
+                                        }
+                                    }
+                                }
+                            ])
+                        }}
+                        style={{ flexDirection: "column",flex:1}}>
                     <Text style={{ color: 'black', fontSize: 13, fontWeight: "bold" }}>{truncate(item[0].name)}</Text>
                     <View style={{ flexDirection: 'row',justifyContent: 'flex-start', marginTop : 10  }}>
                         <Text style={{ color: 'grey', fontSize: 13,  }}>Size/màu sắc : </Text>
@@ -300,7 +328,8 @@ const renderItem = ({item})=>{
                                 </TouchableOpacity>
                         </View>
                     </View>   
-                </View>
+                </TouchableOpacity>
+                
             </View>
         </View>
     )
