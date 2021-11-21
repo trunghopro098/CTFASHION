@@ -6,7 +6,6 @@ export default function SplashScreen({navigation}){
     const moveAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-
     useEffect(()=>{
         Animated.timing(fadeAnim,{
             duration : 2000,
@@ -36,7 +35,7 @@ export default function SplashScreen({navigation}){
             <SafeAreaView style={styles.container}>
                 <StatusBar 
                     backgroundColor="#F2AF90"
-    
+                    barStyle="dark-content"
                 />
                 <LinearGradient
                 // colors={["#B0FCFC",'#FDB3D8']}

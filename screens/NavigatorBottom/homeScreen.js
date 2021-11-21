@@ -1,5 +1,5 @@
-import React,{useState,useEffect,} from "react";
-import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,View} from "react-native"; 
+import React,{useState,useEffect,useLayoutEffect} from "react";
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions} from "react-native"; 
 // import SkeletonContent from "react-native-skeleton-content";
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
@@ -7,11 +7,12 @@ import VirtualizedView from "../../util/VirtualizedView";
 import ProductHot from "../products/productHot";
 import ProductNew from "../products/productNew";
 import GetfullProduct from "../products/getfullProduct";
-import Test2 from "../products/test2";
 import Flashsales from "../products/flashsale";
 import * as GETAPI from '../../util/fetchApi';
 import { SetHTTP } from "../../util/setHTTP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
+import { useDispatch } from "react-redux";
 
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
@@ -25,6 +26,7 @@ export default function HomeScreen({navigation}){
     const [DataProductNewImageSlideBox, setDataProductNewImageSlideBox] = useState([]);//hình ảnh hiển thị lên slide
     const [DataProductNewSlideBox, setDataProductNewSlideBox] = useState([]);//data khi click vào slider
     const [Datafullproduct, setDatafullproduct] = useState([])
+    const dispatch = useDispatch();
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -40,25 +42,33 @@ export default function HomeScreen({navigation}){
         getDataBox();
         getDatafullProduct();
         getHistory();      
+        updateQuanityCart();
     }, [])
-
-        const getHistory = async()=>{
-            const history = await AsyncStorage.getItem('SEARCHHISTORY');
-            console.log(typeof(history))
-            if(history!==null){
-                const arrH = JSON.parse(history)
-                if(arrH.length !== 0){
-                    // console.log('aaaa')
-                    const interval = setInterval(()=>{
-                        const random = Math.floor((Math.random()*arrH.length));
-                        settextsearch(arrH[random].name)
-                        // console.log(arrH[random].name)
-                    },5000);
-                    return () => {cleanup(interval)}                   
-                }
-                
-            }
+    const updateQuanityCart = async()=>{
+        const getData = await AsyncStorage.getItem('CART');
+        if(getData !== null){
+            arr = JSON.parse(getData);
+            dispatch(updateQuanityProduct(arr.length))
+        }else{
+            dispatch(updateQuanityProduct(0))
         }
+    }
+    const getHistory = async()=>{
+        const history = await AsyncStorage.getItem('SEARCHHISTORY');
+        console.log(typeof(history))
+        if(history!==null){
+            const arrH = JSON.parse(history)
+            if(arrH.length !== 0){
+                const interval = setInterval(()=>{
+                    const random = Math.floor((Math.random()*arrH.length));
+                    settextsearch(arrH[random].name)
+                    // console.log(arrH[random].name)
+                },5000);
+                return () => {cleanup(interval)}                   
+            }
+            
+        }
+    }
 
     const getProductSale= async()=>{    
         const res = await GETAPI.getAPI('/product/getTopProductSale');
@@ -129,7 +139,7 @@ export default function HomeScreen({navigation}){
                  {/* barStyle="dark-content" */}
                 <StatusBar  backgroundColor={bgcolorStatusBar} 
                             animated 
-                            barStyle={bgcolorStatusBar=="white"?"dark-content":null}/>
+                            barStyle={bgcolorStatusBar=="white"?"dark-content":"light-content"}/>
                     <Animated.View style={{
                                     transform:[{translateY:translateY}], 
                                     position:'absolute',

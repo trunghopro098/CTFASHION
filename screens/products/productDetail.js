@@ -18,15 +18,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Check } from '../../util/checkProduct';
 import ModalFavorite from '../StartScreens/modal';
-
-
+import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
+import { useDispatch } from "react-redux";
 const actionSheetRef = createRef();
 const ActionSheetPopup = React.memo(props => {
     const {image,name} = props.data
     const dataenventory = props.dataenventory;
     const quantity = props.quantity;
     const quantityDisplayScreen = props.quantityDisplayScreen;
-    
     return(
     <View>
         <ActionSheet ref={actionSheetRef}>
@@ -155,6 +154,7 @@ export default function Productdetail(props,{navigation}){
     const [DataEnventory, setDataEnventory] = useState([]);
     const [quantity, setquantity] = useState(0);// số lượng của sản phẩm trên enventory
     const [quantityDisplayScreen, setquantityDisplayScreen] = useState(1);// số lượng xét giá trị tăng giảm số lượng
+    const dispatch = useDispatch();
 
     const Data = props.route.params;
     const idProduct= {id: Data.idProduct}
@@ -361,9 +361,9 @@ export default function Productdetail(props,{navigation}){
                     
                 }
             }
-            
-            console.log(arr)
+    
             await AsyncStorage.setItem('CART',JSON.stringify(arr));
+            dispatch(updateQuanityProduct(arr.length))
         } catch (error) {
             console.log(error)
         }

@@ -1,4 +1,3 @@
-import { get } from "immer/dist/internal";
 import React, {useEffect, useState} from "react";
 import { View, Text,Image,StyleSheet,FlatList, Dimensions, TouchableOpacity, Alert, StatusBar} from "react-native"; 
 import * as GETAPI from '../../util/fetchApi';
@@ -9,24 +8,25 @@ import truncate from "../../util/truncate";
 import LoadingCircle from '../StartScreens/loadingCircle'
 import LinearGradient from "react-native-linear-gradient";
 import LottieView from "lottie-react-native";
-
-export default function CartScreen (props, {navigation}){
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
+import { useDispatch } from "react-redux";
+export default function CartScreen (props){
 const [Dataproduct, setDataproduct] = useState([]);
 const [DataAnsynStore, setDataAnsynStore] = useState([]);
 const [isLoading, setisLoading] = useState(true);
 const [countItemcart, setcountItemcart] = useState(0)
 const [checkAll, setcheckAll] = useState(true)
+const dispatch = useDispatch();
+useEffect(() => {
+    const set =  props.navigation.addListener('focus',()=>
+    {
+        setisLoading(true)
+        getDataAnsynStore()
+    })
 
-    useEffect(() => {
-      const set =  props.navigation.addListener('focus',()=>
-      {
-            setisLoading(true)
-            getDataAnsynStore()
-        })
-
-        return set;
-    }, [])
-
+    return set;
+}, [])
 
 const getDataAnsynStore = async()=>{
     let arr = [];
@@ -37,12 +37,14 @@ const getDataAnsynStore = async()=>{
         const data1 = {"data": getData}
         const res = await GETAPI.postDataAPI('/order/getProductByCartApp',data1);
         setcountItemcart(countCart)
+        dispatch(updateQuanityProduct(countCart))
         setDataproduct(res);
         setDataAnsynStore(arr);
         setisLoading(false);
     }else{
         setDataproduct([]);
-        setcountItemcart(0)
+        setcountItemcart(0);
+        dispatch(updateQuanityProduct(0))
         setisLoading(false);
     }
     
@@ -220,11 +222,9 @@ const DeleteAll =()=>{
                 text: "Ok",
                 onPress:()=>{removeAllCart()
                         }
-                    }
-                ])
+                }
+            ])
     }
-
-   
 }
 
 const renderItem = ({item})=>{
@@ -234,18 +234,26 @@ const renderItem = ({item})=>{
             <View style={styles.wrapItem}>
                 {item.status == false ? 
                 <>
-                <TouchableOpacity onPress={()=>{
-                                            Check(item[0].id,item.option)
-                                          }}>
-                    <View style= {{ marginLeft: 10 }}>
-                        <Image source={ require('../../assets/icons/uncheck.png')}
-                        resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
+                <TouchableOpacity 
+                    onPress={()=>{
+                        Check(item[0].id,item.option)
+                    }}
+                    style={{ justifyContent:'center',alignItems:'center',paddingLeft:10 }}
+                >
+                    <View>
+                        <Image 
+                            source={ require('../../assets/icons/uncheck.png')}
+                            resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} 
+                        /> 
                     </View>
                 </TouchableOpacity>
                 </>:
                 <>
-                <TouchableOpacity onPress={()=>{UnCheck(item[0].id)}}>
-                    <View style= {{ marginLeft: 10 }}>
+                <TouchableOpacity 
+                    onPress={()=>{UnCheck(item[0].id)}}
+                    style={{ justifyContent:'center',alignItems:'center',paddingLeft:10 }}
+                >
+                    <View>
                         <Image source={ require('../../assets/icons/check.png')}
                         resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
                     </View>
@@ -279,12 +287,12 @@ const renderItem = ({item})=>{
                         </View>
                         <View style= {{ flexDirection: 'row', marginRight: 5}}>
                                 <TouchableOpacity onPress={()=>{Reduce(item[0].id)}}>
-                                        <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> - </Text> 
+                                    <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> - </Text> 
                                 </TouchableOpacity>
-                                        <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
-                                    <TouchableOpacity onPress={()=>{Increase(item[0].id,item.option)}}>
-                                        <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> + </Text>
-                                    </TouchableOpacity>
+                                    <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
+                                <TouchableOpacity onPress={()=>{Increase(item[0].id,item.option)}}>
+                                    <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> + </Text>
+                                </TouchableOpacity>
                         </View>
                     </View>   
                 </View>
@@ -296,12 +304,11 @@ const renderItem = ({item})=>{
 
     return(
         <View style={styles.container}>
-            <StatusBar backgroundColor="white" barStyle="dark-content"/>
+            {/* <StatusBar backgroundColor="white" barStyle="dark-content"/> */}
             <View style={styles.header}>
-            <Text style={{ color: 'red', fontWeight: "bold", fontSize:18, marginLeft: 15, marginTop:5}}>Giỏ hàng của tôi({countItemcart})</Text>
-            <TouchableOpacity onPress={()=>{DeleteAll()}}>
-                <Image source={ require('../../assets/icons/delete_26px.png')}
-                  resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055,marginRight: 15}} /> 
+            <Text style={{ color: 'black', fontWeight: "bold", fontSize:18, marginLeft: 15}}>Giỏ hàng của tôi ({countItemcart})</Text>
+            <TouchableOpacity onPress={()=>{DeleteAll()}} style={{ paddingRight:15 }}>
+                <AntDesign name="delete" size={20} color="black" />
 
             </TouchableOpacity>
         </View>
@@ -366,17 +373,24 @@ const renderItem = ({item})=>{
                     </View>
 
                     <LinearGradient
-                    colors={['#7C007C','#B16FD8','#CB9ADC' ]}
-                    style={{ width: windowW*0.35, 
-                                    backgroundColor: 'pink'
-                                    ,height: 38, marginTop: 6, 
-                                    marginRight: 5, 
-                                    flexDirection:'row', 
-                                    justifyContent:"center",
-                                    alignItems:"center",
-                                    alignContent:'center',
-                                    borderRadius: 40}}>
-                        <Text style={{ fontWeight:'bold', color:'white' }}>Thanh toán</Text>
+                        colors={['#7C007C','#B16FD8','#CB9ADC' ]}
+                        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                        style={{ 
+                            width: windowW*0.32, 
+                            height: 38, 
+                            marginTop: 6, 
+                            marginRight: 5, 
+                            flexDirection:'row', 
+                            justifyContent:"center",
+                            alignItems:"center",
+                            alignContent:'center',
+                            borderRadius: 40, 
+                            marginLeft:5
+                        }}
+                    >
+                        <Text style={{ fontWeight:'bold', color:'white' }}>
+                            Thanh toán
+                        </Text>
                     </LinearGradient>
                 </View>
            
@@ -406,22 +420,24 @@ const styles = StyleSheet.create({
     header:{
         borderBottomWidth: 0.5,
         borderBottomColor: "#D3D3D3",
-        height: 35,
+        height: 45,
         flexDirection: "row",
         justifyContent: 'space-between',
-        shadowColor: "#000",
+        alignItems:"center",
+        shadowColor: "rgb(180, 180, 180)",
         shadowOffset:{
             width:0,
             height: 2,
         },
         shadowOpacity: 0.4,
         shadowRadius: 5,
-        elevation: 2
+        elevation: 2,
+        paddingBottom:10,
+        paddingTop:10
     },
     wrapItem: {
         backgroundColor:'white',
         flexDirection: 'row',
-        justifyContent:"flex-start",
         marginLeft: 5,
         marginRight: 5,
         marginTop: 5,
@@ -436,7 +452,7 @@ const styles = StyleSheet.create({
         elevation: 4,
         paddingTop: 10,
         borderRadius: 5,
-        backgroundColor:'#FDE0C7',
+        backgroundColor:'white',
         
     }
 })
