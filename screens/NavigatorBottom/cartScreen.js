@@ -97,14 +97,19 @@ const Reduce = async(id)=>{
                     {
                         text: "Ok",
                         onPress:async()=>{
-                            for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
-                                if(dataAnsynstore[j].id==id){
-                                    dataAnsynstore.splice(j,1)
-                                    await AsyncStorage.setItem("CART",JSON.stringify(dataAnsynstore))
-                                    getDataAnsynStore()
-                                    console.log("xoa roi")
+                            if(dataAnsynstore.length > 1){
+                                for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
+                                    if(dataAnsynstore[j].id==id){
+                                        dataAnsynstore.splice(j,1)
+                                        await AsyncStorage.setItem("CART",JSON.stringify(dataAnsynstore))
+                                        getDataAnsynStore()
+                                        console.log("xoa roi")
+                                    }
                                 }
-                            }  
+                            }else{
+                                removeAllCart();
+                            }
+  
                         }  
                     }
                 ])
@@ -285,13 +290,13 @@ const renderItem = ({item})=>{
                             <Text style={{ color: 'red', fontSize: 15,  }}>{FormatNumber(item[0].price)} đ</Text>
                             }
                         </View>
-                        <View style= {{ flexDirection: 'row', marginRight: 5}}>
+                        <View style= {{ flexDirection: 'row', marginRight: 10}}>
                                 <TouchableOpacity onPress={()=>{Reduce(item[0].id)}}>
-                                    <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> - </Text> 
+                                    <Text style={{ width:20 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> - </Text> 
                                 </TouchableOpacity>
                                     <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
                                 <TouchableOpacity onPress={()=>{Increase(item[0].id,item.option)}}>
-                                    <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> + </Text>
+                                    <Text style={{ width: 20 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> + </Text>
                                 </TouchableOpacity>
                         </View>
                     </View>   
