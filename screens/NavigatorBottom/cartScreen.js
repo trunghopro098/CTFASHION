@@ -48,16 +48,33 @@ const getDataAnsynStore = async()=>{
     
 }
 
-const Increase = async(id)=>{
-    let dataProduct = Dataproduct;
+const Increase = async(id,option)=>{
+    const idInventory = {id : id};
+    let qty = 0;
+    const res = await GETAPI.postDataAPI('/product/getProductInventory',idInventory);
+    for(let i = 0; i < res.length ; i++){
+        if(res[i].size == option){
+            qty = res[i].quanity-res[i].sold;
+        }
+    }
+    // console.log(qty)
     let dataAnsynstore = DataAnsynStore;
     for(let i = 0; i < dataAnsynstore.length ; i++){
         if(dataAnsynstore[i].id == id){
-            if(dataAnsynstore[i].quanity >= 5){
-                Alert.alert('CTFASHION','Tối đa 5 sản phẩm !!')
+            if(qty == 0){
+                dataAnsynstore[i].quanity =0;
+                Alert.alert('CTFASHION',`Sản phẩm trong kho đã hết, xin vui lòng !!`)
             }else{
-                dataAnsynstore[i].quanity +=1;
+                if(dataAnsynstore[i].quanity >= qty){
+                    Alert.alert('CTFASHION',`Kho hàng chỉ còn: ${qty} sản phẩm, xin vui lòng !!`)
+                }else if(dataAnsynstore[i].quanity >= 5){
+                    Alert.alert('CTFASHION',`Tối đa 5 sản phẩm, xin vui lòng !!`)
+                    // dataAnsynstore[i].quanity +=1;
+                }else{
+                    dataAnsynstore[i].quanity +=1;
+                }
             }
+
         }
     }
 
@@ -99,14 +116,28 @@ const Reduce = async(id)=>{
     getDataAnsynStore()
 }
 
-const Check = async(id)=>{
+const Check = async(id,option)=>{
+    const idInventory = {id : id};
+    let qty1 = 0;
+    const res = await GETAPI.postDataAPI('/product/getProductInventory',idInventory);
+    for(let i = 0; i < res.length ; i++){
+        if(res[i].size == option){
+            qty1 = res[i].quanity-res[i].sold;
+        }
+    }
     let dataAnsynstore = DataAnsynStore;
     for(let i = 0; i < dataAnsynstore.length ; i++){
         if(dataAnsynstore[i].id == id){
-            dataAnsynstore[i].status = true;
+            if(dataAnsynstore[i].quanity <= qty1 ){//nếu = sản phẩm trong kho thì true
+                dataAnsynstore[i].status = true;
+            }else{//nếu lớn hơn số lượng trong kho thì bằng max của qty.
+                Alert.alert('CTFASHION',`Trong kho chỉ còn ${qty1} sản phẩm , xin vui lòng !!`)
+                dataAnsynstore[i].quanity = qty1;
+                dataAnsynstore[i].status = true;
+            }
+            
         }
     }
-
     await AsyncStorage.setItem('CART',JSON.stringify(dataAnsynstore));
     getDataAnsynStore()
     setcheckAll(true)
@@ -203,7 +234,9 @@ const renderItem = ({item})=>{
             <View style={styles.wrapItem}>
                 {item.status == false ? 
                 <>
-                <TouchableOpacity onPress={()=>{Check(item[0].id)}}>
+                <TouchableOpacity onPress={()=>{
+                                            Check(item[0].id,item.option)
+                                          }}>
                     <View style= {{ marginLeft: 10 }}>
                         <Image source={ require('../../assets/icons/uncheck.png')}
                         resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
@@ -218,8 +251,16 @@ const renderItem = ({item})=>{
                     </View>
                 </TouchableOpacity>
                 </>}
-                <Image source={{uri:SetHTTP(item[0].image)}} resizeMode='contain'
+                <TouchableOpacity onPress={()=>{
+                    props.navigation.navigate('productDetail',{
+                        idProduct : item[0].id,
+                        idProductType : item[0].idProductType
+                        })
+                    }}>
+                    <Image source={{uri:SetHTTP(item[0].image)}} resizeMode='contain'
                     style={{ width: windowW*0.25, height: windowH*0.11 }}/>  
+                </TouchableOpacity>
+
                 <View style={{ flexDirection: "column",flex:1}}>
                     <Text style={{ color: 'black', fontSize: 13, fontWeight: "bold" }}>{truncate(item[0].name)}</Text>
                     <View style={{ flexDirection: 'row',justifyContent: 'flex-start', marginTop : 10  }}>
@@ -241,7 +282,7 @@ const renderItem = ({item})=>{
                                         <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> - </Text> 
                                 </TouchableOpacity>
                                         <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
-                                    <TouchableOpacity onPress={()=>{Increase(item[0].id)}}>
+                                    <TouchableOpacity onPress={()=>{Increase(item[0].id,item.option)}}>
                                         <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> + </Text>
                                     </TouchableOpacity>
                         </View>
