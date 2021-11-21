@@ -7,11 +7,12 @@ import {updateDataSearch} from '../../redux/reducer/product.reducer';
 import GetfullProduct from '../products/getfullProduct';
 import * as GETAPI from '../../util/fetchApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import LottieView from "lottie-react-native";
 export default function ResultSearch ({navigation}){
     const datasearch = useSelector(e=>e.productReducer.datasearch);
     const dispatch = useDispatch();
-    const [dataProduct, setdataProduct] = useState();
+    const [dataProduct, setdataProduct] = useState([]);
     const [showContent, setshowContent] = useState(false);
     useEffect(() => {
         getDataProduct()
@@ -53,13 +54,10 @@ export default function ResultSearch ({navigation}){
             />
             {showContent ?
             <View style={{...style.search1}}>
-                
                 <View style={style.input} >
                     <TouchableOpacity>
-                    {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
                         <TextInput  
                             style={{ ...style.textinput}} 
-                            
                             placeholder={'Search'}
                             value = {datasearch}
                             onChangeText={(value)=>dispatch(updateDataSearch(value))} 
@@ -74,13 +72,21 @@ export default function ResultSearch ({navigation}){
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>
-                    <ScrollView
-                          contentContainerStyle={{ paddingBottom:20 }}
-                    >
-                        <GetfullProduct DatafullProduct={dataProduct} navigation={navigation}/>
-                    </ScrollView>
-                </View>
-                :
+                    {dataProduct.length == 0 ? 
+                    <View style={{justifyContent: "center", marginTop: windowH*0.2}}>
+                    <LottieView  
+                        source={require('../../assets/lottierfiles/search_not_found.json')}
+                        style={{ width:windowW*0.4, height:windowH*0.4}}
+                        autoPlay
+                        loop                   
+                    />
+                    </View>: 
+                        <ScrollView contentContainerStyle={{ paddingBottom:20 }}>
+                            <GetfullProduct DatafullProduct={dataProduct} navigation={navigation}/>
+                        </ScrollView>
+                    }
+
+             </View>:
                 <View style={{ flex:1,justifyContent:'center',alignItems:'center' }}>
                     <LoadingCircle />
                 </View>
@@ -95,6 +101,7 @@ const windowH = Dimensions.get('window').height;
 const style = StyleSheet.create({
     container:{
         flex: 1,
+        backgroundColor: 'white'
         
     },
     input:{

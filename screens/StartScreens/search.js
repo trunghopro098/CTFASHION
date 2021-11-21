@@ -79,7 +79,7 @@ export default function SearchScreen({ navigation }){
                         padding:5,
                         borderRadius:50,
                         marginLeft:5,
-                        backgroundColor:'white',
+                        backgroundColor:'#F3F3F3',
                         marginBottom:10,
                         paddingLeft:10,
                         flexDirection:"row",
@@ -150,6 +150,7 @@ const windowH = Dimensions.get('window').height;
 const style = StyleSheet.create({
     container:{
         flex: 1,
+        backgroundColor: 'white'
         
     },
     input:{

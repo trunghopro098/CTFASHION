@@ -1,6 +1,6 @@
 import { get } from "immer/dist/internal";
 import React, {useEffect, useState} from "react";
-import { View, Text,Image,StyleSheet,FlatList, Dimensions, TouchableOpacity, Alert} from "react-native"; 
+import { View, Text,Image,StyleSheet,FlatList, Dimensions, TouchableOpacity, Alert, StatusBar} from "react-native"; 
 import * as GETAPI from '../../util/fetchApi';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SetHTTP } from "../../util/setHTTP";
@@ -85,8 +85,7 @@ const Reduce = async(id)=>{
                                     getDataAnsynStore()
                                     console.log("xoa roi")
                                 }
-                            }
-                            
+                            }  
                         }  
                     }
                 ])
@@ -169,8 +168,8 @@ const CartTotal = (data)=>{
 const removeAllCart = async()=>{
     try {
     await AsyncStorage.removeItem("CART")
-        setDataAnsynStore([])
-        getDataAnsynStore()
+        setDataAnsynStore([])//render lai
+        getDataAnsynStore()// kg chiu render lai
     } catch (error) {
         console.log(error)
         
@@ -200,52 +199,54 @@ const DeleteAll =()=>{
 const renderItem = ({item})=>{
     // console.log('2343')
     return(
-        <View style={styles.wrapItem}>
-            {item.status == false ? 
-            <>
-            <TouchableOpacity onPress={()=>{Check(item[0].id)}}>
-                <View style= {{ marginLeft: 10 }}>
-                    <Image source={ require('../../assets/icons/uncheck.png')}
-                    resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
-                </View>
-            </TouchableOpacity>
-            </>:
-            <>
-            <TouchableOpacity onPress={()=>{UnCheck(item[0].id)}}>
-                <View style= {{ marginLeft: 10 }}>
-                    <Image source={ require('../../assets/icons/check.png')}
-                    resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
-                </View>
-            </TouchableOpacity>
-            </>}
-            <Image source={{uri:SetHTTP(item[0].image)}} resizeMode='contain'
-                   style={{ width: windowW*0.25, height: windowH*0.11 }}/>  
-            <View style={{ flexDirection: "column",flex:1}}>
-                <Text style={{ color: 'black', fontSize: 13, fontWeight: "bold" }}>{truncate(item[0].name)}</Text>
-                <View style={{ flexDirection: 'row',justifyContent: 'flex-start', marginTop : 10  }}>
-                    <Text style={{ color: 'grey', fontSize: 13,  }}>Size/màu sắc : </Text>
-                    <Text style={{ color: 'grey', fontSize: 13, marginLeft: 10  }}>{item.option}</Text>
-                </View>
-                <View style= {{ flexDirection: 'row',justifyContent: 'space-between',width:'100%', marginTop: 10 }}>
-                    <View style= {{ flexDirection: 'row'}}>
-                        {item[0].promotional > 0 ? 
-                        <>
-                        <Text style={{ color: 'grey', fontSize: 13, textDecorationLine: "line-through"  }}>{FormatNumber(item[0].price)} đ</Text>
-                        <Text style={{ color: 'red', fontSize: 13, marginLeft: 10  }}>{FormatNumber(item[0].promotional)} đ</Text>
-                        </>:
-                        <Text style={{ color: 'red', fontSize: 15,  }}>{FormatNumber(item[0].price)} đ</Text>
-                        }
+        <View style={{ marginBottom:  3}}>
+            <View style={styles.wrapItem}>
+                {item.status == false ? 
+                <>
+                <TouchableOpacity onPress={()=>{Check(item[0].id)}}>
+                    <View style= {{ marginLeft: 10 }}>
+                        <Image source={ require('../../assets/icons/uncheck.png')}
+                        resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
                     </View>
-                    <View style= {{ flexDirection: 'row', marginRight: 5}}>
-                            <TouchableOpacity onPress={()=>{Reduce(item[0].id)}}>
-                                     <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> - </Text> 
-                            </TouchableOpacity>
-                                    <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
-                                <TouchableOpacity onPress={()=>{Increase(item[0].id)}}>
-                                    <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> + </Text>
+                </TouchableOpacity>
+                </>:
+                <>
+                <TouchableOpacity onPress={()=>{UnCheck(item[0].id)}}>
+                    <View style= {{ marginLeft: 10 }}>
+                        <Image source={ require('../../assets/icons/check.png')}
+                        resizeMode="contain" style={{ width: windowW*0.055, height: windowH*0.055 }} /> 
+                    </View>
+                </TouchableOpacity>
+                </>}
+                <Image source={{uri:SetHTTP(item[0].image)}} resizeMode='contain'
+                    style={{ width: windowW*0.25, height: windowH*0.11 }}/>  
+                <View style={{ flexDirection: "column",flex:1}}>
+                    <Text style={{ color: 'black', fontSize: 13, fontWeight: "bold" }}>{truncate(item[0].name)}</Text>
+                    <View style={{ flexDirection: 'row',justifyContent: 'flex-start', marginTop : 10  }}>
+                        <Text style={{ color: 'grey', fontSize: 13,  }}>Size/màu sắc : </Text>
+                        <Text style={{ color: 'grey', fontSize: 13, marginLeft: 10  }}>{item.option}</Text>
+                    </View>
+                    <View style= {{ flexDirection: 'row',justifyContent: 'space-between',width:'100%', marginTop: 10 }}>
+                        <View style= {{ flexDirection: 'row'}}>
+                            {item[0].promotional > 0 ? 
+                            <>
+                            <Text style={{ color: 'grey', fontSize: 13, textDecorationLine: "line-through"  }}>{FormatNumber(item[0].price)} đ</Text>
+                            <Text style={{ color: 'red', fontSize: 13, marginLeft: 10  }}>{FormatNumber(item[0].promotional)} đ</Text>
+                            </>:
+                            <Text style={{ color: 'red', fontSize: 15,  }}>{FormatNumber(item[0].price)} đ</Text>
+                            }
+                        </View>
+                        <View style= {{ flexDirection: 'row', marginRight: 5}}>
+                                <TouchableOpacity onPress={()=>{Reduce(item[0].id)}}>
+                                        <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> - </Text> 
                                 </TouchableOpacity>
-                    </View>
-                </View>   
+                                        <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
+                                    <TouchableOpacity onPress={()=>{Increase(item[0].id)}}>
+                                        <Text style={{ width: windowW*0.06 , textAlign: "center", borderWidth: 1, borderColor: 'red',fontWeight: 'bold', borderRadius: 40, color:'red', backgroundColor:"#D3D3D3"}}> + </Text>
+                                    </TouchableOpacity>
+                        </View>
+                    </View>   
+                </View>
             </View>
         </View>
     )
@@ -254,6 +255,7 @@ const renderItem = ({item})=>{
 
     return(
         <View style={styles.container}>
+            <StatusBar backgroundColor="white" barStyle="dark-content"/>
             <View style={styles.header}>
             <Text style={{ color: 'red', fontWeight: "bold", fontSize:18, marginLeft: 15, marginTop:5}}>Giỏ hàng của tôi({countItemcart})</Text>
             <TouchableOpacity onPress={()=>{DeleteAll()}}>
@@ -281,13 +283,13 @@ const renderItem = ({item})=>{
                     loop                   
                 />
             </View>:
-            <>
+            <View style={{  flex: 1 }}>
                <FlatList
                 data = {Dataproduct}
                 keyExtractor= {item=>item[0].id}
                 renderItem={renderItem}
             />
-            </>}
+            </View>}
         </>}
 
                 <View style={styles.BottompaymentItem}>
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
         justifyContent:"flex-start",
         marginLeft: 5,
         marginRight: 5,
-        marginTop: 10,
+        marginTop: 5,
         paddingBottom: 8,
         shadowColor:'#000',
         shadowOffset:{
@@ -392,6 +394,8 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 4,
         paddingTop: 10,
-        borderRadius: 3
+        borderRadius: 5,
+        backgroundColor:'#FDE0C7',
+        
     }
 })
