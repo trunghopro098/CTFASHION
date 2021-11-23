@@ -10,12 +10,15 @@ import Label, {Orientation} from "react-native-label";
 import Star from 'react-native-star-view';
 import LottieView from "lottie-react-native";
 import LoadingCircle from "../StartScreens/loadingCircle";
+import {updatequantityFavorite} from '../../redux/reducer/product.reducer';
+import { useDispatch } from "react-redux";
 
 export default function FavoriteScreen (props,{navigation}){
     const [Dataproduct, setDataproduct] = useState([]);
     const [DataAnsynStore, setDataAnsynStore] = useState([]);
     const [isLoading, setisLoading] = useState(true);
     const [countItemcart, setcountItemcart] = useState(0)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const set =  props.navigation.addListener('focus',()=>
@@ -32,17 +35,19 @@ export default function FavoriteScreen (props,{navigation}){
         if(getData !== null){ 
             arr = JSON.parse(getData);
             // console.log(arr)
-            const countCart = arr.length;
+            let countCart = arr.length;
             const data1 = {"data": getData}
             const res = await GETAPI.postDataAPI('/order/getProductFavorite',data1);
             console.log(res)
             setcountItemcart(countCart)
+            dispatch(updatequantityFavorite(countCart))
             setDataproduct(res);
             setDataAnsynStore(arr);
             setisLoading(false);
         }else{
             setDataproduct([]);
             setcountItemcart(0);
+            dispatch(updatequantityFavorite(0))
             setisLoading(false);
         }
     }
@@ -300,7 +305,7 @@ const styles = StyleSheet.create({
         // backgroundColor: "#F8F9F9",
         borderRadius: 5,
         borderWidth: 0.5,
-        borderColor: 'red',
+        borderColor: 'purple',
         // shadowColor:'#000',
         // shadowOffset:{
         //     width:0,

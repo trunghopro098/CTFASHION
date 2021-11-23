@@ -18,7 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Check } from '../../util/checkProduct';
 import ModalFavorite from '../StartScreens/modal';
-import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
+import {updateQuanityProduct, updatequantityFavorite} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
 const actionSheetRef = createRef();
 const ActionSheetPopup = React.memo(props => {
@@ -248,6 +248,7 @@ export default function Productdetail(props,{navigation}){
                 
             }
             await AsyncStorage.setItem('FAVORITE', JSON.stringify(arr))
+            dispatch(updatequantityFavorite(arr.length))
         } catch (error) {
             console.log(error)
         }

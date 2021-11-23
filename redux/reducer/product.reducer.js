@@ -16,10 +16,13 @@ const productSlice = createSlice({
         },
         updateDataSearch :(state,action)=>{
             state.datasearch = action.payload;
+        },
+        updatequantityFavorite :(state,action)=>{
+            state.quantityFavorite = action.payload;
         }
     }
 })
 
-export const {updateQuanityProduct,updateCart,updateDataSearch} = productSlice.actions;
+export const {updateQuanityProduct,updateCart,updateDataSearch,updatequantityFavorite} = productSlice.actions;
 
 export default productSlice.reducer;

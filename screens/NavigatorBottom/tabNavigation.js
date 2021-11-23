@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 const Stack = createBottomTabNavigator();
 export default function TabNavigation(){
     const quanityCart = useSelector(state=>state.productReducer.quanityCart);
+    const quantityFavorite = useSelector(state=>state.productReducer.quantityFavorite);
         return(
             <View style={{ flex:1 }}>
             <Stack.Navigator
@@ -64,7 +65,7 @@ export default function TabNavigation(){
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Yêu thích</Text>
                         </View>
                     ),
-                    tabBarBadge : 3
+                    tabBarBadge : quantityFavorite > 0 ? quantityFavorite :null
                 }}        
         />
          <Stack.Screen name="Gift" component={GiftScreen}
