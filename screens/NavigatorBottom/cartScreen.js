@@ -340,11 +340,16 @@ const renderItem = ({item})=>{
         <View style={styles.container}>
             {/* <StatusBar backgroundColor="white" barStyle="dark-content"/> */}
             <View style={styles.header}>
-            <Text style={{ color: 'black', fontWeight: "bold", fontSize:18, marginLeft: 15}}>Giỏ hàng của tôi ({countItemcart})</Text>
-            <TouchableOpacity onPress={()=>{DeleteAll()}} style={{ paddingRight:15 }}>
-                <AntDesign name="delete" size={20} color="black" />
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                    <Text style={{ color: 'black', fontWeight: "bold", fontSize:18, marginLeft: 15}}>Giỏ hàng của tôi (</Text>
+                    <Text style={{ color: 'red', fontWeight: "bold", fontSize:18, }}>{countItemcart}</Text>
+                    <Text style={{ color: 'black', fontWeight: "bold", fontSize:18,}}>)</Text>
+                </View>
 
-            </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{DeleteAll()}} style={{ paddingRight:15 }}>
+                    <AntDesign name="delete" size={20} color="black" />
+
+                </TouchableOpacity>
         </View>
         {isLoading === true ? 
         <View style={{ flex:1, justifyContent:'center', alignContent:'center' }}>

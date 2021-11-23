@@ -202,7 +202,12 @@ export default function FavoriteScreen (props,{navigation}){
     return(
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={{ color: 'black', fontWeight: "bold", fontSize:18, marginLeft: 15}}>Yêu thích ({countItemcart})</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                <Text style={{ color: 'black', fontWeight: "bold", fontSize:18, marginLeft: 15}}>Yêu thích (</Text>
+                <Text style={{ color: 'red', fontWeight: "bold", fontSize:18, }}>{countItemcart}</Text>
+                <Text style={{ color: 'black', fontWeight: "bold", fontSize:18,}}>)</Text>
+                </View>
+                
                 <TouchableOpacity onPress={()=>{DeleteAll()}} style={{ paddingRight:15 }}>
                     <AntDesign name="delete" size={20} color="black" />
                 </TouchableOpacity>
