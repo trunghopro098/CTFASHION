@@ -7,8 +7,8 @@ import truncate from "../../util/truncate";
 import Star from 'react-native-star-view';
 export default function GetfullProduct(props){
 
-    const datafullproduct=props.DatafullProduct
- 
+    const datafullproduct=props.DatafullProduct;
+
     
     const renderitem = (item)=>{
         const name = item.name;
@@ -22,94 +22,92 @@ export default function GetfullProduct(props){
         }
         const titleSale = 100-(Math.round((item.promotional*100)/item.price))
         return(
-            <TouchableOpacity 
-                key={item.id} 
-                onPress={()=>{
-                        props.navigation.navigate('productDetail',{
-                            idProduct : item.id,
-                            idProductType : item.idProductType
-                        });
-                }}
-            >
-                {item.promotional > 0 ? 
-                <>
-                <Label
-                    orientation={Orientation.TOP_RIGHT}
-                    containerStyle={styles.cart_item}
-                    title={`${titleSale}%`}
-                    distance={18}
-                    extent={0.0}
-                    style={{
-                            fontSize: 15,
-                            color: 'white',
-                            // textAlign: 'center',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                    }}
-                    shadowProps={{ 
-                            shadowColor: "#C8C8C8",
-                            shadowOffset: { width: 0, height: 12, },  
-                            shadowOpacity: 0.2, shadowRadius: 8, 
-                            elevation: 2 
-                        }}
-                >
-                        <View >
-                            <Image 
-                                source={{ uri:SetHTTP(item.image)}} 
-                                resizeMode='contain'
-                                style={{ 
-                                    width : windowW*0.46,
-                                    height : windowH*0.35,
-                                    borderRadius:6,
+            <View key={item.id} >
+                   <TouchableOpacity onPress={()=>{
+                                        props.navigation.navigate('productDetail',{
+                                        idProduct : item.id,
+                                        idProductType : item.idProductType
+                                    });
+                                    }}>
+                        {item.promotional > 0 ? 
+                        <>
+                        <Label
+                            orientation={Orientation.TOP_RIGHT}
+                            containerStyle={styles.cart_item}
+                            title={`${titleSale}%`}
+                            distance={18}
+                            extent={0.0}
+                            style={{
+                                    fontSize: 15,
+                                    color: 'white',
+                                    // textAlign: 'center',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                            }}
+                            shadowProps={{ 
+                                    shadowColor: "#C8C8C8",
+                                    shadowOffset: { width: 0, height: 12, },  
+                                    shadowOpacity: 0.2, shadowRadius: 8, 
+                                    elevation: 2 
                                 }}
-                            />
-                        </View >
-                            <View style={{ flexDirection:"row",paddingLeft:5 }}>
-                                <Text>{truncate(name)}</Text>
+                        >
+                                <View >
+                                    <Image 
+                                        source={{ uri:SetHTTP(item.image)}} 
+                                        resizeMode='contain'
+                                        style={{ 
+                                            width : windowW*0.46,
+                                            height : windowH*0.35,
+                                            borderRadius:6,
+                                        }}
+                                    />
+                                </View >
+                                    <View style={{ flexDirection:"row",paddingLeft:5 }}>
+                                        <Text>{truncate(name)}</Text>
+                                    </View>
+                                    <View style={{ flex : 1, justifyContent:"space-between", marginHorizontal: 3, marginTop: 3 ,flexDirection:"row",}}>
+                                            <Text style={{...styles.price ,color : "#777777", textDecorationLine:"line-through", marginRight:5 }}>{FormatNumber(item.price)}đ</Text>
+                                            <Text style={{ ...styles.price ,color:"red",marginRight:10}}>{FormatNumber(item.promotional)}đ</Text>
+                                        
+                                        {/* <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text> */}
+                                    </View>  
+                                    <View style={{ flex:1,flexDirection:"row"}}>
+                                        <Star score={star} style={{width:80,height:15}}/>
+                                        <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
+                                    </View>
+                                        
+                            </Label>
+                        </>:<>
+                        <View style={{...styles.cart_item, justifyContent: "center",alignContent: "center" }}>
+                                <View >
+                                    <Image 
+                                            source={{ uri:SetHTTP(item.image)}} 
+                                            resizeMode='contain'
+                                            style={{ width : windowW*0.46,
+                                                height : windowH*0.35,
+                                                borderRadius:6,
+                                            }}
+                                        />
+                                </View>
+                                    <View style={{ flexDirection:"row",paddingLeft:5 }}>
+                                        <Text>{truncate(name)}</Text>
+                                    </View>
+                                    <View style={{ flex : 1, marginHorizontal: 3, marginTop: 3  ,flexDirection:"row",}}>
+                                        <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text>
+                                    </View>  
+                                    <View style={{flex:1, flexDirection:"row"}}>
+                                        <Star score={star} style={{width:80,height:15}}/>
+                                        <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
+                                    </View>
                             </View>
-                            <View style={{ flex : 1, justifyContent:"space-between", marginHorizontal: 3, marginTop: 3 ,flexDirection:"row",}}>
-                                    <Text style={{...styles.price ,color : "#777777", textDecorationLine:"line-through", marginRight:5 }}>{FormatNumber(item.price)}đ</Text>
-                                    <Text style={{ ...styles.price ,color:"red",marginRight:10}}>{FormatNumber(item.promotional)}đ</Text>
-                                
-                                {/* <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text> */}
-                            </View>  
-                            <View style={{ flex:1,flexDirection:"row"}}>
-                                <Star score={star} style={{width:80,height:15}}/>
-                                <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
-                            </View>
-                                
-                    </Label>
-                </>:
-                <>
-                <View style={{...styles.cart_item, justifyContent: "center",alignContent: "center" }}>
-                        <View >
-                            <Image 
-                                    source={{ uri:SetHTTP(item.image)}} 
-                                    resizeMode='contain'
-                                    style={{ width : windowW*0.46,
-                                        height : windowH*0.35,
-                                        borderRadius:6,
-                                    }}
-                                />
-                        </View>
-                            <View style={{ flexDirection:"row",paddingLeft:5 }}>
-                                <Text>{truncate(name)}</Text>
-                            </View>
-                            <View style={{ flex : 1, marginHorizontal: 3, marginTop: 3  ,flexDirection:"row",}}>
-                                <Text style={{ ...styles.price, color:'red' }}>{FormatNumber(item.price)}đ</Text>
-                            </View>  
-                            <View style={{flex:1, flexDirection:"row"}}>
-                                <Star score={star} style={{width:80,height:15}}/>
-                                <Text style={{ fontSize :12}}>{`( ${quanityReview} đánh giá )`}</Text>
-                            </View>
-                    </View>
-                </>}
-                
-            </TouchableOpacity>
+                        </>}
+                    </TouchableOpacity>
+            </View>
         )
     }
 
     return(
+
         <ScrollView contentContainerStyle={styles.container}>
             {datafullproduct!==undefined &&
                 datafullproduct.map(e=>{

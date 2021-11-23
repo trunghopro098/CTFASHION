@@ -157,7 +157,7 @@ export default function HomeScreen({navigation}){
                         <ProductHot Data={DataProducthot} navigation={navigation}/>
                         <Flashsales Data={DataProductFlashsale} navigation={navigation}/>
                         <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>
-                        <GetfullProduct DatafullProduct={Datafullproduct} navigation={navigation}/>
+                        <GetfullProduct DatafullProduct={Datafullproduct} navigation={navigation} />
 
                     </VirtualizedView>
                 {/* </SkeletonContent> */}

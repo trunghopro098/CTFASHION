@@ -7,3 +7,4 @@ export const SetHTTP = (urlImage)=>{
         return API_URL+urlImage
     }
 }
+
