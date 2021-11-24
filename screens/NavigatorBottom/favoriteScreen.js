@@ -55,9 +55,9 @@ export default function FavoriteScreen (props,{navigation}){
     const removeAllFavorite = async()=>{
         try {
         await AsyncStorage.removeItem("FAVORITE")
-            setDataAnsynStore([])//render lai
-            getDataAnsynStore()// kg chiu render lai
-            console.log("đit moen may")
+            setDataAnsynStore([])
+            getDataAnsynStore()
+
         } catch (error) {
             console.log(error)
         }
@@ -222,17 +222,16 @@ export default function FavoriteScreen (props,{navigation}){
                <LoadingCircle/>
             </View>:<>
             {Dataproduct.length > 0 ? 
-            <>
-                <View style ={{ position: 'absolute', flex: 1, marginTop:windowH*0.09}}>
+                <>
+                <View style ={{ position: 'absolute', marginTop: 45 , flexDirection:'column',justifyContent:'center'}}>
                     <LottieView  
-                            source={require('../../assets/lottierfiles/lovehearts.json')}
-                            style={{ width:windowW*0.4, height:windowH*0.7 ,}}
+                            source={require('../../assets/lottierfiles/lovehearts12.json')}
+                            style={{ width:'100%', height:windowH*0.9,marginLeft: windowW*0.06 }}
                             autoPlay
                             loop                   
                         />
                 </View>
-                <ScrollView style={{ backgroundColor: 'transparent' }}>    
-                            
+                <ScrollView style={{ backgroundColor: 'transparent' }}>                               
                     <ScrollView contentContainerStyle={styles.scrollviewitem}>
                     {Dataproduct!==undefined &&
                         Dataproduct.map(e=>{
@@ -243,15 +242,19 @@ export default function FavoriteScreen (props,{navigation}){
                     </ScrollView>
                 </ScrollView>
             </>:
-            <View style ={{ flex: 1, justifyContent: 'center', flexDirection:'column', alignContent:'center', alignItems:'center'}}>
+            <View>
                     <LottieView  
-                            source={require('../../assets/lottierfiles/lovehearts.json')}
-                            style={{ width:windowW*0.4, height:windowH*0.7 ,}}
+                            source={require('../../assets/lottierfiles/lovehearts12.json')}
+                            style={{ width:windowW*0.4, height:windowH*0.9,marginLeft: windowW*0.06}}
                             autoPlay
                             loop                   
                         />
-                        <Text>KHÔNG CÓ SẢN PHẨM YÊU THÍCH</Text>
+                        <View style= {{width:'100%', height: '100%', position:'absolute',flexDirection: 'column', justifyContent: 'center', backgroundColor:'transparent',alignContent:'center' }}>
+                            <Text style= {{ textAlign:'center', color: 'red' }}>KHÔNG CÓ SẢN PHẨM YÊU THÍCH</Text>
+                        </View>
+                        
             </View>
+            
             
             }
 
@@ -268,7 +271,8 @@ const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        flexDirection:'column'
 
     },
     scrollviewitem: {

@@ -2,13 +2,14 @@ import React, {useState} from "react";
 import {View, Text, Modal, StyleSheet, Pressable} from 'react-native';
 import LottieView from "lottie-react-native";
 export default function ModalFavorite(props){
-    
+
     return (
         <View>
           <Modal
             animationType="slide"
             transparent={true}
             visible={props.ModalVisible}
+            
           >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
