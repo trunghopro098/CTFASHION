@@ -11,7 +11,7 @@ import Flashsales from "../products/flashsale";
 import * as GETAPI from '../../util/fetchApi';
 import { SetHTTP } from "../../util/setHTTP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
+import {updateQuanityProduct,updatequantityFavorite} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
 
 export default function HomeScreen({navigation}){
@@ -43,16 +43,30 @@ export default function HomeScreen({navigation}){
         getDatafullProduct();
         getHistory();      
         updateQuanityCart();
+        updataFavorite();
     }, [])
+
     const updateQuanityCart = async()=>{
         const getData = await AsyncStorage.getItem('CART');
         if(getData !== null){
-            arr = JSON.parse(getData);
+           const arr = JSON.parse(getData);
             dispatch(updateQuanityProduct(arr.length))
         }else{
             dispatch(updateQuanityProduct(0))
         }
     }
+
+    const updataFavorite = async()=>{
+
+        const data = await AsyncStorage.getItem('FAVORITE');
+        if(data != null){
+            const arr = JSON.parse(data);
+            dispatch(updatequantityFavorite(arr.length))
+        }else{
+            dispatch(updatequantityFavorite(0))
+        }
+    }
+    
     const getHistory = async()=>{
         const history = await AsyncStorage.getItem('SEARCHHISTORY');
         console.log(typeof(history))

@@ -11,6 +11,8 @@ import ProductDetail from './screens/products/productDetail';
 import CartScreen from './screens/NavigatorBottom/cartScreen';
 import Test2 from './screens/products/test2';
 import ResultSearch from './screens/StartScreens/resultSearch';
+import CheckOut from './screens/products/checkout';
+
 const Tab = createStackNavigator();
 
 const App = ()=>{
@@ -31,6 +33,7 @@ const App = ()=>{
         screenOptions={{ headerShown:false}}
         >
           <Tab.Screen name="aa" component={Test2}/>
+          <Tab.Screen name="checkout" component={CheckOut}/>
           <Tab.Screen name="cart" component={CartScreen}/>
           <Tab.Screen name="home" component={TabNavigation}/>
           <Tab.Screen name='splash' component={SplashScreen}/>

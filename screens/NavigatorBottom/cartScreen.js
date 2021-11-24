@@ -11,7 +11,7 @@ import LottieView from "lottie-react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
-export default function CartScreen (props){
+export default function CartScreen (props, {navigation}){
 const [Dataproduct, setDataproduct] = useState([]);
 const [DataAnsynStore, setDataAnsynStore] = useState([]);
 const [isLoading, setisLoading] = useState(true);
@@ -410,7 +410,9 @@ const renderItem = ({item})=>{
                         </View>
                         
                     </View>
-
+                    <TouchableOpacity onPress={()=>{
+                        props.navigation.navigate('checkout')
+                    }}>
                     <LinearGradient
                         colors={['#7C007C','#B16FD8','#CB9ADC' ]}
                         start={{x: 0, y: 0}} end={{x: 1, y: 0}}
@@ -431,6 +433,7 @@ const renderItem = ({item})=>{
                             Thanh toán
                         </Text>
                     </LinearGradient>
+                    </TouchableOpacity>
                 </View>
            
         </View>
