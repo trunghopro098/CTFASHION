@@ -115,10 +115,14 @@ export default function SearchScreen({ navigation }){
                     {/* Nhấn vào input  hoặc button cho nhảy sang trang search */}
                         <TextInput  
                             style={{ ...style.textinput}} 
-                            
+                            returnKeyType="search"
                             placeholder={'Search'}
                             value = {searhHistory}
                             onChangeText={(value)=>setsearhHistory(value)} 
+                            onSubmitEditing={()=>{
+                                addhistory();
+                                handleSearch()
+                            }}
                         />
                         </TouchableOpacity>
                         <LinearGradient 
