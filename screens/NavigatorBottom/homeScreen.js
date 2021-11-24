@@ -1,6 +1,5 @@
-import React,{useState,useEffect,useLayoutEffect} from "react";
-import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions} from "react-native"; 
-// import SkeletonContent from "react-native-skeleton-content";
+import React,{useState,useEffect} from "react";
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,Alert} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
@@ -13,7 +12,8 @@ import { SetHTTP } from "../../util/setHTTP";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {updateQuanityProduct,updatequantityFavorite} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
-
+import {getUser} from '../../util/getUser';
+import {updateUser} from '../../redux/reducer/user.reducer';
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
@@ -27,6 +27,7 @@ export default function HomeScreen({navigation}){
     const [DataProductNewSlideBox, setDataProductNewSlideBox] = useState([]);//data khi click vào slider
     const [Datafullproduct, setDatafullproduct] = useState([])
     const dispatch = useDispatch();
+    const [statusUser, setstatusUser] = useState(false);
     //Animation header
     const scrollY = new Animated.Value(0);
     const diffClamp = Animated.diffClamp(scrollY,0,50);
@@ -34,7 +35,9 @@ export default function HomeScreen({navigation}){
         inputRange:[0,50],
         outputRange:[0,-50]
     })
-
+    useEffect(() => {
+        checkUser()
+    },[])
     useEffect(() => {
         getCategory();
         getProductSale();
@@ -46,6 +49,25 @@ export default function HomeScreen({navigation}){
         updataFavorite();
     }, [])
 
+    const checkUser = async()=>{
+        const token =  await AsyncStorage.getItem('@token');
+        if(token===undefined||token===null){
+            setstatusUser(false)
+            dispatch(updateUser({}));
+        }else{
+            const status = await getUser(token,dispatch);
+            if(status===false){
+                Alert.alert('CTFASHION','Phiên đăng nhập của bạn hết hạn !!')
+                setstatusUser(false)
+            }else if(status=="block"){
+                Alert.alert('CTFASHION','Tài khoản của bạn đang bị khóa !!')
+                setstatusUser(false)
+            }else{
+                console.log("Tôi đã vào đây")
+                setstatusUser(true);
+            }
+        }
+    }
     const updateQuanityCart = async()=>{
         const getData = await AsyncStorage.getItem('CART');
         if(getData !== null){
@@ -163,7 +185,15 @@ export default function HomeScreen({navigation}){
                                     zIndex:1
                                     }} >
                     
-                        <HeaderScreen navigation={navigation} textsearch={textsearch} hideSearch={true} heightHeader={windowH*0.145} colorSearch={colorSearch} bgWhite={bgHeader}/>
+                        <HeaderScreen 
+                            navigation={navigation} 
+                            textsearch={textsearch} 
+                            hideSearch={true} 
+                            heightHeader={windowH*0.145} 
+                            colorSearch={colorSearch} 
+                            bgWhite={bgHeader}
+                            statusUser={statusUser}
+                        />
                     </Animated.View>
                 
                     <VirtualizedView setValue={handleSetValueScrollY}>      

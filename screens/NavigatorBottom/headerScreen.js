@@ -1,10 +1,20 @@
 import React from "react";
-import {View, Text, TextInput, StyleSheet, Dimensions,TouchableOpacity,Animated } from 'react-native';
+import {View, Text, StyleSheet, Dimensions,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function HeaderScreen(props){
-    const {bgWhite, hideSearch, heightHeader} = props;
+    const {bgWhite, hideSearch, heightHeader,statusUser} = props;
+    const handleAccount = ()=>{
+        console.log(statusUser)
+        if(statusUser){
+            console.log("1")
+            props.navigation.navigate("Profile")
+        }else{
+            console.log("2")
+            props.navigation.navigate("login")
+        }
+    }
     return(
         <Animated.View>
         <LinearGradient
@@ -15,7 +25,9 @@ export default function HeaderScreen(props){
                 <Text style={bgWhite?{...style.label,color:'tomato'}:{...style.label}}>CT FASHION</Text>
                 <View style={{ flexDirection:'row' }}>
                     <AntDesign name="shoppingcart" color={bgWhite?"black":"white"} size={24} style={{marginRight:10}}/>
-                    <Feather name="user" color={bgWhite?"black":"white"} size={24}/>
+                    <TouchableOpacity onPress={handleAccount}>
+                        <Feather name="user" color={bgWhite?"black":"white"} size={24}/>
+                    </TouchableOpacity>
                 </View>
             </View>
             {hideSearch==true ?
