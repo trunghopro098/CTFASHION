@@ -94,41 +94,42 @@ export default function FavoriteScreen (props,{navigation}){
         const titleSale = 100-(Math.round((item[0].promotional*100)/item[0].price))
         return(
             <View key={item[0].id} >
-                   <TouchableOpacity onPress={()=>{
-                                        props.navigation.navigate('productDetail',{
-                                        idProduct : item[0].id,
-                                        idProductType : item[0].idProductType
-                                    });
-                                    }}
-                                    onLongPress={()=>{
-                                        Alert.alert('CTFASHION','Bạn muốn xóa sản phẩm này khỏi danh sách yêu thích !!',
-                                        [
-                                            {
-                                                text: 'Cancel',
-                                                style: "cancel"
-                                            },
-                                            {
-                                                text: 'OK',
-                                                onPress:async()=>{
-                                                    let dataAnsynstore = DataAnsynStore;
-                                                    if(dataAnsynstore.length > 1){
-                                                        for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
-                                                            if(dataAnsynstore[j].id==item[0].id){
-                                                                dataAnsynstore.splice(j,1)
-                                                                await AsyncStorage.setItem("FAVORITE",JSON.stringify(dataAnsynstore))
-                                                                getDataAnsynStore()
-                                                            
-                                                            }
-                                                        }
-                                                    }else{
-                                                        removeAllFavorite();
-                                                    }
-                                                }
+                <TouchableOpacity 
+                    onPress={()=>{
+                            props.navigation.navigate('productDetail',{
+                            idProduct : item[0].id,
+                            idProductType : item[0].idProductType
+                        });
+                    }}
+                    onLongPress={()=>{
+                        Alert.alert('CTFASHION','Bạn muốn xóa sản phẩm này khỏi danh sách yêu thích !!',
+                        [
+                            {
+                                text: 'Cancel',
+                                style: "cancel"
+                            },
+                            {
+                                text: 'OK',
+                                onPress:async()=>{
+                                    let dataAnsynstore = DataAnsynStore;
+                                    if(dataAnsynstore.length > 1){
+                                        for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
+                                            if(dataAnsynstore[j].id==item[0].id){
+                                                dataAnsynstore.splice(j,1)
+                                                await AsyncStorage.setItem("FAVORITE",JSON.stringify(dataAnsynstore))
+                                                getDataAnsynStore()
+                                            
                                             }
-                                        ])
-                                    }}>
-                        {item[0].promotional > 0 ? 
-                        <>
+                                        }
+                                    }else{
+                                        removeAllFavorite();
+                                    }
+                                }
+                            }
+                        ])
+                    }}>
+                    {item[0].promotional > 0 ? 
+                    <>
                         <Label
                             orientation={Orientation.TOP_RIGHT}
                             containerStyle={styles.cart_item}

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import {View, Text,TextInput,Button,StyleSheet,Alert,ImageBackground,StatusBar,TouchableOpacity} from "react-native";
 import { Formik } from 'formik';
 import * as yup from 'yup'
@@ -19,10 +19,19 @@ username: yup
     .min(3, ({ min }) => `Mật khẩu có ít nhất ${min} ký tự`)
     .required('Nhập mật khẩu để đăng nhập'),
 })
-export default function Login ({navigation}){
+export default function Login ({navigation,route}){
     const dispatch = useDispatch();
     const [hidePass, sethidePass] = useState(true);
+ 
+    const formRef = useRef();
 
+    useEffect(() => {
+        if(route.params!==undefined){
+            const { username, password } = route.params;
+            console.log(username+"&&&"+password)
+            formRef.current.setValues({username:username,password:password})
+        }
+    },[])
     const handleLogin  = async(values,{ setErrors, resetForm })=>{
         console.log(values)
         const res = await GETAPI.postDataAPI("/user/login",values)
@@ -56,6 +65,7 @@ export default function Login ({navigation}){
                 <Formik
                     validationSchema={loginValidationSchema}
                     initialValues={{ username: '', password: '' }}
+                    innerRef={formRef}
                     onSubmit={handleLogin}
                 >
                 {({
@@ -65,6 +75,7 @@ export default function Login ({navigation}){
                     values,
                     errors,
                     isValid,
+                    touched 
                 }) => (
                     <>
                     <View style={styles.wrapperInput}>
@@ -72,14 +83,15 @@ export default function Login ({navigation}){
                     <TextInput
                         name="username"
                         placeholder="Nhập tên đăng nhập"
-                        style={[errors.username?{...styles.textInput,borderColor: 'red'}:{...styles.textInput}]}
+                        style={[errors.username&&touched.username?{...styles.textInput,borderColor: 'red'}
+                        :{...styles.textInput}]}
                         onChangeText={handleChange('username')}
                         onBlur={handleBlur('username')}
-                        placeholderTextColor="#DDDDDD"
+                        placeholderTextColor="gray"
                         value={values.username}
                     />
                     </View>
-                    {errors.username &&
+                    {(errors.username && touched.username) &&
                         <Text style={styles.errorText}>{errors.username}</Text>
                     }
                     <View style={styles.wrapperInput}>
@@ -87,8 +99,9 @@ export default function Login ({navigation}){
                     <TextInput
                         name="password"
                         placeholder="Mật khẩu"
-                        placeholderTextColor="#DDDDDD"
-                        style={[errors.password?{...styles.textInput,borderColor: 'red'}:{...styles.textInput}]}
+                        placeholderTextColor="gray"
+                        style={[errors.password && touched.password ?{...styles.textInput,borderColor: 'red'}
+                        :{...styles.textInput}]}
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password}
@@ -103,7 +116,7 @@ export default function Login ({navigation}){
                           
                     </TouchableOpacity>
                     </View>
-                    {errors.password &&
+                    {(errors.password && touched.password) &&
                         <Text style={styles.errorText}>{errors.password}</Text>
                     }
                     <View style={{ paddingTop:10 }}>
