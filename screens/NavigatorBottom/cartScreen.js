@@ -11,13 +11,19 @@ import LottieView from "lottie-react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 export default function CartScreen (props, {navigation}){
 const [Dataproduct, setDataproduct] = useState([]);
 const [DataAnsynStore, setDataAnsynStore] = useState([]);
 const [isLoading, setisLoading] = useState(true);
 const [countItemcart, setcountItemcart] = useState(0)
-const [checkAll, setcheckAll] = useState(true)
+const [checkAll, setcheckAll] = useState(true);
+
 const dispatch = useDispatch();
+var sold = [];
+
+
 useEffect(() => {
     const set =  props.navigation.addListener('focus',()=>
     {
@@ -27,6 +33,7 @@ useEffect(() => {
 
     return set;
 }, [])
+
 
 const getDataAnsynStore = async()=>{
     let arr = [];
@@ -189,6 +196,7 @@ const Checkall = async()=>{
 
 const CartTotal = (data)=>{
     var tong=0;
+    
     for( let item = 0;item<=data.length-1;item++){
         if (data[item].status==true){
             if(data[item][0].promotional > 0){
@@ -197,8 +205,8 @@ const CartTotal = (data)=>{
                 tong +=(data[item][0].price*data[item].quanity);
             }
         }
+        
     }
-    // this.setState({total : tong})
     return tong;
 }
 
@@ -411,7 +419,27 @@ const renderItem = ({item})=>{
                         
                     </View>
                     <TouchableOpacity onPress={()=>{
-                        props.navigation.navigate('checkout')
+                            let arr = [];
+                            console.log(CartTotal(Dataproduct))
+                            for( let item = 0;item<=Dataproduct.length-1;item++){
+                                if (Dataproduct[item].status==true && Dataproduct[item].quanity > 0 ){
+                                    arr.push(Dataproduct[item]);
+                                    
+                                }
+                            }
+                            if(arr.length == 0 ){
+                                Alert.alert('CTFASHION','Vui lòng chọn sản phẩm trước khi thanh toán!')
+                            }else{
+                                props.navigation.navigate('checkout',
+                                {
+                                    'data': arr,
+                                    'CartTotal': CartTotal(Dataproduct),
+
+                                })
+                            }
+
+
+                        
                     }}>
                     <LinearGradient
                         colors={['#7C007C','#B16FD8','#CB9ADC' ]}

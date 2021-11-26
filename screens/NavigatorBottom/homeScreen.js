@@ -51,6 +51,7 @@ export default function HomeScreen({navigation}){
 
     const checkUser = async()=>{
         const token =  await AsyncStorage.getItem('@token');
+        console.log(token)
         if(token===undefined||token===null){
             setstatusUser(false)
             dispatch(updateUser({}));

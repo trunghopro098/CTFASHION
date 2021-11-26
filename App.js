@@ -10,13 +10,9 @@ import ProductDetail from './screens/products/productDetail';
 import CartScreen from './screens/NavigatorBottom/cartScreen';
 import Test2 from './screens/products/test2';
 import ResultSearch from './screens/StartScreens/resultSearch';
-<<<<<<< HEAD
 import CheckOut from './screens/products/checkout';
-
-=======
 import Login from './screens/StartScreens/login';
 import SignUp from './screens/StartScreens/signup'
->>>>>>> 759815b66757d16f299dd68f951c0e95b5043dac
 const Tab = createStackNavigator();
 
 const App = ()=>{
