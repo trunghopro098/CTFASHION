@@ -5,7 +5,8 @@ const productSlice = createSlice({
     initialState:{
         cart:{},
         quanityCart:0,
-        datasearch:''
+        datasearch:'',
+        quantityFavorite:0
     },
     reducers:{
         updateQuanityProduct: (state,action) =>{

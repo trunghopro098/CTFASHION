@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React,{useEffect,useState,useRef} from "react";
 import { View, Text, StyleSheet, Dimensions, ScrollView,Image, TextInput, TouchableOpacity,Alert} from "react-native"; 
 import { useSelector } from "react-redux";
 import LottieView from "lottie-react-native";
@@ -10,57 +10,72 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {updateQuanityProduct} from '../../redux/reducer/product.reducer';
 import { useDispatch } from "react-redux";
-
+import * as yup from 'yup';
+import { Formik } from 'formik';
+const paymentValidationSchema = yup.object().shape({
+    name: yup
+        .string()
+        .min(5, ({ min }) => `Họ tên có ít nhất ${min} ký tự`)
+        .required('Nhập họ tên!!')
+    ,
+    email: yup
+        .string()
+        .email("Vui lòng nhập đúng định dạng Email")
+        .required('Nhập Email !!')
+    ,  
+    phone: yup
+        .string()
+        .min(10, ({ min }) => `Số điện thoại có ít nhất ${min} ký tự`)
+        .required("Vui lòng nhập số điện thoại !")
+    , 
+    address: yup
+        .string()
+        .min(5, ({ min }) => `Địa chỉ có ít nhất ${min} ký tự`)
+        .required('Vui lòng nhập địa chỉ!!')
+    ,
+})
 export default function CheckOut (props,{navigation}){
 
     const [DataInforUser, setDataInforUser] = useState([]);
     const [isLoading, setisLoading] = useState(true);
     const [idUser, setidUser] = useState('');
-    const [Name, setName] = useState('');
-    const [Phone, setPhone] = useState('');
-    const [email, setemail] = useState('');
-    const [address, setaddress] = useState('');
     const [message, setmessage] = useState('');
     const [methodpayment, setmethodpayment] = useState(1);
     const [codeSale, setcodeSale] = useState('');
     const [DataSale, setDataSale] = useState([]);
     const [promotionPrice, setpromotionPrice] = useState(0);
 
-    const [ValidationName, setValidationName] = useState(false);
-    const [ValidationPhone, setValidationPhone] = useState(false);
-    const [Validationemail, setValidationemail] = useState(false);
-    const [Validationaddress, setValidationaddress] = useState(false);
     const dispatch = useDispatch();
     const Data = props.route.params.data;
     const TotalPRD = props.route.params.CartTotal;
     // console.log(Data)
     const currentUser = useSelector(state=>state.userReducer.currentUser);
-
+    let formRef = useRef();
 
     useEffect(() => {
-        // console.log('currenr ne')
-        // console.log(currentUser)
         getInforUser();
         setidUser(currentUser.id);
 
     }, [])
 
-const getInforUser = async()=>{
-    if(currentUser.id != undefined){
-        const res = await GetAPI.postDataAPI('/user/getInforUser',{'idUser': currentUser.id})
-        console.log(res)
-        setDataInforUser(res);
-        setName(res[0].name);
-        setPhone(res[0].phone);
-        setemail(res[0].email);
-        setaddress(res[0].address);
-        setisLoading(false);
-        
-    }else{
-        setDataInforUser([]);
-        setisLoading(false);
+    const getInforUser = async()=>{
+        if(currentUser.id != undefined){
+            const res = await GetAPI.postDataAPI('/user/getInforUser',{'idUser': currentUser.id})
+            console.log(res)
+            setDataInforUser(res);
+            setisLoading(false);      
+            formRef.current.setValues({...res[0]})
+            if(res[0].phone==null){
+                formRef.current.setValues({...formRef.current.values,phone:""})
+            }
+            if(res[0].address==null){
+                formRef.current.setValues({...formRef.current.values,address:""})
+            }
+        }else{
+            setDataInforUser([]);
+            setisLoading(false);
+        }
     }
-}
 
 const GetCodeSale = async()=>{
     if(codeSale===""){
@@ -98,28 +113,26 @@ const TotalPrice = (item)=>{
     let Total = 0;
     if(item[0].promotional > 0){
         Total = item[0].promotional*item.quanity;
-       
     }else{
         Total = item[0].price*item.quanity;
-       
     }
     return Total;
 }
 
 const Order = async()=>{
     let DataProduct = Data;
-    console.log(DataProduct)
     let idSale = null;
     let total = TotalPRD+30000;
+    const {name,email,address,phone} = formRef.current.values
     if(promotionPrice > 0){
         idSale= DataSale.id;
         total = TotalPRD-promotionPrice+30000;
     }
     const data = {
-        "name": Name,
+        "name": name,
         "address": address,
         "email" : email,
-        "phone" : Phone,
+        "phone" : phone,
         "total_price":total,
         "message":message,
         "dataProduct":DataProduct,
@@ -141,15 +154,14 @@ const Order = async()=>{
                 }
             }
             dispatch(updateQuanityProduct(arr.length));
-            await AsyncStorage.removeItem('CART');
+            // await AsyncStorage.removeItem('CART');
             await AsyncStorage.setItem('CART',JSON.stringify(arr));
             props.navigation.navigate('home');
         }else{
             console.log(res.msg)
         }
     }
-
-    // console.log(data.dataProduct)
+    
 }
 const renderitem = (item)=>{
     return(
@@ -184,7 +196,7 @@ const renderitem = (item)=>{
     return(
         <View style={ styles.container}>
             <View style={styles.header}>
-                <Text style={{ fontWeight: 'bold' ,paddingHorizontal: 15, color:'black' }}>Kiểm tra đơn hàng</Text>
+                <Text style={{ fontWeight: 'bold' ,paddingHorizontal: 15, color:'black',fontSize:16 }}>Kiểm tra đơn hàng</Text>
             </View>
            
             <ScrollView style={{ marginBottom: 70, }}>
@@ -196,6 +208,22 @@ const renderitem = (item)=>{
                             <LoadingCircle/>
                         </View>:
                         <View style={styles.inforCustomer}>
+                        <Formik
+                            validationSchema={paymentValidationSchema}
+                            innerRef={formRef}
+                            initialValues={{ email:'',name: '',phone:'',address:'' }}
+                            onSubmit={()=>Order()}
+                        >
+                        {({
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            values,
+                            errors,
+                            isValid,
+                            touched
+                        }) => (
+                        <View>
                             <View>
                                 <LottieView  
                                     source={require('../../assets/lottierfiles/location-lottie-animation.json')}
@@ -204,56 +232,54 @@ const renderitem = (item)=>{
                                     loop           
                                 />
                             </View>
-                        {  DataInforUser.length == 0 ? 
-                                <View style={{ flexDirection: 'column', justifyContent: 'flex-start',alignItems:'center' }}>
-
-                                    <TextInput placeholder='Họ tên' 
-                                                style={styles.textinput}
-                                                 value={Name}
-                                                 onChangeText={setName}/>
-                                   {ValidationName ?  <Text style={{ color:'red', fontSize:10,marginLeft: 10,maxWidth: windowW*0.8 }}>Vui lòng nhập lại họ tên! Tên phải dài hơn 4 ký tự! </Text> : null}         
-                                    <TextInput placeholder='Số điện thoại'
-                                                style={styles.textinput} 
-                                                keyboardType="numeric" 
-                                                value={Phone}
-                                                onChangeText={setPhone}/>
-                                    {ValidationPhone ?  <Text style={{ color:'red', fontSize:10,marginLeft: 10,maxWidth: windowW*0.8 }}>Vui lòng nhập lại số điện thoại!Số điện thoại phải dài hơn 10 ký tự! </Text> : null}
-
-                                    <TextInput placeholder='Email' 
-                                                style={styles.textinput} 
-                                                value={email}
-                                                onChangeText={setemail}
-                                                />
-                                    {Validationemail ?  <Text style={{ color:'red', fontSize:10,marginLeft: 10,maxWidth: windowW*0.8 }}>Vui lòng nhập lại email! Email phải có ký tự @ ! </Text> : null}
-                                    <TextInput placeholder='Địa chỉ'
-                                                style={styles.textinput}
-                                                value={address}
-                                                onChangeText={setaddress}/>
-                                   {Validationaddress?  <Text style={{ color:'red', fontSize:10,marginLeft: 10,maxWidth: windowW*0.8 }}>Vui lòng nhập lại địa chỉ ! địa chỉ không được trống! </Text> : null}
-                                </View>:
-                                <View >
-                                    <View style={styles.address}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                            <Text style={{ color: 'black',fontWeight:'bold' }}>Họ tên : </Text>
-                                            <Text style={{  color: 'black', }}>{DataInforUser[0].name}</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                            <Text style={{ color: 'black',fontWeight:'bold' }}>SĐT : </Text>
-                                            <Text style={{  color: 'black', }}>{DataInforUser[0].phone}</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                            <Text style={{ color: 'black',fontWeight:'bold' }}>Email : </Text>
-                                            <Text style={{  color: 'black', }}>{DataInforUser[0].email}</Text>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                                            <Text style={{ color: 'black',fontWeight:'bold', }}>Địa chỉ : </Text>
-                                            <Text style={{  color: 'black', maxWidth: windowW*0.65}}>{DataInforUser[0].address}</Text>
-                                        </View>                                   
-                                    </View> 
-
-                                </View>
-                            }
+                            <View style={{ flexDirection: 'column', justifyContent: 'flex-start',alignItems:'center',padding:10 }}>
+                                <TextInput 
+                                    placeholder='Họ tên' 
+                                    style={styles.textinput}
+                                    value={values.name}
+                                    onChangeText={handleChange('name')}
+                                    onBlur={handleBlur('name')}
+                                />
+                                {(errors.name &&touched.name)&&
+                                    <Text style={styles.errorText}>{errors.name}</Text>
+                                }
+                                <TextInput 
+                                    placeholder='Số điện thoại'
+                                    style={styles.textinput} 
+                                    keyboardType="numeric" 
+                                    value={values.phone}
+                                    onChangeText={handleChange('phone')}
+                                    onBlur={handleBlur('phone')}
+                                />
+                                {(errors.phone &&touched.phone)&&
+                                    <Text style={styles.errorText}>{errors.phone}</Text>
+                                }
+                                <TextInput 
+                                    placeholder='Email' 
+                                    style={styles.textinput} 
+                                    value={values.email}
+                                    onBlur={handleBlur('email')}
+                                    onChangeText={handleChange('email')}
+                                    editable={currentUser.id===undefined}
+                                />
+                                {(errors.email &&touched.email)&&
+                                    <Text style={styles.errorText}>{errors.email}</Text>
+                                }
+                                <TextInput 
+                                    placeholder='Địa chỉ'
+                                    style={styles.textinput}
+                                    value={values.address}
+                                    onBlur={handleBlur('address')}
+                                    onChangeText={handleChange('address')}
+                                />
+                                {(errors.address &&touched.address)&&
+                                    <Text style={styles.errorText}>{errors.address}</Text>
+                                }
                             </View>
+                        </View>
+                        )}
+                            </Formik>
+                        </View>
                     }
                     <View style={{ marginTop: 10, }}>
                         <Text style={{ fontWeight:'bold', fontSize: 13, color: 'black', marginLeft: 10, marginBottom: 5}}>Thông tin sản phẩm</Text>
@@ -296,8 +322,6 @@ const renderitem = (item)=>{
                                 <Text style={{ color:'green' }}> từ CTFASHION!!!</Text>
                             </View>:null}
 
-                        
-
                     <View style={{ marginTop: 5}}>
                             <Text style={{ fontWeight:'bold', fontSize: 13, color: 'black', marginLeft: 10, marginBottom: 5, marginTop: 5}}>Giá trị đơn hàng</Text>
                     </View> 
@@ -327,34 +351,35 @@ const renderitem = (item)=>{
                     </View>
                     <View style={{ marginTop: 5}}>
                             <Text style={{ fontWeight:'bold', fontSize: 13, color: 'black', marginLeft: 10, marginBottom: 5, marginTop: 5 }}>Chọn phương thức thanh toán </Text>
-                            {methodpayment ==1 ? 
+                            {methodpayment ==2 ? 
                             <ScrollView                            
                                     horizontal={true}
                                     style={{ flexDirection:'row', marginHorizontal: 10 }}>
                                     <TouchableOpacity  
-                                                onPress={()=>{
-                                                setmethodpayment(1);
-                                                    }}
-                                            style={{...styles.wrapmethod, backgroundColor:'pink'}}>
+                                            onPress={()=>{
+                                                setmethodpayment(2);
+                                            }}
+                                            style={{...styles.wrapmethod, backgroundColor:'pink'}}
+                                    >
                                             <Image source={require('../../assets/image/unnamed.png')} resizeMode='contain' style={{width: 35, height: 40}}/>
                                             <Text style={{ marginLeft: 20, }}>Thanh toán khi nhận hàng </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity  
                                         onPress={()=>{
-                                            setmethodpayment(2);
+                                            setmethodpayment(1);
                                                 }}
                                         style={styles.wrapmethod}>
                                         <Image source={require('../../assets/image/cart.jpg')} resizeMode='contain' style={{width: 35, height: 40}}/>
                                         <Text style={{ marginLeft: 20, }}>Thanh toán qua thẻ tín dụng </Text>
                                     </TouchableOpacity>
-                             </ScrollView>
+                                </ScrollView>
                                 :
                                 <ScrollView
                                     horizontal={true}
                                     style={{ flexDirection:'row', marginHorizontal: 10 }}>
                                 <TouchableOpacity  
                                             onPress={()=>{
-                                            setmethodpayment(1);
+                                            setmethodpayment(2);
                                                 }}
                                         style={{...styles.wrapmethod}}>
                                         <Image source={require('../../assets/image/unnamed.png')} resizeMode='contain' style={{width: 35, height: 40}}/>
@@ -362,18 +387,14 @@ const renderitem = (item)=>{
                                 </TouchableOpacity>
                                 <TouchableOpacity  
                                     onPress={()=>{
-                                        setmethodpayment(2);
+                                        setmethodpayment(1);
                                             }}
                                     style={{...styles.wrapmethod, backgroundColor:'pink'}}>
                                     <Image source={require('../../assets/image/cart.jpg')} resizeMode='contain' style={{width: 35, height: 40}}/>
                                     <Text style={{ marginLeft: 20, }}>Thanh toán qua thẻ tín dụng </Text>
                                 </TouchableOpacity>
                          </ScrollView>
-                            }
-
-
-
-
+                    }
                             
                     </View > 
                     <View style={{ marginTop: 5 }}>
@@ -392,9 +413,13 @@ const renderitem = (item)=>{
                         }
 
                     </View>
-                    <TouchableOpacity onPress={()=>{
-                        Order()
-                    }}>
+                    <TouchableOpacity 
+                        onPress={()=>{
+                            if(formRef!==undefined){
+                                formRef.current.handleSubmit();
+                            }
+                        }}
+                    >
                         <LinearGradient
                             colors={['red','#F45705','#F79303' ]}
                             start={{x: 0, y: 0}} end={{x: 1, y: 0}}
@@ -492,71 +517,76 @@ const styles = StyleSheet.create({
                 justifyContent: 'flex-start', 
                 marginLeft: 10,              
             },
-        textinput:{
-            borderWidth: 0.5,
-            borderColor: 'purple',
-            borderRadius: 5,
-            width: windowW*0.8,
-            height: 35,
-            marginVertical: 5,
-            
+    textinput:{
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 5,
+        width: windowW*0.8,
+        height: 35,
+        marginVertical: 5,
+        paddingLeft:10
+    },
+    bill:{
+        
+        flexDirection:'column',
+
+    },
+    wrapItembill:{ 
+        flex:1,
+        marginTop:10,
+        marginHorizontal: 10, 
+        borderRadius: 6,
+        shadowColor: '#000',
+        shadowOffset:{
+            width: 0,
+            height: 2,
         },
-        bill:{
-            
-            flexDirection:'column',
-
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        elevation: 2,
+        marginBottom: 20
+        
         },
-        wrapItembill:{ 
-            flex:1,
-            marginTop:10,
-            marginHorizontal: 10, 
-            borderRadius: 6,
-            shadowColor: '#000',
-            shadowOffset:{
-                width: 0,
-                height: 2,
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 3,
-            elevation: 2,
-            marginBottom: 20
-            
-            },
-            Vieworder:{ 
-                position:'absolute',
-                flex: 1, 
-                backgroundColor:'#F1F3F4',
-                height: 50,
-                width:windowW,
-                bottom:0,
-                flexDirection:'row',
-                justifyContent: "space-between",
-                borderTopColor:'#D3D3ED',
-                borderTopWidth:0.5,
-                alignContent:'center',
-                alignItems: 'center',
-                paddingHorizontal: 15
+    Vieworder:{ 
+        position:'absolute',
+        flex: 1, 
+        backgroundColor:'#F1F3F4',
+        height: 50,
+        width:windowW,
+        bottom:0,
+        flexDirection:'row',
+        justifyContent: "space-between",
+        borderTopColor:'#D3D3ED',
+        borderTopWidth:0.5,
+        alignContent:'center',
+        alignItems: 'center',
+        paddingHorizontal: 15
 
-            },
-            wrapmethod:{
-                width: windowW*0.8,
-                height: 60, 
-                borderRadius: 10,
-                marginRight:10,
-                padding: 10,
-                shadowColor:'#000',
-                shadowOffset:{
-                    width:0,
-                    height:2
-                },
-                shadowOpacity: 0.45,
-                shadowRadius: 5,
-                elevation: 2,
-                marginBottom: 15,
-                flexDirection:'row',
-                justifyContent:'flex-start',
-                alignContent:'center',
-                alignItems:'center'
+    },
+    wrapmethod:{
+        width: windowW*0.8,
+        height: 60, 
+        borderRadius: 10,
+        marginRight:10,
+        padding: 10,
+        shadowColor:'#000',
+        shadowOffset:{
+            width:0,
+            height:2
+        },
+        shadowOpacity: 0.45,
+        shadowRadius: 5,
+        elevation: 2,
+        marginBottom: 15,
+        flexDirection:'row',
+        justifyContent:'flex-start',
+        alignContent:'center',
+        alignItems:'center'
 
-            }
+    },
+    errorText: {
+        marginLeft:10,
+        fontSize: 14,
+        color: 'red',
+    },
 })

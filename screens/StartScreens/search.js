@@ -116,7 +116,7 @@ export default function SearchScreen({ navigation }){
                         <TextInput  
                             style={{ ...style.textinput}} 
                             returnKeyType="search"
-                            placeholder={'Search'}
+                            placeholder={'Nhập tên sản phẩm...'}
                             value = {searhHistory}
                             onChangeText={(value)=>setsearhHistory(value)} 
                             onSubmitEditing={()=>{

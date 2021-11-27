@@ -300,8 +300,10 @@ export default function Productdetail(props,{navigation}){
     
     }
     const RemoveCart = async()=>{
-        await AsyncStorage.removeItem('CART');
-        alert('xoa thanh cong')
+        // await AsyncStorage.removeItem('CART');
+        // alert('xoa thanh cong')
+        const a= await AsyncStorage.getItem('CART')
+        console.log(a)
     }
     
     var Increase =()=>{
