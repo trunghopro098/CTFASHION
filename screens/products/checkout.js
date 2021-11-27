@@ -40,7 +40,7 @@ export default function CheckOut (props,{navigation}){
     const [isLoading, setisLoading] = useState(true);
     const [idUser, setidUser] = useState('');
     const [message, setmessage] = useState('');
-    const [methodpayment, setmethodpayment] = useState(1);
+    const [methodpayment, setmethodpayment] = useState(2);
     const [codeSale, setcodeSale] = useState('');
     const [DataSale, setDataSale] = useState([]);
     const [promotionPrice, setpromotionPrice] = useState(0);
