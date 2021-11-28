@@ -89,12 +89,14 @@ export default function ProfileScreen (props,{navigation}){
     const [isLoading, setisLoading] = useState(true);
 
     useEffect(() => {
-        if(currentUser !== null){
+        if(currentUser.id !== undefined){
             getBill()
             getInforUser()
+        }else{
+            setisLoading(true);
         }
 
-    },[])
+    },[currentUser])
 
     const getBill = async()=>{
         let arrDGH=[];
@@ -129,7 +131,9 @@ export default function ProfileScreen (props,{navigation}){
         if(res!==null){
             console.log(res)
             setDatainf(res)
-            setisLoading(false);  
+            setisLoading(false); 
+          
+             
         }
      
     }

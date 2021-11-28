@@ -45,8 +45,10 @@ export default function Login ({navigation,route}){
                 if(status==="block"){
                     Alert.alert('CTFASHION',"Tài khoản của bạn đang bị khóa")
                 }else if(status){
-                    await AsyncStorage.setItem("@token",res.token)
+                    console.log('fdsgdfhfgnfn')
                     navigation.navigate("home")
+                    await AsyncStorage.setItem("@token",res.token)
+                   
                 }
             }
         }
