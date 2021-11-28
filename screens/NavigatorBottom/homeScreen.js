@@ -53,7 +53,7 @@ export default function HomeScreen({navigation}){
         const token =  await AsyncStorage.getItem('@token');
         console.log(token)
         if(token===undefined||token===null){
-            setstatusUser(false)
+            setstatusUser(false);
             dispatch(updateUser({}));
         }else{
             const status = await getUser(token,dispatch);

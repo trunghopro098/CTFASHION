@@ -296,10 +296,16 @@ const renderitem = (item)=>{
                     </View> 
                     {DataInforUser.length == 0  ? 
                         <View>
-                                <Text style={{  fontSize: 13, color: 'red', marginLeft: 10}}> Đăng nhập để nhận ưu đãi này ! </Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                    <TouchableOpacity onPress={()=>{props.navigation.navigate('login')}}>
+                                        <Text style={{  fontSize: 13, color: 'green', marginLeft: 10}}>ĐĂNG NHẬP</Text>
+                                    </TouchableOpacity>
+                                    
+                                    <Text style={{  fontSize: 13, color: 'red'}}> để nhận ưu đãi này ! </Text>
+                                </View>
                                 <View style={{ flexDirection:'row', justifyContent:'flex-start',marginLeft: 8, marginTop: 5 }}>
                                     <TextInput placeholder='Nhập mã khuyến mãi'style={{width: windowW*0.75,height: 39, borderWidth: 0.5, borderColor: 'purple',borderRadius: 6, }} editable={false}/>
-                                    <View style={{ borderRadius: 5,width:windowW*0.19,borderWidth:0.5, borderColor: 'green', flexDirection:'column', justifyContent:'center', alignContent:'center',marginLeft: 5, }}>
+                                    <View style={{ borderRadius: 5,width:windowW*0.19,borderWidth:0.5, borderColor: 'purple', flexDirection:'column', justifyContent:'center', alignContent:'center',marginLeft: 5, }}>
                                         <Text style={{ color:'green', fontSize: 11,textAlign:'center' }}>ÁP DỤNG</Text>
                                     </View>
                                  </View>
