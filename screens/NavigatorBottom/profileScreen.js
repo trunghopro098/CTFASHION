@@ -38,7 +38,7 @@ const DisplayBill =(props)=>{
                                 <Text style={{...styles.TextBill,width: windowW*0.15,maxWidth: windowW*0.15,}}
                                  >#{Data.id}</Text>
                                 <Text style={{ ...styles.TextBill,width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'right',paddingRight:5 }}>{FormatNumber(Data.total_price)} đ</Text>
-                                <Text style={{...styles.TextBill, color: (Data.status==0) ? 'blue':(Data.status)==1?'green':(Data.status==2)?'black':'red',
+                                <Text style={{...styles.TextBill, color: (Data.status==0) ? 'red':(Data.status)==1?'blue':(Data.status==2)?'green':'grey',
                                                      width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'center'}}>
                                                 {(Data.status==0) ? 'Đang xử lý':(Data.status)==1?'Đang Giao Hàng':(Data.status==2)?'Đã Hoàn Thành':'Đã Hủy'}
                                     </Text>
@@ -57,7 +57,7 @@ const DisplayBill =(props)=>{
                                                 borderBottomColor: 'purple',
                                                 borderRightColor:'purple' }}>
                                                 <Image source={require('../../assets/icons/eye100px.png')} resizeMode="cover"
-                                                    style={{width: 25, height: 25}}/>
+                                                    style={{width: 20, height: 20}}/>
                                     </TouchableOpacity>
                                 
                                 <Text style={{ 

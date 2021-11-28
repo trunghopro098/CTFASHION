@@ -146,16 +146,23 @@ const Order = async()=>{
             Alert.alert('CTFASHION','Đặt hàng thành công ! Cảm ơn quý khách đã tin tưởng và ủng hộ !!!');
             const dataAsycn = await AsyncStorage.getItem('CART');
             let arr = JSON.parse(dataAsycn);
-            for(let i = 0 ; i < DataProduct.length;i++){
-                for(let j = 0; j <arr.length; j++ ){
-                    if(DataProduct[i][0].id === arr[j].id){
-                        arr.splice(j,1);
+            if(DataProduct.length === arr.length){
+                await AsyncStorage.removeItem('CART');
+                dispatch(updateQuanityProduct(0));
+            }else{
+                for(let i = 0 ; i < DataProduct.length;i++){
+                    for(let j = 0; j <arr.length; j++ ){
+                        if(DataProduct[i][0].id === arr[j].id){
+                            arr.splice(j,1);
+                        }
                     }
                 }
+                dispatch(updateQuanityProduct(arr.length));
+                // await AsyncStorage.removeItem('CART');
+                await AsyncStorage.setItem('CART',JSON.stringify(arr));
             }
-            dispatch(updateQuanityProduct(arr.length));
-            // await AsyncStorage.removeItem('CART');
-            await AsyncStorage.setItem('CART',JSON.stringify(arr));
+
+
             props.navigation.navigate('home');
         }else{
             console.log(res.msg)

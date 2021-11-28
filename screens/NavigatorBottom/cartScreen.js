@@ -240,7 +240,7 @@ const DeleteAll =()=>{
     }
 }
 
-const renderItem = ({item})=>{
+const renderItem = ({item, index})=>{
     // console.log('2343')
     return(
         <View style={{ marginBottom:  3}}>
@@ -381,7 +381,7 @@ const renderItem = ({item})=>{
             <View style={{  flex: 1 }}>
                <FlatList
                 data = {Dataproduct}
-                keyExtractor= {item=>item[0].id}
+                keyExtractor= {(item,index)=>(index)}
                 renderItem={renderItem}
             />
             </View>}
