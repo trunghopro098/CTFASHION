@@ -1,13 +1,12 @@
 import React,{useEffect, useState}from "react";
-import { View, Text,Button, StyleSheet, Dimensions, ScrollView, Image,TouchableOpacity, Alert} from "react-native"; 
+import { View, Text, StyleSheet, Dimensions, ScrollView, Image,TouchableOpacity, Alert} from "react-native"; 
 import { useDispatch } from "react-redux";
 import {updateUser} from '../../redux/reducer/user.reducer';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 import * as GETAPI from '../../util/fetchApi';
 import { FormatNumber } from "../../util/formatNumber";
-import Login from '../StartScreens/login';
-
+import { useIsFocused } from "@react-navigation/native";
 const DisplayBill =(props)=>{
     const Data = props.Data;
     return(
@@ -42,20 +41,24 @@ const DisplayBill =(props)=>{
                                                      width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'center'}}>
                                                 {(Data.status==0) ? 'Đang xử lý':(Data.status)==1?'Đang Giao Hàng':(Data.status==2)?'Đã Hoàn Thành':'Đã Hủy'}
                                     </Text>
-                                    <TouchableOpacity style={{
-                                                    color: 'black', 
-                                                fontSize: 12,
-                                                marginRight: 1,
-                                                borderRightWidth: 0.5,
-                                                width: windowW*0.15 ,
-                                                flexDirection:'row',
-                                                alignContent:'center', 
-                                                alignItems:'center',
-                                                justifyContent:'center',
-                                                maxWidth: windowW*0.15,
-                                                borderBottomWidth:0.5, 
-                                                borderBottomColor: 'purple',
-                                                borderRightColor:'purple' }}>
+                                    <TouchableOpacity 
+                                        style={{
+                                            color: 'black', 
+                                            fontSize: 12,
+                                            marginRight: 1,
+                                            borderRightWidth: 0.5,
+                                            width: windowW*0.15 ,
+                                            flexDirection:'row',
+                                            alignContent:'center', 
+                                            alignItems:'center',
+                                            justifyContent:'center',
+                                            maxWidth: windowW*0.15,
+                                            borderBottomWidth:0.5, 
+                                            borderBottomColor: 'purple',
+                                            borderRightColor:'purple' 
+                                        }}
+                                        onPress={()=>props.navigation.navigate("deatilbill",{codeBill:Data.code_order})}
+                                        >
                                                 <Image source={require('../../assets/icons/eye100px.png')} resizeMode="cover"
                                                     style={{width: 20, height: 20}}/>
                                     </TouchableOpacity>
@@ -78,6 +81,7 @@ const DisplayBill =(props)=>{
 }
 export default function ProfileScreen (props,{navigation}){
     const currentUser = useSelector(state=>state.userReducer.currentUser);
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
     const [Seleted, setSeleted] = useState(false);
     const [dataBill, setdataBill] = useState([]);
@@ -96,7 +100,7 @@ export default function ProfileScreen (props,{navigation}){
             setisLoading(true);
         }
 
-    },[currentUser])
+    },[currentUser,isFocused])
 
     const getBill = async()=>{
         let arrDGH=[];
@@ -239,7 +243,7 @@ export default function ProfileScreen (props,{navigation}){
                                                       onPress={()=>{setSeleted(false)}}>
                                             <Image source={require('../../assets/icons/check.png')} resizeMode="cover"
                                             style={{width: 16, height: 16, marginLeft :15, marginRight: 10}}/>
-                                            <Text>ẩn đơn hàng</Text>
+                                            <Text>Ẩn đơn hàng</Text>
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start', alignContent:'center', alignItems: 'center' }}
@@ -257,19 +261,19 @@ export default function ProfileScreen (props,{navigation}){
                              style={{ paddingBottom: 8 , marginRight: 15}}
                              >
                                 <TouchableOpacity onPress={()=>{setSeleted(true)}} style={{...styles.billinfor, marginLeft: 8,backgroundColor: Seleted==true?'pink':null}}>
-                                    <Text style={{ color: 'black' }}>Tất cả</Text>
+                                    <Text style={{ color: 'black',textAlign:'center' }}>Tất cả</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>{setSeleted(2)}} style={{...styles.billinfor,backgroundColor: Seleted==2?'pink':null }}>
-                                    <Text style={{ color: 'black' }}>Đang Xử lý</Text>
+                                    <Text style={{ color: 'black',textAlign:'center' }}>Đang Xử lý</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>{setSeleted(3)}} style={{...styles.billinfor,backgroundColor: Seleted==3?'pink':null }}>
-                                    <Text style={{ color: 'black' }}>Đang Giao Hàng </Text>
+                                    <Text style={{ color: 'black',textAlign:'center' }}>Đang Giao Hàng </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>{setSeleted(4)}} style={{...styles.billinfor,backgroundColor: Seleted==4?'pink':null }}>
-                                    <Text style={{ color: 'black' }}>Đã Thanh Toán</Text>
+                                    <Text style={{ color: 'black',textAlign:'center' }}>Đã Hoàn Thành</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>{setSeleted(5)}} style={{...styles.billinfor,backgroundColor: Seleted==5?'pink':null }}>
-                                    <Text style={{ color: 'black' }}>Đã Hủy </Text>
+                                    <Text style={{ color: 'black',textAlign:'center' }}>Đã Hủy </Text>
                                 </TouchableOpacity>
                             </ScrollView>
                                 {Seleted == true ? 
@@ -278,7 +282,7 @@ export default function ProfileScreen (props,{navigation}){
                                              <View style={styles.datanull}>
                                                  <Text style={{ alignItems:'center', fontSize: 14 }}>BẠN KHÔNG CÓ ĐƠN HÀNG NÀO</Text>
                                             </View>:
-                                            <DisplayBill Data={dataBill}/>}
+                                            <DisplayBill navigation={props.navigation} Data={dataBill}/>}
                                     </View>: null}
 
                                 {Seleted == 2 ?
@@ -287,7 +291,7 @@ export default function ProfileScreen (props,{navigation}){
                                         <View style={styles.datanull}>
                                             <Text style={{ alignItems:'center', fontSize: 14 }}>BẠN KHÔNG CÓ ĐƠN HÀNG NÀO</Text>
                                         </View>:
-                                        <DisplayBill Data={DXL}/>}
+                                        <DisplayBill  navigation={props.navigation}  Data={DXL}/>}
                                     </View>: null}
 
                                 {Seleted == 3 ? 
@@ -296,7 +300,7 @@ export default function ProfileScreen (props,{navigation}){
                                         <View style={styles.datanull}>
                                             <Text style={{ alignItems:'center', fontSize: 14 }}>BẠN KHÔNG CÓ ĐƠN HÀNG NÀO</Text>
                                         </View>:
-                                        <DisplayBill Data={DGH}/>}
+                                        <DisplayBill  navigation={props.navigation}  Data={DGH}/>}
                                     </View>: null}
 
                                 {Seleted == 4 ?
@@ -305,7 +309,7 @@ export default function ProfileScreen (props,{navigation}){
                                         <View style={styles.datanull}>
                                             <Text style={{ alignItems:'center', fontSize: 14 }}>BẠN KHÔNG CÓ ĐƠN HÀNG NÀO</Text>
                                         </View>:
-                                        <DisplayBill Data={DTT}/>}
+                                        <DisplayBill  navigation={props.navigation}  Data={DTT}/>}
                                     </View>: null}
                                 {Seleted == 5 ? 
                                     <View>
@@ -313,7 +317,7 @@ export default function ProfileScreen (props,{navigation}){
                                         <View style={styles.datanull}>
                                             <Text style={{ alignItems:'center', fontSize: 14 }}>BẠN KHÔNG CÓ ĐƠN HÀNG NÀO</Text>
                                         </View>:
-                                        <DisplayBill Data={DH}/>}
+                                        <DisplayBill  navigation={props.navigation}  Data={DH}/>}
                                     </View>: null}
                             <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10 }}>Quản Lý Tài Khoản</Text>
                             
