@@ -22,8 +22,6 @@ const [checkAll, setcheckAll] = useState(true);
 
 const dispatch = useDispatch();
 var sold = [];
-
-
 useEffect(() => {
     const set =  props.navigation.addListener('focus',()=>
     {
@@ -381,7 +379,7 @@ const renderItem = ({item, index})=>{
             <View style={{  flex: 1 }}>
                <FlatList
                 data = {Dataproduct}
-                keyExtractor= {(item,index)=>(index)}
+                keyExtractor= {(item,index)=>index}
                 renderItem={renderItem}
             />
             </View>}

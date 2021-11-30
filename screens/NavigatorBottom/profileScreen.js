@@ -420,5 +420,4 @@ const windowH = Dimensions.get('window').height;
             alignContent:'center',
             alignItems:'center',
         }
-
  })
