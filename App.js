@@ -14,6 +14,7 @@ import CheckOut from './screens/products/checkout';
 import Login from './screens/StartScreens/login';
 import SignUp from './screens/StartScreens/signup';
 import DetailsBill from './screens/StartScreens/detailsBill';
+import ProductCategory from './screens/products/productCategory';
 const Tab = createStackNavigator();
 
 const App = ()=>{
@@ -36,6 +37,7 @@ const App = ()=>{
           <Tab.Screen name="login" component={Login}/>
           <Tab.Screen name="signup" component={SignUp}/>
           <Tab.Screen name="deatilbill" component={DetailsBill} />
+          <Tab.Screen name="productCategory" component={ProductCategory} />
         </Tab.Navigator>
       </NavigationContainer>
   )

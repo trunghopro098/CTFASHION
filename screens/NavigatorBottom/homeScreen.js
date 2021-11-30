@@ -125,7 +125,6 @@ export default function HomeScreen({navigation}){
         const ArrDtaProductImage = [];
         const ArrProductNew = [];
         const res = await GETAPI.getAPI('/product/getProductNew/1');
-        console.log("duc rooif")
 
         // lấy 4 sản phẩm đầu tiên
         for(let i = 0; i <= 4; i++){
@@ -198,7 +197,7 @@ export default function HomeScreen({navigation}){
                     </Animated.View>
                 
                     <VirtualizedView setValue={handleSetValueScrollY}>      
-                        <CategoryScreen Data={Datacategory} />
+                        <CategoryScreen navigation={navigation} Data={Datacategory} />
                         <ProductHot Data={DataProducthot} navigation={navigation}/>
                         <Flashsales Data={DataProductFlashsale} navigation={navigation}/>
                         <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>

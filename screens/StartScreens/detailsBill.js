@@ -122,7 +122,21 @@ export default function DetailsBill ({navigation,route}){
             }
             
         }
-     
+    }
+    const handleRemoveBill = async()=>{
+        const data ={"code_order":codeBill,"status":3}
+        const res = await GETAPI.postDataAPI("/order/updateStatusBill",data);
+        if(res.msg){
+            if(res.msg==="Success"){
+                Alert.alert('CTFASHION',"Hủy đơn thành công");
+                setshowModalRemove(false)
+                navigation.goBack()
+            }
+            else{
+                Alert.alert('CTFASHION',"Có lỗi rồi");
+                setshowModalRemove(false)
+            }
+        }
     }
     const renderitemProduct = ({item,index})=>{
         return(
@@ -187,21 +201,7 @@ export default function DetailsBill ({navigation,route}){
             </View>
         )
     }
-    const handleRemoveBill = async()=>{
-        const data ={"code_order":codeBill,"status":3}
-        const res = await GETAPI.postDataAPI("/order/updateStatusBill",data);
-        if(res.msg){
-            if(res.msg==="Success"){
-                Alert.alert('CTFASHION',"Hủy đơn thành công");
-                setshowModalRemove(false)
-                navigation.goBack()
-            }
-            else{
-                Alert.alert('CTFASHION',"Có lỗi rồi");
-                setshowModalRemove(false)
-            }
-        }
-    }
+  
     const ModalRemoveBill = ()=>(
         <Modal
             visible={showModalRemove}
