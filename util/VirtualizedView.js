@@ -7,6 +7,7 @@ export default function VirtualizedView(props) {
       
       // nestedScrollEnabled
         contentContainerStyle={{ paddingTop:90,elevation:5 }}
+        showsVerticalScrollIndicator={false}
         onScroll={(e)=>{
           props.setValue(e);
         }} 

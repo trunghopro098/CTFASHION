@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,Alert} from "react-native"; 
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,Alert,ToastAndroid} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
@@ -58,7 +58,7 @@ export default function HomeScreen({navigation}){
         }else{
             const status = await getUser(token,dispatch);
             if(status===false){
-                Alert.alert('CTFASHION','Phiên đăng nhập của bạn hết hạn !!')
+                ToastAndroid.show("Phiên đăng nhập hết hạn !", ToastAndroid.SHORT);
                 setstatusUser(false)
             }else if(status=="block"){
                 Alert.alert('CTFASHION','Tài khoản của bạn đang bị khóa !!')
@@ -125,7 +125,6 @@ export default function HomeScreen({navigation}){
         const ArrDtaProductImage = [];
         const ArrProductNew = [];
         const res = await GETAPI.getAPI('/product/getProductNew/1');
-        console.log("duc rooif")
 
         // lấy 4 sản phẩm đầu tiên
         for(let i = 0; i <= 4; i++){
@@ -198,7 +197,7 @@ export default function HomeScreen({navigation}){
                     </Animated.View>
                 
                     <VirtualizedView setValue={handleSetValueScrollY}>      
-                        <CategoryScreen Data={Datacategory} />
+                        <CategoryScreen navigation={navigation} Data={Datacategory} />
                         <ProductHot Data={DataProducthot} navigation={navigation}/>
                         <Flashsales Data={DataProductFlashsale} navigation={navigation}/>
                         <ProductNew images ={DataProductNewImageSlideBox} Data = {DataProductNewSlideBox} navigation={navigation} DataNewproduct= {DataProductNew}/>

@@ -31,7 +31,8 @@ export default function TabNavigation(){
                     }
                     ],
                     tabBarShowLabel: false
-                }}>
+                }}
+            >
 
         <Stack.Screen name="Home" component={HomeScreen}
                 options={{

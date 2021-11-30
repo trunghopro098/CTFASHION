@@ -8,7 +8,7 @@ export default function CategoryScreen(props){
  const renderitem = ({item})=>{
         return(
         <View style={styles.item}>
-            <TouchableOpacity onPress={()=>{console.log("xin chaof")}}>
+            <TouchableOpacity onPress={()=>{props.navigation.navigate("productCategory",{idCategory:item.id,nameCategory:item.name})}}>
             <View style={styles.itemImage}>
                 <Image
                     source={{uri :SetHTTP(item.logo) }} 
