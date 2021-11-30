@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import {View, Text,StyleSheet,FlatList,Image,TouchableOpacity,Modal,Alert} from "react-native";
+import {View, Text,StyleSheet,FlatList,Image,TouchableOpacity,Modal,Alert,TextInput,ToastAndroid} from "react-native";
 import * as GETAPI from '../../util/fetchApi';
 import LoadingCircle from '../StartScreens/loadingCircle'
 import moment from 'moment';
@@ -7,6 +7,9 @@ import LottieView from "lottie-react-native";
 import {SetHTTP} from '../../util/setHTTP';
 import truncate from '../../util/truncate';
 import {FormatNumber} from '../../util/formatNumber'
+import { Rating } from 'react-native-ratings';
+import { useSelector } from "react-redux";
+import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function DetailsBill ({navigation,route}){
     const {codeBill} = route.params
     const [dataBill, setdataBill] = useState();
@@ -15,6 +18,8 @@ export default function DetailsBill ({navigation,route}){
     const [dataSale, setdataSale] = useState();
     const [totalPriceProduct, settotalPriceProduct] = useState(0);
     const [showModalRemove, setshowModalRemove] = useState(false);
+    const [showModalReview, setshowModalReview] = useState(false);
+    const currentUser = useSelector(state=>state.userReducer.currentUser);
     useEffect(() => {
         navigation.setOptions({
             headerShown:true,
@@ -29,7 +34,7 @@ export default function DetailsBill ({navigation,route}){
         settotalPriceProduct(0)
         setshowContent(false)
         getBill()
-    },[codeBill])
+    },[codeBill,showModalReview])
     const getBill = async()=>{
         let tmp = 0;
         const data = {"idOrder":codeBill}
@@ -70,6 +75,55 @@ export default function DetailsBill ({navigation,route}){
             return "Trả tiền mật"
         }
     }
+    const handleEditReview = async(item)=>{
+        if(item.reviewStar===null){
+            // ToastAndroid.show("Bạn phải đánh giá sao !", ToastAndroid.SHORT);
+            ToastAndroid.showWithGravity(
+                "Bạn phải đánh giá sao",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+              );
+        }else{
+            const data = {"idReview":item.idReview,"comment":item.comment,
+            "reviewStar":item.reviewStar}
+            const res = await GETAPI.postDataAPI("/review/editReview",data)
+            if(res.msg){
+                if(res.msg==="Success"){
+                    getBill()
+                    ToastAndroid.show("Cập nhật đánh giá thành công !", ToastAndroid.SHORT);
+                }else{
+                    ToastAndroid.show("Có lỗi rồi !", ToastAndroid.SHORT);
+                }
+            }
+        }
+    }
+    const handleAddReview = async(item)=>{
+        if(item.reviewStar===null){
+            // ToastAndroid.show("Bạn phải đánh giá sao !", ToastAndroid.SHORT);
+            ToastAndroid.showWithGravity(
+                "Bạn phải đánh giá sao",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+              );
+        }else{
+            const idUser = currentUser.id;
+            const idProduct = item.idProduct;
+            const idOrderDetails = item.id;
+            const data = {"idUser":idUser,"idProduct":idProduct,"comment":item.comment,
+            "reviewStar":item.reviewStar,"idOrderDetails":idOrderDetails}
+            const res = await GETAPI.postDataAPI("/review/addReview",data)
+            if(res.msg){
+                if(res.msg==="Success"){
+                    getBill()
+                    ToastAndroid.show("Đánh giá thành công !", ToastAndroid.SHORT);
+                }else{
+                    ToastAndroid.show("Có lỗi rồi !", ToastAndroid.SHORT);
+                }
+            }
+            
+        }
+     
+    }
     const renderitemProduct = ({item,index})=>{
         return(
             <View style={{ flex:1,flexDirection:'row',padding:10 }}>
@@ -80,6 +134,56 @@ export default function DetailsBill ({navigation,route}){
                     <Text>{`Số lượng : ${item.quanity}`}</Text>
                     <Text>{`Tạm tính : ${FormatNumber(item.price*item.quanity)} đ`}</Text>
                 </View>
+            </View>
+        )
+    }
+    const renderitemProductReview = ({item,index})=>{
+        return(
+            <View style={{ flex:1 }}>
+            <View style={{ flex:1,flexDirection:'row',padding:10 }}>
+                <Image source={{uri:SetHTTP(item.image)}} style={{width:70,height:100,marginRight:10}}/>
+                 <View style={{ flexDirection:'column'}}>
+                    <Text style={{ fontWeight:'bold' }}>{truncate(item.name_product)}</Text>
+                    <Text>{`Màu/Size : ${item.size}`}</Text>
+                
+                </View>
+            </View>
+            <View style={{ alignItems:'flex-start' }}>
+            <Rating
+                showRating={false}
+                onFinishRating={(value)=>item.reviewStar=value}
+                style={{ paddingVertical: 10 }}
+                imageSize={24}
+                ratingColor="orange"
+                startingValue={item.reviewStar}
+            />
+            </View>
+            <TextInput
+                style={{ borderColor:"gray", borderWidth: 0.2,padding: 5,marginTop:10,marginBottom:10 }}
+                underlineColorAndroid="transparent"
+                placeholder="Nhập đánh giá"
+                placeholderTextColor="grey"
+                numberOfLines={5}
+                multiline={true}
+                defaultValue={item.comment}
+                onChangeText={(e)=>item.comment=e}
+            />
+            {item.reviewStar===null?
+            <TouchableOpacity 
+                style={{padding:10,backgroundColor:'tomato'}}
+                onPress={()=>handleAddReview(item)}
+            >
+                <Text style={{color:'white',textAlign:'center' }}>Đánh giá sản phẩm</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity 
+                style={{padding:10,backgroundColor:'tomato'}}
+                onPress={()=>handleEditReview(item)}
+            >
+                <Text style={{color:'white',textAlign:'center' }}>Chỉnh sửa đánh giá</Text>
+            </TouchableOpacity>
+            }
+       
             </View>
         )
     }
@@ -127,11 +231,53 @@ export default function DetailsBill ({navigation,route}){
             </View>
         </Modal> 
     )
+    const ModalReview = ()=>(
+        <Modal
+            visible={showModalReview}
+            animationType="slide"
+            transparent={true}
+        >
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                <View style={{ position:'absolute',top:20,right:20 }}>
+                    <TouchableOpacity onPress={()=>setshowModalReview(false)}>
+                        <AntDesign name="close" color="gray" size={20}/>
+                    </TouchableOpacity>
+                </View>
+                    <Text style={{ fontWeight:'bold',marginBottom:10,fontSize:16,textAlign:'center' }}>
+                        Đánh giá sản phẩm 
+                    </Text>
+                    <View style={{ flex:1 }}>
+                    <FlatList 
+                        data={dataProduct}
+                        renderItem= {renderitemProductReview}
+                        keyExtractor= {(item,index)=>index}
+                        contentContainerStyle={{paddingBottom:20}}
+                        showsVerticalScrollIndicator={false}
+                        ListFooterComponent={()=>(
+                        <View style={{ alignItems:'center' }}>
+                            <TouchableOpacity 
+                                style={{ padding:10,backgroundColor:'red',width:80,alignItems:'center',borderRadius:10,marginTop:10 }}
+                                onPress={()=>setshowModalReview(false)}
+                            >
+                                <Text style={{ color:'white' }}>Đóng</Text>
+                            </TouchableOpacity>
+                        </View>
+                        )}
+                    />
+                    </View>
+                
+                    
+                </View>
+            </View>
+        </Modal> 
+    )
     return (
         <View style={{ flex:1 }}>
             {showContent ?
             <View style={styles.wrapper}>
                 <ModalRemoveBill />
+                <ModalReview />
                 <Text style={{ fontSize:18,fontWeight:'bold' }}>{statusBill(dataBill.status)}</Text>
                 <Text>Phương thức thanh toán : {methodpayment(dataBill.method_payment)}</Text>
                 <Text>Cập nhật ngày : {moment(dataBill.update_at).format('YYYY-MM-DD HH:mm:ss')}</Text>
@@ -168,6 +314,7 @@ export default function DetailsBill ({navigation,route}){
                             padding:10,
                             width:150,
                         }}
+                        onPress={()=>setshowModalReview(true)}
                     >
                         <Text style={{ textAlign:'center' }}>Đánh giá ngay</Text>    
                     </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,Alert} from "react-native"; 
+import { SafeAreaView,StyleSheet,StatusBar,Animated,Dimensions,Alert,ToastAndroid} from "react-native"; 
 import HeaderScreen from "./headerScreen";
 import CategoryScreen from "../products/category";
 import VirtualizedView from "../../util/VirtualizedView";
@@ -58,7 +58,7 @@ export default function HomeScreen({navigation}){
         }else{
             const status = await getUser(token,dispatch);
             if(status===false){
-                Alert.alert('CTFASHION','Phiên đăng nhập của bạn hết hạn !!')
+                ToastAndroid.show("Phiên đăng nhập hết hạn !", ToastAndroid.SHORT);
                 setstatusUser(false)
             }else if(status=="block"){
                 Alert.alert('CTFASHION','Tài khoản của bạn đang bị khóa !!')
