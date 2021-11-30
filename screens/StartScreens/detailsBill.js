@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import {View, Text,StyleSheet,FlatList,Image,TouchableOpacity,Modal,Alert,TextInput,ToastAndroid} from "react-native";
+import {View, Text,StyleSheet,FlatList,Image,Dimensions, TouchableOpacity,Modal,Alert,TextInput,ToastAndroid, ScrollView} from "react-native";
 import * as GETAPI from '../../util/fetchApi';
 import LoadingCircle from '../StartScreens/loadingCircle'
 import moment from 'moment';
@@ -10,6 +10,7 @@ import {FormatNumber} from '../../util/formatNumber'
 import { Rating } from 'react-native-ratings';
 import { useSelector } from "react-redux";
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import VirtualizedViewFlaslist from "../../util/VituallizedViewFlast";
 export default function DetailsBill ({navigation,route}){
     const {codeBill} = route.params
     const [dataBill, setdataBill] = useState();
@@ -42,6 +43,8 @@ export default function DetailsBill ({navigation,route}){
         const product = await GETAPI.postDataAPI("/order/getProductByIdBill",data)
         setdataBill(bill[0])
         setdataProduct(product)
+        console.log("Data đây ")
+        console.log(product)
         product.map(e=>tmp+=(e.price*e.quanity))
         settotalPriceProduct(tmp)
         if(bill[0].idSale==null){
@@ -273,7 +276,7 @@ export default function DetailsBill ({navigation,route}){
         </Modal> 
     )
     return (
-        <View style={{ flex:1 }}>
+        <VirtualizedViewFlaslist style={{ flex:1 }}>
             {showContent ?
             <View style={styles.wrapper}>
                 <ModalRemoveBill />
@@ -292,10 +295,10 @@ export default function DetailsBill ({navigation,route}){
                     <View style={{ flexDirection: 'column'}}>
                         <View style={{  flexDirection: 'row',alignItems:'center' }}>
                             <Text style={{ fontWeight:'bold',fontSize:16 }}>{dataBill.name}</Text>
-                            <Text style={{ marginLeft:20,fontSize:14 }}>{dataBill.phone}</Text>
+                            <Text style={{ marginLeft:20,fontSize:14}}>{dataBill.phone}</Text>
                         </View>
                         <Text style={{fontSize:14 }}>{dataBill.email}</Text>
-                        <Text style={{ marginTop:5 }}>{dataBill.address}</Text>
+                        <Text style={{ marginTop:5 , maxWidth:windowW*0.78 }}>{dataBill.address}</Text>
                     </View>
                     </View>
                 </View>
@@ -363,9 +366,10 @@ export default function DetailsBill ({navigation,route}){
                 <LoadingCircle />
             </View>
             }
-        </View>
+        </VirtualizedViewFlaslist>
     )
 }
+const windowW = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     wrapper:{
         flex: 1,
