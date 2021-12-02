@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import {View, Text,StyleSheet,FlatList,Image,Dimensions, TouchableOpacity,Modal,Alert,TextInput,ToastAndroid, ScrollView} from "react-native";
+import {View, Text,StyleSheet,FlatList,Image,Dimensions, TouchableOpacity,Modal,Alert,TextInput,ToastAndroid} from "react-native";
 import * as GETAPI from '../../util/fetchApi';
 import LoadingCircle from '../StartScreens/loadingCircle'
 import moment from 'moment';
@@ -362,7 +362,7 @@ export default function DetailsBill ({navigation,route}){
 
             </View>
             :
-            <View style={{ flex:1,justifyContent:'center',alignItems: 'center'}}>
+            <View style={{ flex:1,justifyContent:'center',alignItems: 'center',height:windowH*0.9}}>
                 <LoadingCircle />
             </View>
             }
@@ -370,6 +370,7 @@ export default function DetailsBill ({navigation,route}){
     )
 }
 const windowW = Dimensions.get('window').width;
+const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     wrapper:{
         flex: 1,
@@ -381,7 +382,8 @@ const styles = StyleSheet.create({
         borderColor:'gray',
         padding:10,
         marginTop:10
-    },   centeredView: {
+    },   
+    centeredView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
