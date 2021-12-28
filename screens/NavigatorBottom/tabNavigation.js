@@ -8,6 +8,10 @@ import FavoriteScreen from './favoriteScreen';
 import GiftScreen from './giftScreen';
 import ProfileScreen from './profileScreen';
 import { useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const Stack = createBottomTabNavigator();
 export default function TabNavigation(){
     const quanityCart = useSelector(state=>state.productReducer.quanityCart);
@@ -15,37 +19,28 @@ export default function TabNavigation(){
         return(
             <View style={{ flex:1 }}>
             <Stack.Navigator
-          
-            screenOptions={{
-                    headerShown:false,
-                    tabBarStyle:[{  
-                        style:{
-                            position : "absolute",
-                            borderTopLeftRadius  :11, 
-                            borderTopRightRadius : 11,
-                            height : 60,
-                            elevation : 0,
-                            backgroundColor : '#ffffff',
-                            ...styles.shadow,
-                      }
-                    }
-                    ],
-                    tabBarShowLabel: false
+                screenOptions={{
+                        headerShown:false,
+                        tabBarStyle:[{  
+                            style:{
+                                position : "absolute",
+                                borderTopLeftRadius  :11, 
+                                borderTopRightRadius : 11,
+                                height : 60,
+                                elevation : 0,
+                                backgroundColor : '#ffffff',
+                                ...styles.shadow,
+                            }
+                        }],
+                        tabBarShowLabel: false
                 }}
             >
 
         <Stack.Screen name="Home" component={HomeScreen}
                 options={{
                 tabBarIcon: ({focused})=>(
-                    <View style={{ alignItems : "center", justifyContent : "center", top : 5 }}>
-                    <Image
-                    source={ require('../../assets/icons/home.png')}
-                    resizeMode="contain"
-                    style={{
-                        width: 25,
-                        height : 25,
-                        tintColor : focused ? '#e32f45' : '#748c94'         
-                        }}/>
+                    <View style={{ alignItems : "center", justifyContent : "center",top:3}}>
+                        <Ionicons name="home-outline" size={22} color={focused ? '#e32f45' : '#748c94'}/>
                         <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Trang chủ</Text>
                     </View>
                 )
@@ -54,15 +49,8 @@ export default function TabNavigation(){
         <Stack.Screen name="Favorite" component={FavoriteScreen}
                 options={{
                     tabBarIcon: ({focused})=>(
-                        <View style={{ alignItems : "center", justifyContent : "center", top : 5 }}>
-                        <Image
-                        source={ require('../../assets/icons/favourite.png')}
-                        resizeMode="contain"
-                        style={{
-                            width: 25,
-                            height : 25,
-                            tintColor : focused ? '#e32f45' : '#748c94'         
-                            }}/>
+                        <View style={{ alignItems : "center", justifyContent : "center",top:3}}>
+                            <Feather name="heart" size={22} color={focused ? '#e32f45' : '#748c94'}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Yêu thích</Text>
                         </View>
                     ),
@@ -72,15 +60,8 @@ export default function TabNavigation(){
          <Stack.Screen name="Gift" component={GiftScreen}
                  options={{
                     tabBarIcon: ({focused})=>(
-                        <View style={{ alignItems : "center", justifyContent : "center", top : 5 }}>
-                        <Image
-                        source={ require('../../assets/icons/gift.png')}
-                        resizeMode="contain"
-                        style={{
-                            width: 25,
-                            height : 25,
-                            tintColor : focused ? '#e32f45' : '#748c94'         
-                            }}/>
+                        <View style={{ alignItems : "center", justifyContent : "center",top:3}}>
+                            <Ionicons name="gift-outline" size={22} color={focused ? '#e32f45' : '#748c94'}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Khuyến mãi</Text>
                         </View>
                     )
@@ -89,15 +70,8 @@ export default function TabNavigation(){
         <Stack.Screen name="Cart" component={CartScreen}
                 options={{
                     tabBarIcon: ({focused})=>(
-                        <View style={{ alignItems : "center", justifyContent : "center", top : 5 }}>
-                        <Image
-                        source={ require('../../assets/icons/cart.png')}
-                        resizeMode="contain"
-                        style={{
-                            width: 25,
-                            height : 25,
-                            tintColor : focused ? '#e32f45' : '#748c94'         
-                            }}/>
+                        <View style={{ alignItems : "center", justifyContent : "center" ,top:3}}>
+                            <AntDesign name="shoppingcart" size={24} color={focused ? '#e32f45' : '#748c94'}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Giỏ hàng</Text>
                         </View>
                     ),
@@ -108,15 +82,8 @@ export default function TabNavigation(){
         <Stack.Screen name="Profile" component={ProfileScreen}
                 options={{
                     tabBarIcon: ({focused})=>(
-                        <View style={{ alignItems : "center", justifyContent : "center", top : 5 }}>
-                        <Image
-                        source={ require('../../assets/icons/profile.png')}
-                        resizeMode="contain"
-                        style={{
-                            width: 25,
-                            height : 25,
-                            tintColor : focused ? '#e32f45' : '#748c94'         
-                            }}/>
+                        <View style={{ alignItems : "center", justifyContent : "center",top:3 }}>
+                            <Feather name="user" size={24} color={focused ? '#e32f45' : '#748c94'}/>
                             <Text style={{ color : focused ? '#e32f45' : '#748c94', fontSize : 12}}>Tài khoản</Text>
                         </View>
                     )

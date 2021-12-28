@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import * as GETAPI from '../../util/fetchApi';
 import { FormatNumber } from "../../util/formatNumber";
 import { useIsFocused } from "@react-navigation/native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import {SetHTTP} from "../../util/setHTTP";
 const DisplayBill =(props)=>{
     const Data = props.Data;
     return(
@@ -34,34 +37,34 @@ const DisplayBill =(props)=>{
                                 justifyContent:'flex-start',
                    
                              }}>
-                                <Text style={{...styles.TextBill,width: windowW*0.15,maxWidth: windowW*0.15,}}
+                                <Text style={{...styles.TextBill,width: windowW*0.15,maxWidth: windowW*0.15,textAlign:'center',padding:5}}
                                  >#{Data.id}</Text>
-                                <Text style={{ ...styles.TextBill,width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'right',paddingRight:5 }}>{FormatNumber(Data.total_price)} đ</Text>
+                                <Text style={{ ...styles.TextBill,width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'center',padding:5 }}>{FormatNumber(Data.total_price)} đ</Text>
                                 <Text style={{...styles.TextBill, color: (Data.status==0) ? 'red':(Data.status)==1?'blue':(Data.status==2)?'green':'grey',
-                                                     width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'center'}}>
+                                                     width: windowW*0.23,maxWidth: windowW*0.23, textAlign:'center',padding:5}}>
                                                 {(Data.status==0) ? 'Đang xử lý':(Data.status)==1?'Đang Giao Hàng':(Data.status==2)?'Đã Hoàn Thành':'Đã Hủy'}
-                                    </Text>
-                                    <TouchableOpacity 
-                                        style={{
-                                            color: 'black', 
-                                            fontSize: 12,
-                                            marginRight: 1,
-                                            borderRightWidth: 0.5,
-                                            width: windowW*0.15 ,
-                                            flexDirection:'row',
-                                            alignContent:'center', 
-                                            alignItems:'center',
-                                            justifyContent:'center',
-                                            maxWidth: windowW*0.15,
-                                            borderBottomWidth:0.5, 
-                                            borderBottomColor: 'purple',
-                                            borderRightColor:'purple' 
-                                        }}
-                                        onPress={()=>props.navigation.navigate("deatilbill",{codeBill:Data.code_order})}
-                                        >
-                                                <Image source={require('../../assets/icons/eye100px.png')} resizeMode="cover"
-                                                    style={{width: 20, height: 20}}/>
-                                    </TouchableOpacity>
+                                </Text>
+                                <TouchableOpacity 
+                                    style={{
+                                        color: 'black', 
+                                        fontSize: 12,
+                                        marginRight: 1,
+                                        borderRightWidth: 0.5,
+                                        width: windowW*0.15 ,
+                                        flexDirection:'row',
+                                        alignContent:'center', 
+                                        alignItems:'center',
+                                        justifyContent:'center',
+                                        maxWidth: windowW*0.15,
+                                        borderBottomWidth:0.5, 
+                                        borderBottomColor: 'purple',
+                                        borderRightColor:'purple' 
+                                    }}
+                                    onPress={()=>props.navigation.navigate("deatilbill",{codeBill:Data.code_order})}
+                                    >
+                                            <Image source={require('../../assets/icons/eye100px.png')} resizeMode="cover"
+                                                style={{width: 20, height: 20}}/>
+                                </TouchableOpacity>
                                 
                                 <Text style={{ 
                                             ...styles.TextBill,
@@ -69,7 +72,7 @@ const DisplayBill =(props)=>{
                                             maxWidth: windowW*0.15, 
                                             fontSize: 11, width: windowW*0.21,
                                             textAlign:'center',
-                                            maxWidth: windowW*0.16 }}>
+                                            maxWidth: windowW*0.16 ,padding:5}}>
                                         {Data.create_at.substring(0, 10)} 
                                 </Text>
                              </View>
@@ -122,7 +125,6 @@ export default function ProfileScreen (props,{navigation}){
                     arrDH.push(res[i]);
                 }
             }
-            console.log(arrDXL)
             setDXL(arrDXL);
             setDGH(arrDGH);
             setDTT(arrDTT);
@@ -157,43 +159,62 @@ export default function ProfileScreen (props,{navigation}){
             <ScrollView>
             {currentUser.id!==undefined?
                     <View>
-                        <View style={{
-                            flex: 1,
-                            padding: 10,
-                            flexDirection:'row',
-                            justifyContent: 'flex-start',
-                            marginTop: 10,
-                            borderBottomWidth: 0.5,
-                            borderBottomColor: 'purple',
-                            marginBottom: 5
-                        }}>                     
-                            <Image source={require('../../assets/image/profilenet.jpg')} resizeMode="cover"
-                                style={{width: 60, height: 60, borderColor: 'red', borderWidth: 0.5, borderRadius: 50}}/>
-                                <View style={{             
-                                        flexDirection: 'column',
-                                        justifyContent: 'flex-end',
-                                    }}>
+                        <View 
+                            style={{
+                                flex: 1,
+                                padding: 10,
+                                flexDirection:'row',
+                                justifyContent: 'flex-start',
+                                borderBottomWidth: 0.5,
+                                borderBottomColor: 'purple',
+                                marginBottom: 5
+                            }}
+                        >   
+                        <TouchableOpacity >  
+                            {currentUser.avartar===null ?  
+                                <FontAwesome name="user-circle-o" color="gray" size={55}/>              
+                                :
+                                <Image 
+                                    source={{ uri:SetHTTP(currentUser.avartar)}} resizeMode="cover"
+                                    style={{width: 60, height: 60, borderColor: 'red', borderWidth: 0.5, borderRadius: 50}}
+                                />
+                            }
+                        </TouchableOpacity>
+                            <View 
+                                style={{             
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
                                     
-                                        <Text style={{
-                                            marginLeft: 15,
-                                            color: 'black',
-                                            fontWeight: 'bold'
-                                        }}>{currentUser.name}</Text>
+                                <Text 
+                                    style={{
+                                        marginLeft: 15,
+                                        color: 'black',
+                                        fontWeight: 'bold', 
+                                        fontSize:16
+                                    }}
+                                >
+                                    {currentUser.name}
+                                </Text>
                                         
-                                        <View style={{             
+                                <TouchableOpacity 
+                                    style={{             
                                         flexDirection: 'row',
                                         justifyContent: 'flex-start',
                                         marginTop: 7,
-                                    }}>
-                                            <Image source={require('../../assets/icons/edit_user_100px.png')} resizeMode="cover"
-                                            style={{width: 16, height: 16, marginLeft :15}}/>
-                                            <Text style={{ color:'grey', marginLeft: 10,fontSize: 10 }}>Chỉnh sửa thông tin cá nhân</Text>
-                                        </View>
+                                    }}
+                                >
+                                    <MaterialCommunityIcons 
+                                        name="folder-edit-outline" size={18} color="gray"
+                                        style={{marginLeft :15}}
+                                    />
+                                    <Text style={{ color:'grey', marginLeft: 10,fontSize: 12 }}>Chỉnh sửa thông tin cá nhân</Text>
+                                </TouchableOpacity>
                                 </View> 
-
                         </View>
                         
-                            <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10 }}>Thông Tin Tài Khoản</Text>
+                        <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10 }}>Thông Tin Tài Khoản</Text>
                             {isLoading ? null :
                                     <View style={{ 
                                         flexDirection: 'column',
@@ -257,9 +278,9 @@ export default function ProfileScreen (props,{navigation}){
                             
 
                             <ScrollView
-                             horizontal={true}
-                             style={{ paddingBottom: 8 , marginRight: 15}}
-                             >
+                                horizontal={true}
+                                style={{ paddingBottom: 8 , marginRight: 15}}
+                            >
                                 <TouchableOpacity onPress={()=>{setSeleted(true)}} style={{...styles.billinfor, marginLeft: 8,backgroundColor: Seleted==true?'pink':null}}>
                                     <Text style={{ color: 'black',textAlign:'center' }}>Tất cả</Text>
                                 </TouchableOpacity>
@@ -319,39 +340,42 @@ export default function ProfileScreen (props,{navigation}){
                                         </View>:
                                         <DisplayBill  navigation={props.navigation}  Data={DH}/>}
                                     </View>: null}
-                            <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10 }}>Quản Lý Tài Khoản</Text>
+                            <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10,marginTop:10 }}>Quản Lý Tài Khoản</Text>
                             
                             <View style={{ flexDirection:'column' }}>
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start',paddingTop:10,paddingBottom:10 }}>
                                     <Image source={require('../../assets/icons/settings_52px.png')} resizeMode="cover"
                                     style={{width: 20, height: 20,marginLeft: 15,marginTop: 5 }}/>
-                                    <Text style={{ 
+                                    <Text 
+                                        style={{ 
                                             color: 'grey',
                                             marginLeft: 10,
                                             marginTop: 5
-                                            }}>
-                                                Cập nhật thông tin tài khoản
+                                        }}>
+                                            Cập nhật thông tin tài khoản
                                     </Text>
                                 </TouchableOpacity>
   
                                 <TouchableOpacity 
                                     onPress={()=>{
-                                    Alert.alert('CTFASHION','Bạn muốn đăng xuất !!!',[
-                                        {
-                                            text: 'Cancel',
-                                            style:'cancel'
-                                        },
-                                        {
-                                            text: "Ok",
-                                            onPress:()=>{handleLogout()
-                                                    }
+                                        Alert.alert('CTFASHION','Bạn muốn đăng xuất !!!',[
+                                            {
+                                                text: 'Cancel',
+                                                style:'cancel'
+                                            },
+                                            {
+                                                text: "Ok",
+                                                onPress:()=>{handleLogout()}
                                             }
-                                        ])
+                                            ])
                                     }} 
-                                    style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
-                                    >
-                                     <Image source={require('../../assets/icons/shutdown_48px.png')} resizeMode="cover"
-                                    style={{width: 20, height: 20,marginLeft: 15,marginTop: 5 }}/>
+                                    style={{ flexDirection: 'row', justifyContent: 'flex-start',marginBottom:15 }}
+                                >
+                                    <Image 
+                                        source={require('../../assets/icons/shutdown_48px.png')} 
+                                        resizeMode="cover"
+                                        style={{width: 20, height: 20,marginLeft: 15,marginTop: 5 }}
+                                    />
                                     <Text style={{ 
                                         color: 'red',
                                         marginLeft: 10,
@@ -364,10 +388,19 @@ export default function ProfileScreen (props,{navigation}){
                      </View>
                     :
                     <View style={{flex:1, flexDirection:'column', justifyContent:'center', alignContent:'center', alignItems:'center', marginTop: windowH*0.40 }}>
-                        <Text style={{ color: 'red', fontWeight:'bold', textAlign:'center'}}>ĐĂNG NHẬP ĐỂ NHẬN ĐƯỢC NHIỀU ƯU ĐÃI TỪ CTFASHION!!</Text>
+                        <Text style={{ color: 'gray', textAlign:'center',marginBottom:10,fontSize:15}}>Bạn cần đăng nhập để truy cập mục này !</Text>
                         <TouchableOpacity 
                             onPress={()=>props.navigation.navigate("login")}
-                            style={{width: 140, height: 40 , backgroundColor:'green',flexDirection:'row', justifyContent:'center', alignContent:'center', alignItems:'center'}}
+                            style={{
+                                width: 140, 
+                                height: 40 , 
+                                backgroundColor:'tomato',
+                                flexDirection:'row', 
+                                justifyContent:'center', 
+                                alignItems:'center',
+                                elevation:5,
+                                borderRadius:10
+                            }}
                         >
                             <Text style={{ color: 'white', fontWeight:'bold', textAlign:'center'}}>ĐĂNG NHẬP NGAY</Text>
 

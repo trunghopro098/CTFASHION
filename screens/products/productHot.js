@@ -6,9 +6,9 @@ import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 import { LoadingSkeletonSieuSale } from "../StartScreens/loadingSkeleton";
 export default function ProductHot(props){
-const data = props.Data
-// console.log(data)
-const renderitem = ({item,index})=>{
+    const data = props.Data
+  
+    const renderitem = ({item,index})=>{
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
         <View style={{ marginHorizontal: 6 }}>
@@ -55,7 +55,7 @@ const renderitem = ({item,index})=>{
     return(
 
         <View>
-            {data.length===0 || data==undefined ? 
+            { data==undefined || data.length===0 ? 
             <><LoadingSkeletonSieuSale/></>:
             <>
             <LinearGradient  colors= {["#C790E5","#EDDAF5"]} style={styles.container}>

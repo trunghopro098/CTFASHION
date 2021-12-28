@@ -15,7 +15,7 @@ export const getUser = async(token,dispatch)=>{
             return "block";
         }else{
             dispatch(updateUser(res[0]));
-            console.log(res[0])
+            // console.log(res[0])
             return true  
         }
        

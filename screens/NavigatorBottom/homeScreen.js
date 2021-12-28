@@ -36,7 +36,10 @@ export default function HomeScreen({navigation}){
         outputRange:[0,-50]
     })
     useEffect(() => {
-        checkUser()
+        navigation.addListener('focus',()=>{
+            checkUser()
+        })
+        
     },[])
     useEffect(() => {
         getCategory();

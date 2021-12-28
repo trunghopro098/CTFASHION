@@ -45,7 +45,6 @@ export default function Login ({navigation,route}){
                 if(status==="block"){
                     Alert.alert('CTFASHION',"Tài khoản của bạn đang bị khóa")
                 }else if(status){
-                    console.log('fdsgdfhfgnfn')
                     navigation.navigate("home")
                     await AsyncStorage.setItem("@token",res.token)
                    
@@ -126,7 +125,7 @@ export default function Login ({navigation,route}){
                             onPress={handleSubmit}
                             title="Đăng nhập"
                             disabled={!isValid}
-                            
+                            color="tomato"
                         />
                     </View>
                     </>

@@ -38,7 +38,6 @@ export default function FavoriteScreen (props,{navigation}){
             let countCart = arr.length;
             const data1 = {"data": getData}
             const res = await GETAPI.postDataAPI('/order/getProductFavorite',data1);
-            console.log(res)
             setcountItemcart(countCart)
             dispatch(updatequantityFavorite(countCart))
             setDataproduct(res);
@@ -245,13 +244,13 @@ export default function FavoriteScreen (props,{navigation}){
             </>:
             <View>
                     <LottieView  
-                            source={require('../../assets/lottierfiles/lovehearts12.json')}
-                            style={{ width:windowW*0.4, height:windowH*0.9,marginLeft: windowW*0.06}}
-                            autoPlay
-                            loop                   
-                        />
+                        source={require('../../assets/lottierfiles/lovehearts12.json')}
+                        style={{ width:windowW*0.4, height:windowH*0.9,marginLeft: windowW*0.06,opacity:0.5}}
+                        autoPlay
+                        loop                   
+                    />
                         <View style= {{width:'100%', height: '100%', position:'absolute',flexDirection: 'column', justifyContent: 'center', backgroundColor:'transparent',alignContent:'center' }}>
-                            <Text style= {{ textAlign:'center', color: 'red' }}>KHÔNG CÓ SẢN PHẨM YÊU THÍCH</Text>
+                            <Text style= {{ textAlign:'center', color: 'gray' }}>Không có sản phẩm yêu thích...</Text>
                         </View>
                         
             </View>

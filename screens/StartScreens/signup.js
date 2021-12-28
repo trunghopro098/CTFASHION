@@ -226,7 +226,7 @@ export default function SignUp ({navigation}){
                                 onPress={handleSubmit}
                                 title="Đăng ký"
                                 disabled={!isValid}
-                                
+                                color="tomato"
                             />
                         </View>
                         </>

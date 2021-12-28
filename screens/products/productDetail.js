@@ -149,7 +149,6 @@ export default function Productdetail(props,{navigation}){
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleDelete, setModalVisibleDelete] = useState(false);
     const [modalVisibleAddcart, setmodalVisibleAddcart] = useState(false)
-
     const [selectedValue, setSelectedValue] = useState();
     const [DataEnventory, setDataEnventory] = useState([]);
     const [quantity, setquantity] = useState(0);// số lượng của sản phẩm trên enventory
@@ -197,7 +196,6 @@ export default function Productdetail(props,{navigation}){
     const getProductType = async()=>{
         try {
             const res = await GETAPI.postDataAPI('/product/getProductByType',idProductType);
-            console.log(res)
             for( let i= 0; i < res.length ; i++){//xoa bỏ sản phẩm đã hiển thị
                 if(res[i].id === Data.idProduct){
                     res.splice(i,1);
@@ -262,16 +260,18 @@ export default function Productdetail(props,{navigation}){
             let getData = await AsyncStorage.getItem('FAVORITE');
             if(getData != null){
                 arr = JSON.parse(getData);
-                for(let i = 0; i < arr.length; i++){
-                    if(arr[i].id === id){
-                        arr.splice(i,1);
+                if(arr.length===1){
+                    await AsyncStorage.removeItem("FAVORITE");
+                }else{
+                    for(let i = 0; i < arr.length; i++){
+                        if(arr[i].id === id){
+                            arr.splice(i,1);
+                        }
                     }
+                    await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
                 }
+              
             }
-            await AsyncStorage.removeItem("FAVORITE");
-            await AsyncStorage.setItem("FAVORITE",JSON.stringify(arr))
-            // alert('đã xoa khoi thuw mucj yeu thich');
-            // console.log(arr)
             setisFavourite(false)
             setModalVisibleDelete(true)
         } catch (error) {
