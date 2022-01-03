@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {View, Text, Modal, StyleSheet, Pressable} from 'react-native';
 import LottieView from "lottie-react-native";
 export default function ModalFavorite(props){
