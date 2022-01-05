@@ -20,6 +20,7 @@ const [isLoading, setisLoading] = useState(true);
 const [countItemcart, setcountItemcart] = useState(0)
 const [checkAll, setcheckAll] = useState(true);
 
+
 const dispatch = useDispatch();
 var sold = [];
 useEffect(() => {
@@ -41,6 +42,7 @@ const getDataAnsynStore = async()=>{
         const countCart = arr.length;
         const data1 = {"data": getData}
         const res = await GETAPI.postDataAPI('/order/getProductByCartApp',data1);
+        console.log(res)
         setcountItemcart(countCart)
         dispatch(updateQuanityProduct(countCart))
         setDataproduct(res);
@@ -67,7 +69,7 @@ const Increase = async(id,option)=>{
     // console.log(qty)
     let dataAnsynstore = DataAnsynStore;
     for(let i = 0; i < dataAnsynstore.length ; i++){
-        if(dataAnsynstore[i].id == id){
+        if(dataAnsynstore[i].id == id && dataAnsynstore[i].option == option ){
             if(qty == 0){
                 dataAnsynstore[i].quanity =0;
                 Alert.alert('CTFASHION',`Sản phẩm trong kho đã hết, xin vui lòng !!`)
@@ -89,10 +91,13 @@ const Increase = async(id,option)=>{
     getDataAnsynStore()
 }
 
-const Reduce = async(id)=>{
+const Reduce = async(id,option)=>{
     let dataAnsynstore = DataAnsynStore;
+    console.log(id)
+    console.log(option)
+    console.log(dataAnsynstore)
     for(let i = 0; i < dataAnsynstore.length ; i++){
-        if(dataAnsynstore[i].id == id){
+        if(dataAnsynstore[i].id == id && dataAnsynstore[i].option == option  ){
             if(dataAnsynstore[i].quanity == 1){
                 Alert.alert('CTFASHION','Bạn muốn xóa sản phẩm này !!!',[
                     {
@@ -114,7 +119,6 @@ const Reduce = async(id)=>{
                             }else{
                                 removeAllCart();
                             }
-  
                         }  
                     }
                 ])
@@ -294,7 +298,7 @@ const renderItem = ({item, index})=>{
                                         let dataAnsynstore = DataAnsynStore;
                                         if(dataAnsynstore.length > 1){
                                             for(let j = 0;j<=dataAnsynstore.length-1;j++){ 
-                                                if(dataAnsynstore[j].id==item[0].id){
+                                                if(dataAnsynstore[j].id==item[0].id && dataAnsynstore[j].option==item.option) {
                                                     dataAnsynstore.splice(j,1)
                                                     await AsyncStorage.setItem("CART",JSON.stringify(dataAnsynstore))
                                                     getDataAnsynStore()
@@ -325,7 +329,7 @@ const renderItem = ({item, index})=>{
                             }
                         </View>
                         <View style= {{ flexDirection: 'row', marginRight: 10}}>
-                                <TouchableOpacity onPress={()=>{Reduce(item[0].id)}}>
+                                <TouchableOpacity onPress={()=>{Reduce(item[0].id, item.option)}}>
                                     <Text style={{ width:20 , textAlign: "center", borderWidth: 0.5, borderColor: 'gray',fontWeight: 'bold', borderRadius: 40, color:'black', backgroundColor:"rgba(180, 180, 180, 0.2)"}}> - </Text> 
                                 </TouchableOpacity>
                                     <Text style={{ width: windowW*0.08 , textAlign: "center",fontWeight: 'bold'}}>{item.quanity}</Text>
@@ -379,6 +383,7 @@ const renderItem = ({item, index})=>{
             <View style={{  flex: 1 }}>
                <FlatList
                 data = {Dataproduct}
+            
                 keyExtractor= {(item,index)=>index}
                 renderItem={renderItem}
             />

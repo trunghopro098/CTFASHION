@@ -562,7 +562,7 @@ export default function Productdetail(props,{navigation}){
                                 <View style={styles.CarouselCart}>
                                 {DataProductType.length == 0 ? 
                                 <>
-                                    <Text style={{ fontSize: 14, color: 'red', textAlign: 'center' }}>CHÁY HÀNG ! KHÔNG CÒN SẢN PHẨM NÀO CÙNG LOẠI VỚI SẢN PHẨM NÀY!</Text>
+                                    <Text style={{ fontSize: 14, color: 'red', textAlign: 'center' }}>CHÁY HÀNG! KHÔNG CÒN SẢN PHẨM NÀO CÙNG LOẠI VỚI SẢN PHẨM NÀY!</Text>
                                 </>:
                                 <>
                                     <Carousel                  
