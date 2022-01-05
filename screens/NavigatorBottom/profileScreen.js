@@ -22,10 +22,10 @@ const DisplayBill =(props)=>{
                 alignContent: 'center',
                 alignItems:'center'                   
              }}>
-                <Text style={{ fontWeight:'bold', color: 'black', fontSize: 12, marginRight: 1, borderRightWidth: 0.5,width: windowW*0.15,textAlign:'center',maxWidth: windowW*0.15,borderBottomWidth:0.5, borderBottomColor: 'purple', borderRightColor:'purple' }}>Mã ĐH</Text>
-                <Text style={{ fontWeight:'bold', color: 'black', fontSize: 12, marginRight: 1, borderRightWidth: 0.5,width: windowW*0.23,textAlign:'center',maxWidth: windowW*0.23,borderBottomWidth:0.5, borderBottomColor: 'purple', borderRightColor:'purple'  }}>Tổng Tiền</Text>
-                <Text style={{ fontWeight:'bold', color: 'black', fontSize: 12, marginRight: 1, borderRightWidth: 0.5,width: windowW*0.23 ,textAlign:'center',maxWidth: windowW*0.23,borderBottomWidth:0.5, borderBottomColor: 'purple', borderRightColor:'purple' }}>Tình Trạng</Text>
-                <Text style={{ fontWeight:'bold', color: 'black', fontSize: 12, marginRight: 1, borderRightWidth: 0.5,width: windowW*0.15 ,textAlign:'center',maxWidth: windowW*0.15,borderBottomWidth:0.5, borderBottomColor: 'purple', borderRightColor:'purple' }}>Chi Tiết</Text>
+                <Text style={{ ...styles.table_order, width: windowW*0.15, maxWidth: windowW*0.15 }}>Mã ĐH</Text>
+                <Text style={{ ...styles.table_order, width: windowW*0.23,maxWidth: windowW*0.23  }}>Tổng Tiền</Text>
+                <Text style={{ ...styles.table_order, width: windowW*0.23,maxWidth: windowW*0.23 }}>Tình Trạng</Text>
+                <Text style={{ ...styles.table_order, width: windowW*0.15, maxWidth: windowW*0.15 }}>Chi Tiết</Text>
                 <Text style={{ fontWeight:'bold', color: 'black', fontSize: 12, marginRight: 1, width: windowW*0.21,textAlign:'center',maxWidth: windowW*0.16,borderBottomWidth:0.5, borderBottomColor: 'purple', borderRightColor:'purple'  }}>Ngày Đăt </Text>
             </View>
                  <ScrollView>
@@ -464,5 +464,18 @@ const windowH = Dimensions.get('window').height;
         justifyContent:'center',
         alignContent:'center',
         alignItems:'center',
+    },
+    table_order:{
+        fontWeight:'bold',
+        color: 'black', 
+        fontSize: 12,
+        marginRight: 1,
+        borderRightWidth: 0.5,
+        textAlign:'center',
+        borderBottomWidth:0.5, 
+        borderBottomColor: 'purple',
+        borderRightColor:'purple' 
+
     }
+
  })
