@@ -51,6 +51,12 @@ export default function EditProfile({navigation}){
         const data = {"idUser":currentUser.id}
         const res = await GETAPI.postDataAPI("/user/getInforUser",data)
         formRef.current.setValues(res[0])
+        if(res[0].phone==null){
+            formRef.current.setValues({...formRef.current.values,phone:""})
+        }
+        if(res[0].address==null){
+            formRef.current.setValues({...formRef.current.values,address:""})
+        }
         setshowContent(true)
     }
     const handleUpdateProfile = async()=>{

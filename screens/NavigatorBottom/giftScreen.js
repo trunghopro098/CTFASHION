@@ -88,7 +88,7 @@ export default function GiftScreen (){
                 <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, }}>) SỰ KIỆN ĐANG DIỄN RA</Text>
             </View>:
             <View style = {styles.header}>
-               <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, }}>CÁC SỰ KIỆN ĐANG DIỄN RA</Text> 
+               <Text style={{ color: 'black', fontWeight: "bold", fontSize:16,paddingLeft:10 }}>CÁC SỰ KIỆN CỦA CỬA HÀNG</Text> 
             </View>}
 
             {/* View promotion upcomming */}
@@ -130,8 +130,7 @@ export default function GiftScreen (){
 
     )
 }
-const WindowW = Dimensions.get('window').width;
-const WindowH = Dimensions.get('window').height; 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
