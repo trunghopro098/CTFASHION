@@ -35,8 +35,6 @@ export default function GiftScreen (){
             }
           
         }
-        console.log('fdgf')
-        console.log(finish)
         setGoingOn(goingon);
         setFinished(finish);
         setUpcomming(upcomming);
@@ -60,25 +58,22 @@ export default function GiftScreen (){
                     <Text style= {{ color: 'black', fontSize:14 }}> mã</Text>
                 </View>
                 
-                    {new Date(item.date_start) <= currentTime && new Date(item.expired) >= currentTime ?
-                        <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>
+                {new Date(item.date_start) <= currentTime && new Date(item.expired) >= currentTime ?
+                    <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>
+                    <Text style= {{ color: 'black',  fontSize:14 }}>Thời gian kết thúc sự kiện ngày </Text>
+                    <Text style= {{ color: 'black', fontWeight: "bold", fontSize:14 }}>{item.expired.substring(0, 10)}</Text>
+                    </View>:
+                    <View>
+                        <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>   
+                        <Text style= {{ color: 'black',  fontSize:14 }}>Thời gian sự kiện bắt đầu </Text>
+                        <Text style= {{ color: 'black', fontWeight: "bold", fontSize:14 }}>{item.date_start.substring(0, 10)}</Text>
+                        </View>
+                        <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>   
                         <Text style= {{ color: 'black',  fontSize:14 }}>Thời gian kết thúc sự kiện ngày </Text>
                         <Text style= {{ color: 'black', fontWeight: "bold", fontSize:14 }}>{item.expired.substring(0, 10)}</Text>
-                        </View>:
-                        <View>
-                            <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>   
-                            <Text style= {{ color: 'black',  fontSize:14 }}>Thời gian sự kiện bắt đầu </Text>
-                            <Text style= {{ color: 'black', fontWeight: "bold", fontSize:14 }}>{item.date_start.substring(0, 10)}</Text>
-                            </View>
-                            <View style={{ flex:1, flexDirection: 'row',marginBottom: 5 }}>   
-                            <Text style= {{ color: 'black',  fontSize:14 }}>Thời gian kết thúc sự kiện ngày </Text>
-                            <Text style= {{ color: 'black', fontWeight: "bold", fontSize:14 }}>{item.expired.substring(0, 10)}</Text>
-                            </View>
                         </View>
-         
-                    }
-
-
+                    </View>
+                }
             </View>
         )
     }
@@ -88,9 +83,9 @@ export default function GiftScreen (){
             
             {Upcomming.length > 0 ? 
             <View style = {styles.header}>
-            <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, marginLeft: 15 }}>(</Text>
-            <Text style={{ color: 'red', fontWeight: "bold", fontSize:16, }}>{Upcomming.length}</Text>
-            <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, }}>) SỰ KIỆN ĐANG DIỄN RA</Text>
+                <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, marginLeft: 15 }}>(</Text>
+                <Text style={{ color: 'red', fontWeight: "bold", fontSize:16, }}>{Upcomming.length}</Text>
+                <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, }}>) SỰ KIỆN ĐANG DIỄN RA</Text>
             </View>:
             <View style = {styles.header}>
                <Text style={{ color: 'black', fontWeight: "bold", fontSize:16, }}>CÁC SỰ KIỆN ĐANG DIỄN RA</Text> 
@@ -111,15 +106,15 @@ export default function GiftScreen (){
             })} 
             </ScrollView>:null}
             {GoingOn.length > 0 ?
-            <ScrollView>
-            <Text style={{ color: 'blue', fontWeight: "bold", fontSize:15, marginLeft: 10, marginVertical: 10 }}>SỰ KIỆN SẮP DIỄN RA</Text>
-            {GoingOn.length > 0 &&
-            GoingOn.map(e=>{
-                return(
-                    renderitem(e)
-                )
-            })} 
-            </ScrollView>:null}
+                <ScrollView>
+                <Text style={{ color: 'blue', fontWeight: "bold", fontSize:15, marginLeft: 10, marginVertical: 10 }}>SỰ KIỆN SẮP DIỄN RA</Text>
+                {GoingOn.length > 0 &&
+                    GoingOn.map(e=>{
+                        return(
+                            renderitem(e)
+                        )
+                    })} 
+                </ScrollView>:null}
             {Finished.length > 0 ?
             <ScrollView>
             <Text style={{ color: 'red', fontWeight: "bold", fontSize:15, marginLeft: 10, marginVertical: 10 }}>SỰ KIỆN ĐÃ KẾT THÚC</Text>
@@ -170,9 +165,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.45,
         shadowRadius: 3,
         elevation: 3,
-        padding: 10,
+        padding: 20,
         marginBottom: 10,
-        
-
     }
 })

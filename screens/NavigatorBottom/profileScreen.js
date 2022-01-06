@@ -138,7 +138,7 @@ export default function ProfileScreen (props){
     const getInforUser =async()=>{
         const res = await GETAPI.postDataAPI('/user/getInforUser',{'idUser': currentUser.id});
         if(res!==null){
-            console.log(res)
+            // console.log(res)
             setDatainf(res)
             setisLoading(false);  
         }
@@ -211,6 +211,7 @@ export default function ProfileScreen (props){
                             justifyContent: 'flex-start',
                             marginTop: 7,
                         }}
+                        onPress={()=>props.navigation.navigate("editProfile")}
                     >
                         <MaterialCommunityIcons 
                             name="folder-edit-outline" size={18} color="gray"
@@ -351,7 +352,10 @@ export default function ProfileScreen (props){
                 <Text style={{ color: 'black', fontWeight: 'bold', marginLeft: 10,marginTop:10 }}>Quản Lý Tài Khoản</Text>
                 
                 <View style={{ flexDirection:'column' }}>
-                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start',paddingTop:10,paddingBottom:10 }}>
+                    <TouchableOpacity 
+                        style={{ flexDirection: 'row', justifyContent: 'flex-start',paddingTop:10,paddingBottom:10 }}
+                        onPress={()=>props.navigation.navigate("editProfile")}
+                    >
                         <Image source={require('../../assets/icons/settings_52px.png')} resizeMode="cover"
                         style={{width: 20, height: 20,marginLeft: 15,marginTop: 5 }}/>
                         <Text 
@@ -427,15 +431,15 @@ const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
  const styles = StyleSheet.create({
      container: {
-         flex: 1
+        flex: 1
      },
      header:{
-         flexDirection:'row',
-         justifyContent: 'flex-start',
-         height : 45,
-         alignContent: 'center',
-         alignItems: 'center',
-         backgroundColor: 'white'
+        flexDirection:'row',
+        justifyContent: 'flex-start',
+        height : 45,
+        alignContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white'
      },
      billinfor:{ 
         width:80,
@@ -450,7 +454,7 @@ const windowH = Dimensions.get('window').height;
         borderRadius: 10,
      },
      TextBill:{ 
-         color: 'black',
+        color: 'black',
         fontSize: 12,
         marginRight: 1,
         borderRightWidth:0.5,
