@@ -182,7 +182,7 @@ const renderitem = (item)=>{
                     <View style={styles.infoProduct}>
                         <Text style={{ fontWeight:'bold',color: 'black',maxWidth: windowW*0.65 }}> {item[0].name} </Text>
                         <View style={{ flexDirection:'row', justifyContent:'flex-start' , marginTop:5}}>
-                            <Text style={{ color: 'black' }}> Size/option :  </Text>
+                            <Text style={{ color: 'black' }}> Size/Màu Sắc:  </Text>
                             <Text style={{ color: 'black', marginLeft : 10 }}> {item.option}  </Text>
                         </View>
                         <View style={{ flexDirection:'row', justifyContent:'flex-start' ,marginTop:5}}>
