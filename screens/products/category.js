@@ -1,11 +1,11 @@
-import React from 'react';
+import React ,{memo} from 'react';
 import { View, Text, StyleSheet ,Image,Dimensions, FlatList,TouchableOpacity } from 'react-native';
 import { SetHTTP } from '../../util/setHTTP';
 import LinearGradient from 'react-native-linear-gradient';
 import { LoadingSkeletonCategory } from '../StartScreens/loadingSkeleton';
- function CategoryScreen(props){
-// const [OnPress, setOnPress] = useState('');
 
+function CategoryScreen(props){
+    console.log("re-render")
  const data = props.Data;
 
 
@@ -94,3 +94,5 @@ const styles = StyleSheet.create({
 
     }
 })
+
+export default memo(CategoryScreen) 

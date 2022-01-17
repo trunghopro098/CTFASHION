@@ -14,6 +14,7 @@ import {updateQuanityProduct,updatequantityFavorite} from '../../redux/reducer/p
 import { useDispatch } from "react-redux";
 import {getUser} from '../../util/getUser';
 import {updateUser} from '../../redux/reducer/user.reducer';
+
 export default function HomeScreen({navigation}){
     const [bgcolorStatusBar, setbgcolorStatusBar] = useState("#764FE2");
     const [colorSearch, setcolorSearch] = useState(null);
@@ -176,7 +177,7 @@ export default function HomeScreen({navigation}){
         
             <SafeAreaView style= {{ flex: 1 }}>
                
-                 {/* barStyle="dark-content" */}
+                {/* barStyle="dark-content" */}
                 <StatusBar  backgroundColor={bgcolorStatusBar} 
                             animated 
                             barStyle={bgcolorStatusBar=="white"?"dark-content":"light-content"}/>

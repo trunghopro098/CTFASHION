@@ -1,11 +1,12 @@
-import React from "react";
+import React ,{memo} from "react";
 import {View, Text, StyleSheet,Dimensions, TouchableOpacity,FlatList, Image} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Label, {Orientation} from "react-native-label";
 import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 import { LoadingSkeletonSieuSale } from "../StartScreens/loadingSkeleton";
- function ProductHot(props){
+
+function ProductHot(props){
     const data = props.Data
   
     const productDetail = (idProduct, idProductype)=>{
@@ -158,3 +159,5 @@ const styles = StyleSheet.create({
         alignItems: "center"
     }
 })
+
+export default memo(ProductHot);

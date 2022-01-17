@@ -1,9 +1,9 @@
-import React from "react";
+import React ,{memo} from "react";
 import {View, Text, StyleSheet, Dimensions,TouchableOpacity,Animated } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-export default function HeaderScreen(props){
+function HeaderScreen(props){
     const {bgWhite, hideSearch, heightHeader,statusUser} = props;
     const handleAccount = ()=>{
         console.log(statusUser)
@@ -124,3 +124,5 @@ const style = StyleSheet.create({
         marginTop:5 
     }
 })
+
+export default memo(HeaderScreen);

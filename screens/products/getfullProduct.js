@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{memo} from "react";
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Image} from "react-native";
 import { SetHTTP } from "../../util/setHTTP";
 import Label, {Orientation} from "react-native-label";
@@ -156,3 +156,5 @@ const styles = StyleSheet.create({
         
     }
 })
+
+export default memo(GetfullProduct);

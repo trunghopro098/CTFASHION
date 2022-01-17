@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{memo} from "react";
 import {View, Text, StyleSheet,Dimensions, Image,TouchableOpacity} from 'react-native';
 import {SliderBox} from 'react-native-image-slider-box';
 import { SetHTTP } from "../../util/setHTTP";
@@ -16,6 +16,7 @@ function ProductNew(props){
             idProductType : idProductype
         });
      }
+    console.log("re-render-new")
     // console.log(dataNewProduct)
     const renderitem = (item)=>{
         return(
@@ -133,3 +134,5 @@ const styles = StyleSheet.create({
         elevation: 5,
     }
 })
+
+export default memo(ProductNew);
