@@ -137,13 +137,13 @@ const Check = async(id,option)=>{
     let qty1 = 0;
     const res = await GETAPI.postDataAPI('/product/getProductInventory',idInventory);
     for(let i = 0; i < res.length ; i++){
-        if(res[i].size == option){
+        if(res[i].size == option ){
             qty1 = res[i].quanity-res[i].sold;
         }
     }
     let dataAnsynstore = DataAnsynStore;
     for(let i = 0; i < dataAnsynstore.length ; i++){
-        if(dataAnsynstore[i].id == id){
+        if(dataAnsynstore[i].id == id && dataAnsynstore[i].option == option  ){
             if(dataAnsynstore[i].quanity <= qty1 ){//nếu = sản phẩm trong kho thì true
                 dataAnsynstore[i].status = true;
             }else{//nếu lớn hơn số lượng trong kho thì bằng max của qty.
@@ -159,10 +159,10 @@ const Check = async(id,option)=>{
     setcheckAll(true)
 }
 
-const UnCheck = async(id)=>{
+const UnCheck = async(id,option)=>{
     let dataAnsynstore = DataAnsynStore;
     for(let i = 0; i < dataAnsynstore.length ; i++){
-        if(dataAnsynstore[i].id == id){
+        if(dataAnsynstore[i].id == id && dataAnsynstore[i].option == option){
             dataAnsynstore[i].status = false;
         }
     }
@@ -265,7 +265,7 @@ const renderItem = ({item, index})=>{
                 </>:
                 <>
                 <TouchableOpacity 
-                    onPress={()=>{UnCheck(item[0].id)}}
+                    onPress={()=>{UnCheck(item[0].id,item.option)}}
                     style={{ justifyContent:'center',alignItems:'center',paddingLeft:10 }}
                 >
                     <View>

@@ -7,18 +7,26 @@ import { SetHTTP } from "../../util/setHTTP";
 import { FormatNumber } from "../../util/formatNumber";
 import { LoadingSkeletonflashsale } from "../StartScreens/loadingSkeleton";
 
-export default function Flashsales(props){
+ function Flashsales(props){
 const data = props.Data
-
+const productDetail = (idProduct, idProductype)=>{
+    props.navigation.navigate('productDetail',{
+        idProduct : idProduct,
+        idProductType : idProductype
+    });
+ }
 const renderitem= ({item,index})=>{
+    // console.log(SetHTTP(item.image) )
     const titleSale = 100-(Math.round((item.promotional*100)/item.price))
     return(
 
         <View style={{ marginHorizontal: 3 , marginTop: 4}}>
-          <TouchableOpacity onPress={()=>{ props.navigation.navigate('productDetail',{
-                                           idProduct : item.id,
-                                           idProductType : item.idProductType
-                                            });
+          <TouchableOpacity onPress={()=>{ 
+                                            productDetail(item.id,item.idProductType)
+                                        //     props.navigation.navigate('productDetail',{
+                                        //    idProduct : item.id,
+                                        //    idProductType : item.idProductType
+                                        //     });
                                          }}>
                 <Label
                     orientation={Orientation.TOP_RIGHT}
@@ -81,6 +89,7 @@ const renderitem= ({item,index})=>{
         </View>
     )
 }
+export default React.memo(Flashsales)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

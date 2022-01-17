@@ -50,8 +50,8 @@ export default function HomeScreen({navigation}){
         getHistory();      
         updateQuanityCart();
         updataFavorite();
-    }, [])
-
+    }, [0])
+    console.log('render lại nè')
     const checkUser = async()=>{
         const token =  await AsyncStorage.getItem('@token');
         console.log(token)
@@ -173,6 +173,7 @@ export default function HomeScreen({navigation}){
     }
   
     return(
+        
             <SafeAreaView style= {{ flex: 1 }}>
                
                  {/* barStyle="dark-content" */}
@@ -199,7 +200,7 @@ export default function HomeScreen({navigation}){
                         />
                     </Animated.View>
                 
-                    <VirtualizedView setValue={handleSetValueScrollY}>      
+                    <VirtualizedView setValue={handleSetValueScrollY} >      
                         <CategoryScreen navigation={navigation} Data={Datacategory} />
                         <ProductHot Data={DataProducthot} navigation={navigation}/>
                         <Flashsales Data={DataProductFlashsale} navigation={navigation}/>

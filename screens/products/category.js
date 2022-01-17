@@ -3,12 +3,27 @@ import { View, Text, StyleSheet ,Image,Dimensions, FlatList,TouchableOpacity } f
 import { SetHTTP } from '../../util/setHTTP';
 import LinearGradient from 'react-native-linear-gradient';
 import { LoadingSkeletonCategory } from '../StartScreens/loadingSkeleton';
-export default function CategoryScreen(props){
+ function CategoryScreen(props){
+// const [OnPress, setOnPress] = useState('');
+
  const data = props.Data;
+
+
+ const productDetail = (idCategory, nameCategory)=>{
+    props.navigation.navigate("productCategory",
+    {idCategory:idCategory,nameCategory:nameCategory})
+ }
  const renderitem = ({item})=>{
         return(
         <View style={styles.item}>
-            <TouchableOpacity onPress={()=>{props.navigation.navigate("productCategory",{idCategory:item.id,nameCategory:item.name})}}>
+            <TouchableOpacity onPress={
+                ()=>{
+                props.navigation.navigate("productCategory",
+                {idCategory:item.id,nameCategory:item.name})
+                productDetail(item.id, item.name)
+                }
+                
+                }>
             <View style={styles.itemImage}>
                 <Image
                     source={{uri :SetHTTP(item.logo) }} 
@@ -44,7 +59,7 @@ export default function CategoryScreen(props){
 
     )
 }
-
+export default React.memo(CategoryScreen)
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{

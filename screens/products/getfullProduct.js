@@ -5,11 +5,16 @@ import Label, {Orientation} from "react-native-label";
 import { FormatNumber } from "../../util/formatNumber";
 import truncate from "../../util/truncate";
 import Star from 'react-native-star-view';
-export default function GetfullProduct(props){
+ function GetfullProduct(props){
 
     const datafullproduct=props.DatafullProduct;
 
-    
+    const productDetail = (idProduct, idProductype)=>{
+        props.navigation.navigate('productDetail',{
+            idProduct : idProduct,
+            idProductType : idProductype
+        });
+     }
     const renderitem = (item)=>{
         const name = item.name;
         let star = item.reviewStar;
@@ -24,10 +29,11 @@ export default function GetfullProduct(props){
         return(
             <View key={item.id} >
                    <TouchableOpacity onPress={()=>{
-                                        props.navigation.navigate('productDetail',{
-                                        idProduct : item.id,
-                                        idProductType : item.idProductType
-                                    });
+                       productDetail(item.id,item.idProductType)
+                                    //     props.navigation.navigate('productDetail',{
+                                    //     idProduct : item.id,
+                                    //     idProductType : item.idProductType
+                                    // });
                                     }}>
                         {item.promotional > 0 ? 
                         <>
@@ -118,6 +124,7 @@ export default function GetfullProduct(props){
         </ScrollView>
     )
 }
+export default React.memo(GetfullProduct)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

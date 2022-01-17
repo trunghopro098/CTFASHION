@@ -5,21 +5,28 @@ import { SetHTTP } from "../../util/setHTTP";
 import truncate from "../../util/truncate";
 import { LoadingSkeletonSliderbox } from "../StartScreens/loadingSkeleton";
 
-export default function ProductNew(props){
+function ProductNew(props){
 
     const dataImage = props.Data
     const dataNewProduct = props.DataNewproduct
 
+    const productDetail = (idProduct, idProductype)=>{
+        props.navigation.navigate('productDetail',{
+            idProduct : idProduct,
+            idProductType : idProductype
+        });
+     }
     // console.log(dataNewProduct)
     const renderitem = (item)=>{
         return(
             <TouchableOpacity key={item.id} style={styles.wrapperitemProductNew}
             onPress={()=>{
-                props.navigation.navigate('productDetail',{
-                idProduct : item.id,
-                idProductType : item.idProductType
+                productDetail(item.id, item.idProductType)
+            //     props.navigation.navigate('productDetail',{
+            //     idProduct : item.id,
+            //     idProductType : item.idProductType
                 
-            });
+            // });
          }}>
                 <View  >
                     <Image 
@@ -79,6 +86,7 @@ export default function ProductNew(props){
         </View>
     )
 }
+export default React.memo(ProductNew)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
