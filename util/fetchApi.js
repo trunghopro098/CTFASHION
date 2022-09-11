@@ -1,7 +1,7 @@
-import {API_URL} from "@env"
-// const API_URL  = 'http://192.168.43.41:5000'
+// import {API_URL} from "@env"
+const API_URL  = 'http://192.168.1.47:3001'
 export const getAPI = async(url)=>{
-    // console.log(API_URL)
+    console.log("url",API_URL )
     const res = await fetch(API_URL+url)
     .then((response)=>response.json())
     .then((responseJson)=>{
@@ -10,6 +10,7 @@ export const getAPI = async(url)=>{
     .catch((err)=>{
         console.log(err)
     })
+    console.log("trungabc",res)
     return res;
 }
 export const postDataAPI = async(url,data)=>{

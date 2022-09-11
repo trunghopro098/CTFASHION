@@ -43,6 +43,7 @@ export default function HomeScreen({navigation}){
         
     },[])
     useEffect(() => {
+        console.log("xon chao cac ban")
         getCategory();
         getProductSale();
         getdatasale();
@@ -52,14 +53,13 @@ export default function HomeScreen({navigation}){
         updateQuanityCart();
         updataFavorite();
     }, [0])
-    console.log('render lại nè')
     const checkUser = async()=>{
         const token =  await AsyncStorage.getItem('@token');
         console.log(token)
         if(token===undefined||token===null){
             setstatusUser(false);
             dispatch(updateUser({}));
-        }else{
+        }else{ 
             const status = await getUser(token,dispatch);
             if(status===false){
                 ToastAndroid.show("Phiên đăng nhập hết hạn !", ToastAndroid.SHORT);
@@ -121,7 +121,9 @@ export default function HomeScreen({navigation}){
         setDataProductFlashsale(res) 
     }
     const getCategory = async()=>{
+        
         const res = await GETAPI.getAPI('/product/getCategory');
+        console.log("chay ne ",res )
         setDatacategory(res)
     }
     const getDataBox = async()=>{
@@ -129,15 +131,15 @@ export default function HomeScreen({navigation}){
         const ArrDtaProductImage = [];
         const ArrProductNew = [];
         const res = await GETAPI.getAPI('/product/getProductNew/1');
-
+        console.log('resa', res)
         // lấy 4 sản phẩm đầu tiên
         for(let i = 0; i <= 4; i++){
-            ArrDtaProductImage.push(res.item[i])
-            ArrDtaImage.push(SetHTTP(res.item[i].image))
+            ArrDtaProductImage.push(res?.item[i])
+            ArrDtaImage.push(SetHTTP(res?.item[i].image))
         }
         // lấy 3 sản phẩm sau cùng
-        for(let j = 5; j <= res.item.length-1; j++){
-            ArrProductNew.push(res.item[j])
+        for(let j = 5; j <= res?.item.length-1; j++){
+            ArrProductNew.push(res?.item[j])
         }
         // console.log(ArrProductNew)
         setDataProductNewImageSlideBox(ArrDtaImage)

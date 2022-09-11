@@ -16,6 +16,7 @@ import Star from 'react-native-star-view';
         });
      }
     const renderitem = (item)=>{
+        // console.log('urltrung', item.image)
         const name = item.name;
         let star = item.reviewStar;
         let quanityReview = 0;
@@ -124,7 +125,6 @@ import Star from 'react-native-star-view';
         </ScrollView>
     )
 }
-export default React.memo(GetfullProduct)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

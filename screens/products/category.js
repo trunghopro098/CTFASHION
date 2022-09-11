@@ -39,7 +39,7 @@ function CategoryScreen(props){
 
     return(
         <View>
-            {data.length==0 || data==undefined ? 
+            {data?.length==0 || data==undefined ? 
             <><LoadingSkeletonCategory/></>:
             <>
             <LinearGradient
@@ -59,7 +59,7 @@ function CategoryScreen(props){
 
     )
 }
-export default React.memo(CategoryScreen)
+// export default React.memo(CategoryScreen)
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container:{

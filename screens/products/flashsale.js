@@ -65,7 +65,7 @@ const renderitem= ({item,index})=>{
     return(
 
         <View>
-            {data.length===0 || data==undefined  ? 
+            {data?.length===0 || data==undefined  ? 
             <><LoadingSkeletonflashsale/></>:
             <>
             <LinearGradient  colors= {["#EDDAF5","white"]} style={styles.container}>
@@ -88,7 +88,7 @@ const renderitem= ({item,index})=>{
         </View>
     )
 }
-export default React.memo(Flashsales)
+// export default React.memo(Flashsales)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

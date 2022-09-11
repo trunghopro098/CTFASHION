@@ -88,7 +88,7 @@ function ProductHot(props){
         </View>
     )
 }
-export default React.memo(ProductHot)
+// export default React.memo(ProductHot)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

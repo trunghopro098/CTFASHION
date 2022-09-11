@@ -54,6 +54,7 @@ export default function SignUp ({navigation}){
     const [showModalSuccess, setshowModalSuccess] = useState(false);
     const formRef = useRef();
     const handleRegister = async(values)=>{
+        console.log("trunghvhkvf", values)
         const res = await GETAPI.postDataAPI("/user/register",values)
         if(res.success){
             setshowModalSuccess(true)

@@ -87,7 +87,7 @@ function ProductNew(props){
         </View>
     )
 }
-export default React.memo(ProductNew)
+// export default React.memo(ProductNew)
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 const styles = StyleSheet.create({

@@ -1,7 +1,9 @@
 import React from 'react';
 import {Modal,View,Text,StyleSheet,TouchableOpacity,ToastAndroid} from 'react-native'
 import {handleChoosePhotoCamera,handleChoosePhotoLibrary} from '../../util/adapterPickImage';
-import {API_URL} from "@env";
+// import {API_URL} from "@env";
+// const API_URL = "";
+const API_URL  = 'http://192.168.1.47:3001'
 import * as GETAPI from '../../util/fetchApi';
 export default function ModalPickImage(props){
     let code = "";
